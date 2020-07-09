@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCollector.msgnode="ComIbmCollector.msgnode" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmTrace.msgnode="ComIbmTrace.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="BIll_PAYMENT.msgflow" nsPrefix="BIll_PAYMENT.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="BIll_PAYMENT" bundleName="BIll_PAYMENT" pluginId="ZBESB V1"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/BIll_PAYMENT.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/BIll_PAYMENT.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="57,141" queueName="BILL_IN" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993">
+        <translation xmi:type="utility:ConstantString" string="BILL_IN"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="156,141" dataSource="ZBDB_ESB" connectDatasourceBeforeFlowStarts="true" computeExpression="esql://routine/#BIll_PAYMENT_BILLER_DATA.Main">
+        <translation xmi:type="utility:ConstantString" string="BILLER_DATA"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="293,142" computeExpression="esql://routine/#BIll_PAYMENT_EQ_JOURNAL.Main">
+        <translation xmi:type="utility:ConstantString" string="EQ_JOURNAL"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="428,87" queueName="EQUATION.TRANS.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="TO_EQUATION"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="487,219" collectionExpiry="30">
+        <inTerminals terminalNodeID="ISO_Request" dynamic="true" label="ISO_Request"/>
+        <inTerminals terminalNodeID="RSP_IN" dynamic="true" label="RSP_IN"/>
+        <translation xmi:type="utility:ConstantString" string="Collector"/>
+        <eventHandlerPropertyTable terminal="ISO_Request" quantity="1" correlationPath="$Environment/ISO/PCREF" correlationPattern=""/>
+        <eventHandlerPropertyTable terminal="RSP_IN" quantity="1" correlationPath="$Root/DFDL/TRANSACTIONRSP/TRANSACTION_RSP_HEADER/PCREF" correlationPattern=""/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="78,315" queueName="BILL.RESP.QUEUE" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993">
+        <translation xmi:type="utility:ConstantString" string="BILL_IN1"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_8" location="608,125" computeExpression="esql://routine/#BIll_PAYMENT_BILLER_BAL_ENQ.Main">
+        <translation xmi:type="utility:ConstantString" string="BILLER_BAL_ENQ"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="606,215" computeExpression="esql://routine/#BIll_PAYMENT_BILLER_ISO_RESPONSE.Main">
+        <translation xmi:type="utility:ConstantString" string="BILLER_ISO_RESPONSE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="766,126" queueName="EQUATION.TRANS.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="MQ Output"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="595,432" queueName="BILL.BAL.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="MQ Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="865,207" collectionExpiry="30">
+        <inTerminals terminalNodeID="Resp_Out" dynamic="true" label="Resp_Out"/>
+        <inTerminals terminalNodeID="ISO_Request" dynamic="true" label="ISO_Request"/>
+        <translation xmi:type="utility:ConstantString" string="Collector1"/>
+        <eventHandlerPropertyTable terminal="Resp_Out" quantity="1" correlationPath="$Body/BALANCEENQUIRYRESPONSE/PCREF" correlationPattern=""/>
+        <eventHandlerPropertyTable terminal="ISO_Request" quantity="1" correlationPath="$Environment/ISO/PCREF" correlationPattern=""/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_13" location="123,227">
+        <translation xmi:type="utility:ConstantString" string="Trace"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_14" location="576,311">
+        <translation xmi:type="utility:ConstantString" string="Trace1"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_15" location="998,203" computeExpression="esql://routine/#BIll_PAYMENT_BILL_ISO_OUT.Main">
+        <translation xmi:type="utility:ConstantString" string="BILL_ISO_OUT"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_16" location="1112,101" queueName="ESB_TO_SWITCH">
+        <translation xmi:type="utility:ConstantString" string="TO_SWITCH"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="1161,250" queueName="TO_LOG2">
+        <translation xmi:type="utility:ConstantString" string="TO_LOG"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_18" location="100,76" queueName="TO_LOG">
+        <translation xmi:type="utility:ConstantString" string="TO_ISO_IN_LOG"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="936,305">
+        <translation xmi:type="utility:ConstantString" string="Trace2"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out1" targetTerminalName="ISO_Request"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="RSP_IN">
+        <bendPoints>390,-12,-24,84</bendPoints>
+      </connections>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_11" sourceTerminalName="OutTerminal.out" targetTerminalName="Resp_Out">
+        <bendPoints>183,-59,-89,166</bendPoints>
+      </connections>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="ISO_Request"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_14" targetNode="FCMComposite_1_15" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_16" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_15" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_17" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_18" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

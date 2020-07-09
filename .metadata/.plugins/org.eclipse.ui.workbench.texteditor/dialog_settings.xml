@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="PCREF" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="PCREF"/>
+			<item value="Resp_Out"/>
+			<item value="RSP_IN"/>
+			<item value="InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993"/>
+			<item value="InputBody.ns:ISO8583_1993"/>
+			<item value="ApprovalCode_038"/>
+			<item value="copy"/>
+			<item value="GZNR2"/>
+		</list>
+		<list key="replacehistory">
+			<item value="BAL_RESP"/>
+			<item value="TXN_RESP"/>
+			<item value="InputBody.{ns01}:ISO8583_1993"/>
+			<item value="InputBody.ns:ISO8583_1993"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="257" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="381" key="DIALOG_HEIGHT"/>
+		<item value="1326" key="DIALOG_X_ORIGIN"/>
+		<item value="423" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

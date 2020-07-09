@@ -1,0 +1,51 @@
+CREATE COMPUTE MODULE ISO_IN_TRAN_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE code CHARACTER '00';
+		-- CALL CopyMessageHeaders();
+		CALL CopyEntireMessage(); -- sending out input messsage unchanged 
+		-- (we are here to apply rules DB and store results in Environment.)
+		
+		
+		
+		
+		
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource);
+		SET Environment.BET.GZAx2 = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		
+		IF Environment.ISO.PAN ='4126' THEN-- if the first 4 chars of the PAN are 4126 then this is a visa transaction.
+			
+		
+			
+		SET Environment.BET.GZAx2 = THE(SELECT ITEM T.USDACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		ELSE
+			
+			SET Environment.BET.GZAx2 = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);	
+			
+		END IF;
+		
+		
+		-- GZAx2 (GZAB2, GZAN2, GZAS2) to replace missing Field103
+
+		RETURN TRUE;
+	END;
+
+	
+	
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+

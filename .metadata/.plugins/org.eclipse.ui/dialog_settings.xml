@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="ProjectInterchangeZipFileExportWizard">
+		<list key="PROJ_INTER_EXPORT_interchange">
+			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE062020.zip"/>
+			<item value="C:\ESB\intercahnge files\26JUNEBACKUP.zip"/>
+			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE012020.zip"/>
+		</list>
+	</section>
+	<section name="ProjectInterchangeImportWizard">
+		<list key="PROJ_INTER_IMPORT_interchange_import">
+			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE012020.zip"/>
+		</list>
+	</section>
+</section>

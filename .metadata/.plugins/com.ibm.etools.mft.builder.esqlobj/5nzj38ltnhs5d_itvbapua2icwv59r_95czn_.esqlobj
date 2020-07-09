@@ -1,0 +1,296 @@
+CREATE COMPUTE MODULE ISO_IN_TRAN_match_accounts
+	DECLARE serviceProvider SHARED CHARACTER; 
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		
+		CALL CopyEntireMessage();
+		DECLARE code,account, BPC_DSTV_BILLERID,BPC_COH_BILLERID, BPC_CUT_BILLERID,
+		BPC_GZU_BILLERID, BPC_ZIMRA_BILLERID, BPC_TELONE_BILLERID, BPC_BUSE_BILLERID,
+		BPC_TOPICS_BILLERID,BPC_CIMAS_BILLERID, BPC_ZBLIFE_BILLERID, BPC_KADOMA_BILLERID, 
+		BPC_MEIKLES_BILLERID, BPC_MASVINGO_BILLERID, BPC_CHINHOYI_BILLERID, BPC_RUWA_BILLERID,
+		BPC_EDGARS_BILLERID,BPC_ZETDC_PREPAID_BILLERID, BPC_TRUWORTHS_BILLERID,
+		BPC_ZETDC_POSTPAID_BILLERID, BPC_ECONET_TOPUP_BILLERID CHAR;
+		
+		SET  BPC_DSTV_BILLERID = '1';
+		SET  BPC_COH_BILLERID= '2';
+		SET  BPC_CUT_BILLERID= '3';
+		SET  BPC_GZU_BILLERID= '4';
+		SET  BPC_ZIMRA_BILLERID= '5';
+		SET  BPC_TELONE_BILLERID= '7';
+		SET  BPC_BUSE_BILLERID= '8';
+		SET  BPC_TOPICS_BILLERID= '9';
+		SET  BPC_CIMAS_BILLERID= '10';
+		SET  BPC_ZBLIFE_BILLERID= '11';
+		SET  BPC_KADOMA_BILLERID= '12';
+		SET  BPC_MEIKLES_BILLERID= '13';
+		SET  BPC_MASVINGO_BILLERID= '14';
+		SET  BPC_CHINHOYI_BILLERID= '15';
+		SET  BPC_RUWA_BILLERID= '16';
+		SET  BPC_EDGARS_BILLERID= '17';
+		SET  BPC_ZETDC_PREPAID_BILLERID= '18';
+		SET  BPC_TRUWORTHS_BILLERID= '19';
+		SET  BPC_ZETDC_POSTPAID_BILLERID= '20';
+		SET  BPC_ECONET_TOPUP_BILLERID= '21';
+		
+		
+		IF Environment.ISO.Field003L02 = '11' THEN
+			--pick card, suspnse account and set it to that account to Environment.BET.GZAx2
+			SET account = CAST (04131847311932 AS CHAR);
+			SET Environment.BET.GZAx2 =  account;
+		END IF;
+		
+		IF Environment.ISO.Field003L02 = '29' THEN
+			SET account = CAST (04131847311932 AS CHAR);
+			SET Environment.ISO.AccountIdentification1_102 =  account;
+			-- pick card suspense account and set it to AccountIdentification1_102
+		END IF;	
+		
+		
+		IF Environment.ISO.Field003L02 = '50' THEN --IF THE PROCESSING CODE BEGINS WITH 50 THEN THIS IS A BILL PAYMENT 
+			
+			 SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 1; --turn the bitmap on for field 046
+			 
+			CALL getBillerData(); -- INITIALISE THE BILLERid, ACCOUNT NUMBER AND MOBILE NUMBER 
+		 	
+		 	IF Environment.BILL.billerid = BPC_DSTV_BILLERID THEN 
+		 		
+		 		SET Environment.BET.GZAx2 = CAST (4191150266001 AS CHAR); --DSTV
+		 		SET serviceProvider ='DSTV';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_COH_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --CITY OF HARARE
+		 		SET serviceProvider ='COH';
+--		 	
+--		 	ELSEIF Environment.BILL.billerid = BPC_CUT_BILLERID THEN
+--		 		 
+--		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --BPC_CUT_BILLERID
+--		 		SET serviceProvider ='CUT';
+		 		
+--		 	ELSEIF Environment.BILL.billerid = BPC_GZU_BILLERID THEN
+--		 		 
+--		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --BPC_GZU_BILLERID
+--		 		SET serviceProvider ='DSTV';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZIMRA_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4151830255932 AS CHAR); --BPC_ZIMRA_BILLERID
+		 		SET serviceProvider ='ZIMRA';
+		 		
+--		 	ELSEIF Environment.BILL.billerid = '6' THEN
+--		 		 
+--		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --CITY OF HARARE
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_TELONE_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4158393333202 AS CHAR); --BPC_TELONE_BILLERID
+		 		SET serviceProvider ='TELONE';
+		 		
+--		 	ELSEIF Environment.BILL.billerid = '8' THEN
+--		 		 
+--		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --BPC_BUSE_BILLERID
+--		 		SET serviceProvider ='DSTV';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_TOPICS_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4166106129204 AS CHAR); --BPC_TOPICS_BILLERID
+		 		SET serviceProvider ='TOPICS';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_CIMAS_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4178060937203 AS CHAR); --BPC_CIMAS_BILLERID
+		 		SET serviceProvider ='CIMAS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZBLIFE_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4158225968205 AS CHAR); --BPC_ZBLIFE_BILLERID
+		 		SET serviceProvider ='ZBLIFE';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_KADOMA_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4520147210092 AS CHAR); --BPC_KADOMA_BILLERID
+		 		SET serviceProvider ='KADOMA CITY';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_MEIKLES_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4158243814200 AS CHAR); --BPC_MEIKLES_BILLERID
+		 		SET serviceProvider ='MEIKLES';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_MASVINGO_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4407094505203 AS CHAR); --BPC_MASVINGO_BILLERID
+		 		SET serviceProvider ='MASVINGO CITY';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_CHINHOYI_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --BPC_CHINHOYI_BILLERID
+		 		SET serviceProvider ='DSTV';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_RUWA_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4136060989085 AS CHAR); --BPC_RUWA_BILLERID
+		 		SET serviceProvider ='RUWA LOCAL BOARD';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_EDGARS_BILLERID THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4372052038205 AS CHAR); --BPC_EDGARS_BILLERID
+		 		SET serviceProvider ='EDGARS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZETDC_PREPAID_BILLERID  THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4131845500932 AS CHAR); --BPC_ZETDC_PREPAID_BILLERID
+		 		SET serviceProvider ='ZETDC';
+		 		
+		 	ELSEIF Environment.BILL.billerid = '19' THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4166106188204 AS CHAR); --BPC_TRUWORTHS_BILLERID
+		 		SET serviceProvider ='TRUWORTHS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = '20' THEN
+		 		 
+		 		SET Environment.BET.GZAx2 = CAST (4158361024210 AS CHAR); --BPC_ZETDC_POSTPAID_BILLERID
+		 		SET serviceProvider ='ZETDC';	
+		 	
+--		 	ELSEIF Environment.BILL.billerid = '21' THEN
+--		 		 
+--		 		SET Environment.BET.GZAx2 = CAST (4178168389200 AS CHAR); --BPC_ECONET_TOPUP_BILLERID
+--		 		SET serviceProvider ='DSTV';																			
+		 	END IF;							 												
+		 		
+		  SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsFees_046     = serviceProvider || Environment.BILL.CustomerAccountNumber;
+		 
+		 	
+		-- this is a biller payment lets process the biller value for filed 46????  
+			
+		END IF;	--END BILLER PROCESSING 
+			
+		
+		--lets see if this  IS A REVERSAL and if the transaction is already in the database i.e the original txn message 
+
+		
+					
+		IF Environment.ISO.MTI= '420' THEN 
+			
+			SET Environment.VARS.GROUPID = '200'||InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;						
+			SET Environment.VARS.ID = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.GROUPID =Environment.VARS.GROUPID AND T.ACTIONCODE = '000' AND T.ISREVERSED='0');
+
+			IF Environment.VARS.ID IS NOT NULL THEN 
+				
+				--PROCESSS THE REVERSAL HERE
+				CALL createReversalMessage();
+				
+			
+			ELSE
+				PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot;
+								
+				RETURN FALSE;				
+				--PROPAGE THE MESSAGE BACK WITH DO NOT HONOUR , ORIGINAL TRANSACTION WAS NOT FOUND
+				  
+			END IF;		
+				
+		END IF;	
+			
+		
+		IF Environment.ISO.MTI= '421' THEN 
+			
+		PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot DELETE NONE;
+		
+--			SET Environment.VARS.FOOURTWENTY = '420'||InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+--			SET Environment.VARS.OGREF =THE(SELECT ITEM T.RETRIEVALREFERENCENUMBER FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.GROUPID =Environment.VARS.FOOURTWENTY AND T.ACTIONCODE = '124');
+--			
+--			
+--			IF Environment.VARS.OGREF IS NOT NULL THEN 
+--				
+--				--PROCESSS THE REVERSAL HERE
+--				CALL createReversalMessage();
+--				
+--			
+--			
+--			ELSE
+--				--PROPAGATE MESSAGE WITH DO NOT HONOUR
+--				 
+--					PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot DELETE NONE;
+--							 	
+--			END IF;		
+--			
+		END IF ;
+		
+	
+		
+
+		
+		RETURN TRUE;
+		
+	END;
+
+	CREATE PROCEDURE createReversalMessage() BEGIN 
+			SET Environment.ISO.AccountIdentification1_102 =  Environment.BET.GZAx2;		
+			SET Environment.BET.GZAx2 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+	END;
+	
+	
+	CREATE PROCEDURE getBillerData() BEGIN -- procedure to get biller data 
+
+		DECLARE field048, value, tagid CHARACTER;
+	DECLARE  lenval INTEGER;
+	--SET field048 = CAST(InputBody.BLOB as CHAR CCSID 1208); AdditionalDataPrivate_048
+	
+	SET field048 = CAST (InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048 as CHAR CCSID 1208);
+	
+	SET Environment.BILL.field048 = field048;
+	WHILE LENGTH(field048) > 0 DO
+		SET tagid = SUBSTRING ( field048 FROM 1 FOR 3);
+        SET OutputRoot.XMLNSC.Message.Field48.TAG =  tagid;       
+        SET lenval = CAST (SUBSTRING(field048 FROM 4 FOR 3)AS INTEGER);
+        SET value = SUBSTRING (field048 FROM 7 FOR lenval);
+        SET OutputRoot.XMLNSC.Message.Field048.VALUE = value;       
+        SET field048 = SUBSTRING (field048 FROM 7 + lenval);
+        
+        IF tagid = '010' THEN
+        	
+        	
+        	SET Environment.BILL.billerid = value; --this gives us the BILLER ID from filed084
+        END IF;	
+        
+        IF tagid = '021' THEN
+        	
+        	
+        	SET Environment.BILL.CustomerAccountNumber = value; -- the customer Account Number the Customer was paying to
+        END IF;	
+        
+        IF tagid = '022' THEN
+        	
+        	-- the customer Mobile number (this is optional)
+        	SET Environment.BILL.MobileNumber = value;
+        	
+        END IF;	
+        
+        
+       -- SET Enviroment.BILL.data = Environment.BILL.MobileNumber ||  Environment.BILL.CustomerAccountNumber;
+        
+       
+	END WHILE;	
+		
+	END;	
+	
+	
+	CREATE PROCEDURE dressUpVISA() BEGIN -- proceudre to get VISA DATA
+		
+		
+	 END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

@@ -1,0 +1,438 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		--CALL CopyMessageHeaders();
+
+		CALL generateRandomnNumber();
+		
+		SET Environment.ISO.RADNLEN = LENGTH(CAST (Environment.ISO.ApprovalCode_038 AS CHARACTER));
+		IF  Environment.ISO.RADNLEN <6 THEN
+			CALL generateRandomnNumber();
+		END IF;
+		
+		
+		--CHECK IF WE NOT NEED TO DO A BAL ENQ 
+		
+		IF CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'Account does not exist on the database')
+	    OR CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'No account held')  THEN
+	    
+	    
+	    SET Environment.ISO.MSGBAD= 'THI IS GOING OUT';
+			    --THIS ENDS HERE WE NEED TO SEND IT BACK NOW 
+			   		 CALL createDoNotHonorMessages();
+			    --propagte message via out1 and return right now  
+			    
+			    PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot;	
+			    
+			    RETURN FALSE;
+	    
+		END IF;
+			
+			
+		
+				
+		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
+		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
+        SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
+        
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_Version          = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageClass;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageFunction  =1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    =InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageOrigin;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit001 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit002 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit003 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit004 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit005 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit006 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit007 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit008 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit009 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit010 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit011 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit012 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit013 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit014 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit015 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit016 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit017 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit018 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit019 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit020 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit021 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit022 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit023 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit024 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit025 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit026 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit027 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit028 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit029 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit030 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit031 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit032 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit033 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit034 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit035 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit036 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit037 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit038 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit039 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit040 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit041 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit042 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit043 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit044 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit045 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit047 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit048 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit049 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit050 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit051 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit052 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit053 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit054 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit055 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit056 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit057 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit058 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit059 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit060 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit061 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit062 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit063 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit064 = 0;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit065 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit066 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit067 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit068 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit069 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit070 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit071 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit072 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit073 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit074 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit075 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit076 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit077 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit078 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit079 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit080 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit081 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit082 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit083 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit084 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit085 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit086 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit087 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit088 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit089 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit090 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit091 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit092 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit093 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit094 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit095 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit096 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit097 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit098 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit099 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit100 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit101 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit104 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit105 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit106 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit107 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit108 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit109 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit110 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit111 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit112 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit113 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit114 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit115 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit116 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit117 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit118 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit119 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit120 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit121 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit122 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit123 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit124 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit125 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit126 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit127 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit128 = 0;
+
+		SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.ProcessingCode_003;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountTransaction_004;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountReconciliation_005;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MerchantType_018;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038                           = Environment.ISO.ApprovalCode_038;
+       
+	IF InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.XRREC = 'R'  THEN
+		
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '000';
+		
+	END IF ;
+	
+	IF InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.XRREC = 'F'  THEN
+	
+	IF CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'is a blocked account')THEN
+		
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '112';
+		
+		ELSEIF CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'Account does not exist on the database') THEN
+			
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '124';	
+		
+		
+		ELSEIF CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'No account held') THEN
+			
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '124';
+			
+	
+	
+		ELSEIF CONTAINS(InputRoot.Collection.RSP_IN.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt, 'Balance exceeded') THEN
+			
+			SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '116';
+			
+		ELSE
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '124';
+			
+		END IF;
+	END IF ;	
+	
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048                  = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
+
+        --SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = '007016C000000090188932010016C000000091688932'; 
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AccountIdentification1_102;
+
+		RETURN TRUE;
+	END;
+	
+	
+	
+CREATE PROCEDURE generateRandomnNumber() BEGIN
+		
+		DECLARE PCREF CHAR '000000'; -- 6 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		SET Environment.ISO.SEED = SEED;
+		SET Environment.ISO.ApprovalCode_038 = PCREF;	
+	END; 
+
+
+	CREATE PROCEDURE createDoNotHonorMessages() BEGIN
+	
+	SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
+		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
+        SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
+        
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_Version          = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageClass;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageFunction  =1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    =InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageOrigin;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit001 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit002 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit003 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit004 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit005 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit006 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit007 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit008 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit009 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit010 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit011 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit012 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit013 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit014 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit015 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit016 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit017 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit018 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit019 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit020 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit021 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit022 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit023 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit024 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit025 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit026 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit027 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit028 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit029 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit030 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit031 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit032 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit033 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit034 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit035 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit036 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit037 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit038 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit039 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit040 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit041 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit042 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit043 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit044 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit045 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit047 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit048 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit049 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit050 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit051 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit052 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit053 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit054 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit055 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit056 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit057 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit058 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit059 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit060 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit061 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit062 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit063 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit064 = 0;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit065 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit066 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit067 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit068 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit069 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit070 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit071 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit072 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit073 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit074 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit075 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit076 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit077 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit078 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit079 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit080 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit081 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit082 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit083 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit084 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit085 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit086 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit087 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit088 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit089 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit090 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit091 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit092 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit093 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit094 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit095 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit096 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit097 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit098 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit099 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit100 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit101 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit104 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit105 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit106 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit107 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit108 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit109 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit110 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit111 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit112 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit113 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit114 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit115 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit116 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit117 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit118 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit119 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit120 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit121 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit122 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit123 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit124 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit125 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit126 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit127 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit128 = 0;
+
+		SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.ProcessingCode_003;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountTransaction_004;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountReconciliation_005;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MerchantType_018;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038                           = Environment.ISO.ApprovalCode_038;
+      
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '124';		
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048                  = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
+
+        --SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = '007016C000000090188932010016C000000091688932'; 
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AccountIdentification1_102;
+        
+       
+	
+	
+		
+			
+		
+	
+	END;
+		
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

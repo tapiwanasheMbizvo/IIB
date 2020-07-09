@@ -1,0 +1,226 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		 CALL GetCBSdates();
+		DECLARE OGREF INTEGER;
+		DECLARE code,account CHAR;
+		CALL generateRandomnNumber();
+		
+		IF LENGTH(Environment.ISO.ApprovalCode_038) <6 THEN
+			CALL generateRandomnNumber();
+		END IF;		
+	--++++++++++++++++++++++START OF CONSTANTS
+		SET Environment.ISO.Field003 = InputBody.ns:ISO8583_1993.ProcessingCode_003;	
+		SET Environment.ISO.PAN = CAST (LEFT (InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002, 6) AS CHAR);
+		SET code = CAST (LEFT(Environment.ISO.Field003,2)AS CHAR);
+		SET Environment.ISO.Field003L02 = code;
+		SET Environment.SHARED.lastcall = lastcall;
+		SET Environment.SHARED.credvaldate = credvaldate;
+		SET Environment.SHARED.debvaldate = debvaldate;
+		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;		
+		SET Environment.ISO.AccountIdentification1_102 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.BET.GZBRNM = THE(SELECT ITEM T.POSTINGBRANCH FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		
+			SET Environment.BET.GZBRNM ='4131';
+		--
+--		amt1 = msg.getISOField(Constants.ISO_FIELD_ACCOUNT_AMOUNT).getValue();//Inclusive of charges
+--		amt2 = msg.getISOField(Constants.ISO_FIELD_TRANSACTION_AMOUNT).getValue();
+--		if (msg.getISOField(Constants.ISO_FIELD_ACCOUNT_AMOUNT).getValue()==""){
+--				amt1 =amt2;
+--		}
+		
+		SET Environment.BET.CREDITAMOUNT =InputBody.ns:ISO8583_1993.AmountTransaction_004;		
+		SET Environment.BET.DEBITAMOUNT =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		 	
+		IF (Environment.BET.DEBITAMOUNT IS NULL) THEN 
+			SET Environment.BET.DEBITAMOUNT = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+		END IF;				
+		
+		
+		SET Environment.ISO.Field032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.BET.GZNR2 = Environment.ISO.Field041 || ' | ' || Environment.ISO.Field032;		
+		SET Environment.BET.GZPBR = 'ATM11'; -- constant for now as per instructions
+		SET Environment.BET.MCC = InputBody.ns:ISO8583_1993.MerchantType_018;
+		SET Environment.ISO.Field007 = InputBody.ns:ISO8583_1993.DateTimeTransmission_007;   
+		SET Environment.BET.GZVFR1 = COALESCE(Environment.ISO.Field007, Environment.SHARED.credvaldate); -- note: Field007 not in bitmap
+		SET Environment.BET.GZVFR2 = Environment.SHARED.credvaldate;
+		--SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);					 
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 
+				
+		 
+		 
+		
+		 
+		--++++++++++++++++++++++END OF CONSTANTS 
+				
+		 
+		 --check if the reversal was done or not 
+		 SET OGREF = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.RETRIEVALREFERENCENUMBER =InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037  AND T.ACTIONCODE = '000' AND T.ISREVERSED = 0);
+		
+		SET Environment.DB.VALUES.ID = OGREF;
+		
+		
+		IF Environment.ISO.Field003L02 = '11' THEN
+			--pick card, suspnse account and set it to that account to Environment.BET.GZAx2
+			SET account = CAST (04131847311932 AS CHAR);
+			SET Environment.BET.GZAx2 =  account;
+		END IF;
+		
+		IF Environment.ISO.Field003L02 = '29' THEN
+			SET account = CAST (04131847311932 AS CHAR);
+			SET Environment.ISO.AccountIdentification1_102 =  account;
+			-- pick card suspense account and set it to AccountIdentification1_102
+		END IF;	
+		
+		 	 
+		IF Environment.DB.VALUES.ID IS NOT NULL THEN
+			 
+			CALL createReversalMessage() ;
+				
+		ELSE
+		
+		PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot;
+		
+		RETURN FALSE;
+		
+		END IF;		
+		 
+		 --CALL createReversalMessage() ;
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE createReversalMessage() BEGIN 
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource);			 		
+		IF Environment.BET.Acquirer = '1' THEN 		 					 	
+			IF Environment.ISO.Field003L02 = '21' THEN 
+			---for transacstions that increase the customer's balance 
+			--deposit working @tmbizvo 10032020
+											
+			SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+													
+			ELSE
+			---	for transacstions that decrease the customer's balance 
+			--cash withdrwal, purchase, purchase w/cash back,   working @tmbizvo 10032020
+
+			--BEGIN LOGIC FOR FUNDS TRANSFER
+			IF Environment.ISO.Field003L02 = '40' THEN -- THIS IS A FUNDS TRANSFER , SHOULD CREDIT THE RECEIVING ACCOUNT 
+			
+				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+				SET Environment.ISO.CREDITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			
+			ELSE -- THIS CDREDITS THE POS/ATM ACCOUNT
+				
+				SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				SET Environment.ISO.CREDITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			END IF;	
+			
+			--END LOGIC FOR FUNDS TRANSFER		
+			
+
+			---		 												
+			END IF;
+				
+		 ELSE
+		 
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.ADVICEDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.ADVICECREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);		
+			
+			IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
+		
+				IF Environment.ISO.Field003L02 = '21' THEN 	
+				
+					SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+					SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+				
+				ELSE
+						IF Environment.ISO.Field003L02 = '40' THEN
+							
+								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+							
+							ELSE
+					
+								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+								SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);		
+						END IF;
+						 					
+					
+				
+				END IF;			 
+								
+			ELSE
+				
+			IF Environment.ISO.Field003L02 = '21' THEN 	
+				
+				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+				SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+				
+			ELSE
+				
+				IF Environment.ISO.Field003L02 = '40' THEN
+					
+						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+					
+					ELSE				
+						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+						SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+				END IF;
+									
+			END IF;		 
+			END IF; 
+		
+				
+		 END IF;
+		 
+		END;
+
+
+
+	CREATE PROCEDURE GetCBSdates() BEGIN
+		
+		--* PICK DATA 
+		DECLARE workdate INTEGER;
+		DECLARE worktimestamp TIMESTAMP;
+		SET worktimestamp = CURRENT_TIMESTAMP;
+		SET workdate = EXTRACT(DAY FROM worktimestamp);
+		IF workdate = EXTRACT(DAY FROM lastcall) THEN 
+			RETURN;
+		END IF;
+		SET lastcall = worktimestamp;
+		-- assume EQ dates are formatted CYYMMDD (CONFIRMED) -- the following code is an emulation of the EQ Call Function
+		SET workdate = (EXTRACT(YEAR FROM lastcall) - 1900) * 10000 + EXTRACT(MONTH FROM lastcall) * 100 + EXTRACT(DAY FROM lastcall);
+		SET credvaldate = CAST(workdate AS CHARACTER);
+		SET debvaldate = credvaldate;
+	END;
+	
+	CREATE PROCEDURE generateRandomnNumber() BEGIN
+		
+		DECLARE PCREF CHAR '000000'; -- 15 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		SET Environment.ISO.ApprovalCode_038 = PCREF;	
+	END; 
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

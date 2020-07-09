@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IntegrationNodeConnectionParameters Version="10.0.0" host="10.136.192.172" integrationNodeName="ZBDEV1NODE" listenerPort="4401" userName="jtsgondo" xmlns="http://www.ibm.com/xmlns/prod/websphere/iib/8/IntegrationNodeConnectionParameters"/>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="com.ibm.dfdl.launching.testParse">
+		<item value="true" key="ParserInputsFromFile"/>
+		<item value="UTF-8" key="Encoding"/>
+		<item value="ieee" key="BinaryFloarRep"/>
+		<item value="bigEndian" key="ByteOrder"/>
+		<item value="true" key="SerializerInputsFromFile"/>
+		<item value="false" key="RuntimeValidation"/>
+		<list key="ParserInputs">
+			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\1200msgs\ZIMSWITCH\incoming1200.txt"/>
+			<item value="C:\ESB\VISA\visaMESSAGE1.txt"/>
+		</list>
+		<list key="SerializerInputs">
+		</list>
+	</section>
+</section>
