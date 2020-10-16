@@ -1,5 +1,5 @@
 --DECLARE ns NAMESPACE 'http://www.ibm.com/dfdl/ISO8583-1993';
-
+Path COMMON;
 CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
@@ -8,24 +8,9 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
 
 
 
-		CALL makeRandom();				
-		IF Environment.Trace.TEST = 6   THEN 
-		
-		SET Environment.Trace.AHA= 'IS already six';
-		
-		else
-				CALL  makeRandom();
-		END IF;
-		
-		DECLARE TIMESTRING CHAR;
-		DECLARE SEED, RNDNUM INT;
-		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
-		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
-		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
-		
-		SET Environment.Trace.AccountTest = CAST (InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AccountIdentification1_102 AS CHAR);
-		SET Environment.Trace.Random  = 		RNDNUM;
-		SET Environment.Trace.SEED    = 		SEED;
+		DECLARE   ApprovalCode_038 CHARACTER;
+		CALL createRandomSix(ApprovalCode_038);
+		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;
 		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
 		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
         SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
@@ -195,7 +180,7 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
         SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032||'     ';
         SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
         --SET OutputRoot.DFDL.ns:ISO8583_1993.AuthorizationIdentificationResponse_038    = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.ApprovalCode_038;
-		SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038    						=  Environment.Trace.Random;
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038    						=  Environment.ISO.ApprovalCode_038;
         SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                           	= '000'; -- cannot fail, wouldn't match if it did ... 
                                                                                             -- Note: ResponseCode_039 is only 2 chars (an 2)
 

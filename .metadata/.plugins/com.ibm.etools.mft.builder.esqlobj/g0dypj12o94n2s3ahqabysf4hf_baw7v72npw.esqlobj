@@ -1,0 +1,469 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+
+		
+		DECLARE PCREF CHAR '000000000000000'; 
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000000000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		
+		DECLARE  account, code CHAR;
+		SET Environment.ISO.Field003 = InputBody.ns:ISO8583_1993.ProcessingCode_003;
+		SET code = CAST (LEFT(Environment.ISO.Field003,2)AS CHAR);
+		SET Environment.ISO.Field003L02 = code;
+			
+		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+
+		--SET Environment.BET.GZBRNM = THE(SELECT ITEM T.POSTINGBRANCH FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		SET Environment.BET.GZBRNM ='4131';
+		
+		SET Environment.BET.CREDITAMOUNT =InputBody.ns:ISO8583_1993.AmountTransaction_004;		
+		SET Environment.BET.DEBITAMOUNT =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		 	
+		IF (Environment.BET.DEBITAMOUNT IS NULL) THEN 
+			SET Environment.BET.DEBITAMOUNT = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+		END IF;	
+
+		SET Environment.ISO.Field032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.BET.GZNR2 = Environment.ISO.Field041 || ' | ' || Environment.ISO.Field032;
+		
+		SET Environment.BET.GZPBR = 'ATM11'; -- constant for now as per instructions
+		SET Environment.BET.MCC = InputBody.ns:ISO8583_1993.MerchantType_018;
+		SET Environment.ISO.Field007 = InputBody.ns:ISO8583_1993.DateTimeTransmission_007;   
+
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
+		SET Environment.BET.RPYQUEUE  = 'ESB.RESPONSES.QUEUE';
+		SET Environment.BET.BALRPYQUEUE= 'ESB_ENQ_Q';
+		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		SET Environment.ISO.CardAcceptorNameLocation_043 = InputBody.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+		SET Environment.ISO.AdditionalDataPrivate_048 = InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048;
+		SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.ISO.CurrencyCodeTransaction_049 = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+		SET Environment.ISO.AccountIdentification1_102 =InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.ISO.PCREF = PCREF;
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
+		
+
+
+
+		SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+			
+		 
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 			
+		
+		 IF Environment.BET.Acquirer = '1' THEN
+		 	SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+			SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource);			 		 		 					 	
+				IF Environment.ISO.Field003L02 = '21' THEN 
+				---for transacstions that increase the customer's balance 
+				--deposit working @tmbizvo 10032020
+				
+				--GOOD CODE
+				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;								
+				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+				  IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+				
+						SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				  ELSE
+				  	SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.USDACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				  	
+				  END IF;		
+				--GOOD CODE END
+												
+				ELSE
+			---	for transacstions that decrease the customer's balance 
+			--cash withdrwal, purchase, purchase w/cash back,   working @tmbizvo 10032020
+
+			--BEGIN LOGIC FOR FUNDS TRANSFER
+			IF Environment.ISO.Field003L02 = '40' THEN -- THIS IS A FUNDS TRANSFER , SHOULD CREDIT THE RECEIVING ACCOUNT 
+			
+				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+				SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			
+			ELSE -- THIS CDREDITS THE POS/ATM ACCOUNT
+				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+				 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+					SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				 ELSE
+				 	SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.USDACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				 END IF;
+				 	
+				SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			END IF;	
+			
+			--END LOGIC FOR FUNDS TRANSFER		
+			
+
+			---		 												
+			END IF;
+				
+		 ELSE
+		 --Advice transactions 
+		 
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.ADVICEDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.ADVICECREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);		
+			
+			IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
+		
+				IF Environment.ISO.Field003L02 = '21' THEN 	
+				
+					SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+					 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+						SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+					 ELSE
+					 	SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+					 END IF;	
+				
+				ELSE
+						IF Environment.ISO.Field003L02 = '40' THEN
+							
+								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+							
+							ELSE					
+								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+								 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+									SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+								 ELSE
+									 SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+							
+								 END IF;	 	
+								 				
+						END IF;
+						 														
+				END IF;			 
+								
+			ELSE
+				
+			IF Environment.ISO.Field003L02 = '21' THEN 	
+				
+				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+				 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo
+				 	 
+					SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				 ELSE
+				 
+				 SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+				 END IF; 			
+				
+			ELSE
+				
+				IF Environment.ISO.Field003L02 = '40' THEN
+					
+						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+					
+					ELSE				
+						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+						 	IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+						 	
+								SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+						 	ELSE
+						 		SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+						 	END IF;			
+				END IF;
+
+			END IF;		 
+			END IF; 
+						
+		 END IF;
+
+
+
+--set up loic for zipit send and receieve  tmbizvo @02102020
+--ZIPIT RECEIVE  ProCode -29, P2P  Credit 103, debit Suspense 
+--ZIPIT SEND ProCode  - 11 , P2P Debit  102, credit Suspense 
+--A2A credit, Proc Code 30, field 103, debit suspense & A2A debit, Proc Code 12, field 102, credit suspense
+
+			IF Environment.ISO.Field003L02 = '29' THEN
+			
+				SET Environment.ISO.DEBITACC = CARDTOCARDSUSPENSEACCOUNT;
+				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+				
+			END IF;
+			
+			IF Environment.ISO.Field003L02 = '11' THEN
+			
+				SET Environment.ISO.CREDITACC = CARDTOCARDSUSPENSEACCOUNT;
+				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			END IF;
+			
+			IF Environment.ISO.Field003L02 = '30' THEN
+			
+				SET Environment.ISO.DEBITACC = ATOASUSPENSEACCOUNT;
+				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+			END IF;
+			
+			IF Environment.ISO.Field003L02 = '12' THEN
+				SET Environment.ISO.CREDITACC = ATOASUSPENSEACCOUNT;
+				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			END IF;
+			
+			
+				
+--end code for zipit send and receive
+
+
+--check if it is procode 50 for BP tmbizvo @07102020
+IF Environment.ISO.Field003L02 = '50' THEN 
+	
+	--set up zvirikudiwa ne TRANSACTION subflow 
+	
+		SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+ 		DECLARE CustomerAccountNumber, BillerID,MobileNumber, BillerAccount, serviceProvider CHARACTER;
+		
+		SET CustomerAccountNumber = '';
+		SET MobileNumber = '';
+		SET BillerID = '';	
+		SET BillerAccount = '';
+		SET serviceProvider = '';	   
+ 							   
+ 							   
+ 		CALL getBillerInfo (Environment.ISO.AdditionalDataPrivate_048
+ 				,BillerID,CustomerAccountNumber
+ 				,MobileNumber); 			   
+ 							   
+ 		CALL getBillerAccount(BillerID,BillerAccount, serviceProvider );
+ 		 					   
+
+END IF;	--END FOR BP 
+
+		--clean up
+		--we need to do a couple of checks to see if the message we received has the correct parms 
+		--1) Is the terminal in the DB
+		--2) Do we have the transaction codes
+		--3) Do we have the debit and credit account 
+		
+		
+		IF LENGTH(Environment.ISO.CREDITACC)>0
+			  AND  LENGTH(Environment.ISO.DEBITACC)>0 
+			   AND LENGTH(Environment.BET.GZTCD1)>0 
+			    AND LENGTH(Environment.BET.GZTCD2)> 0 THEN 
+			CALL CopyEntireMessage();
+			-- lets throw the iso to  collection tmbizvo @15072020
+		
+		PROPAGATE TO TERMINAL 'out2' MESSAGE InputRoot;		
+			RETURN TRUE;
+		
+		ELSE
+			
+			  CALL createDoNotHonorMessages();			 			
+			--malformed for some reason throw it out
+			PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot;		
+			 THROW USER EXCEPTION CATALOG 'INPUTMESSAGE_ERRORS' MESSAGE 1 VALUES
+			(
+			'::VALUES MISSING  ON RN:: ',InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037,
+			 '::CREDIT ACC::',Environment.ISO.CREDITACC,
+			 '::DEBIT ACC::',Environment.ISO.DEBITACC,
+			 '::DEBIT CODE::',Environment.BET.GZTCD1,
+			  '::CREDIT CODE::',Environment.BET.GZTCD2      
+			 );	
+			 RETURN FALSE; 
+		END IF;					
+	END;
+	
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	
+	END;
+
+	CREATE PROCEDURE generateRandomnNumber() BEGIN
+		
+		DECLARE PCREF CHAR '000000'; -- 6 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		SET Environment.ISO.SEED = SEED;
+		SET Environment.ISO.ApprovalCode_038 = PCREF;	
+	END; 
+	
+		CREATE PROCEDURE createDoNotHonorMessages() BEGIN
+	
+	SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
+		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
+        SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
+        
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_Version          = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = InputBody.ns:ISO8583_1993.MTI_MessageClass;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageFunction  =1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    =InputBody.ns:ISO8583_1993.MTI_MessageOrigin;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit001 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit002 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit003 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit004 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit005 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit006 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit007 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit008 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit009 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit010 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit011 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit012 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit013 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit014 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit015 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit016 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit017 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit018 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit019 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit020 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit021 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit022 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit023 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit024 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit025 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit026 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit027 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit028 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit029 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit030 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit031 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit032 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit033 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit034 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit035 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit036 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit037 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit038 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit039 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit040 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit041 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit042 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit043 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit044 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit045 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit047 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit048 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit049 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit050 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit051 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit052 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit053 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit054 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit055 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit056 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit057 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit058 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit059 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit060 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit061 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit062 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit063 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit064 = 0;
+
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit065 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit066 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit067 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit068 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit069 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit070 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit071 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit072 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit073 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit074 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit075 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit076 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit077 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit078 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit079 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit080 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit081 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit082 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit083 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit084 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit085 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit086 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit087 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit088 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit089 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit090 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit091 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit092 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit093 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit094 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit095 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit096 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit097 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit098 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit099 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit100 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit101 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit104 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit105 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit106 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit107 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit108 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit109 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit110 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit111 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit112 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit113 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit114 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit115 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit116 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit117 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit118 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit119 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit120 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit121 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit122 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit123 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit124 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit125 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit126 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit127 = 0;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit128 = 0;
+
+		SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = InputBody.ns:ISO8583_1993.ProcessingCode_003;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                   = InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = InputBody.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012                   = InputBody.ns:ISO8583_1993.DateTimeLocalTransaction_012;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = InputBody.ns:ISO8583_1993.MerchantType_018;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038                           = Environment.ISO.ApprovalCode_038;
+		SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '496';      
+		
+
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = InputBody.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048                  = InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = InputBody.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = InputBody.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
+
+        --SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = '007016C000000090188932010016C000000091688932'; 
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102   = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+        
+		
+	END;
+	 
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

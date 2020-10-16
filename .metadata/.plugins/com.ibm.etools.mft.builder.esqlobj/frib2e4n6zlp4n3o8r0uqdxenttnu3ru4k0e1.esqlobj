@@ -1,0 +1,5 @@
+CREATE PROCEDURE getTerminalAccount(IN terminalID CHARACTER , OUT account CHARACTER ) BEGIN 
+
+
+
+END;

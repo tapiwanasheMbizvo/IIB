@@ -1,0 +1,16 @@
+CREATE PROCEDURE addToMQDestinationList(IN LocalEnvironment REFERENCE, IN newQueue char) BEGIN
+  /*******************************************************************************
+  * A procedure that adds a queue name to the MQ destination list in the local environment.
+  * This list is used by an MQOutput node that has its mode set to Destination list.
+  *
+  * IN LocalEnvironment: the LocalEnvironment to be modified. 
+  * IN queue: the queue to be added to the list
+  *
+  *******************************************************************************/
+DECLARE I INTEGER CARDINALITY(LocalEnvironment.Destination.MQ.DestinationData[]);
+		IF I = 0 THEN
+			SET LocalEnvironment.Destination.MQ.DestinationData[1].queueName = newQueue;
+		ELSE
+			SET LocalEnvironment.Destination.MQ.DestinationData[I+1].queueName = newQueue;
+		END IF;
+	END;

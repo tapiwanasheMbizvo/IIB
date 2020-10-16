@@ -1,0 +1,34 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+		DECLARE PCREF CHAR '000000000000000'; -- 15 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000000000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		DECLARE spaces CHAR;
+		
+		SET Environment.BET.BALRPYQUEUE = 'ESB.ENQ.QUEUE';
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 			
+	
+		SET Environment.ISO.PCREF = PCREF; -- have a single variable match string
+			PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot DELETE NONE; -- send input ISO message to collection with PCREF in environment (hope this works as expected ...)
+		
+		RETURN TRUE; -- send EQ request message to collection - this SHOULD work as expected. The returned response message is sent to the collection from the response path.
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

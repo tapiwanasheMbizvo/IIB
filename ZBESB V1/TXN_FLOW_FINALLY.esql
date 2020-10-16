@@ -1,15 +1,13 @@
+Path COMMON;
 CREATE COMPUTE MODULE TXN_FLOW_FINALLY
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 
 		--CALL CopyMessageHeaders();
-
-		CALL generateRandomnNumber();
+		DECLARE   ApprovalCode_038 CHARACTER;
+		CALL createRandomSix(ApprovalCode_038);
+		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;	
 		
-		SET Environment.ISO.RADNLEN = LENGTH(CAST (Environment.ISO.ApprovalCode_038 AS CHARACTER));
-		IF  Environment.ISO.RADNLEN < 6 THEN
-			CALL generateRandomnNumber();
-		END IF;
 		
 						
 		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
@@ -67,7 +65,14 @@ CREATE COMPUTE MODULE TXN_FLOW_FINALLY
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit043 = 1;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit044 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit045 = 0;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+       --AmountsFees_046 need to be on for BP tranasctions 07102020
+               
+        
+        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 1;
+        ELSE
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+        END IF;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit047 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit048 = 1;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit049 = 1;
@@ -125,8 +130,21 @@ CREATE COMPUTE MODULE TXN_FLOW_FINALLY
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit099 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit100 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit101 = 0;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
+        
+ 		IF InputBody.ns:ISO8583_1993.SecondaryBitmap.Bit102 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
+        ELSE
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 0;
+        END IF;	
+        
+        
+        IF InputBody.ns:ISO8583_1993.SecondaryBitmap.Bit103 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 1;
+        ELSE
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
+        END IF;	
+        
+        
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit104 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit105 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit106 = 0;
@@ -170,26 +188,29 @@ CREATE COMPUTE MODULE TXN_FLOW_FINALLY
         SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
         SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = InputBody.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
         SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = InputBody.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
-      
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+        
+       IF InputBody.ns:ISO8583_1993.PrimaryBitmap.Bit046 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsFees_046 =InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountsFees_046;
+        ELSE
+        	--SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
+        END IF;
+        IF InputBody.ns:ISO8583_1993.SecondaryBitmap.Bit102 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+       
+        END IF;	
+        
+        
+        IF InputBody.ns:ISO8583_1993.SecondaryBitmap.Bit103 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification2_103                 = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+        	
+        END IF;	
 
 		RETURN TRUE;
 	END;
 	
 	
 	
-CREATE PROCEDURE generateRandomnNumber() BEGIN
-		
-		DECLARE PCREF CHAR '000000'; -- 6 character unique reference code
-		DECLARE TIMESTRING CHAR;
-		DECLARE SEED, RNDNUM INT;
-		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
-		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
-		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
-		SET PCREF = CAST(RNDNUM AS CHAR);
-		SET Environment.ISO.SEED = SEED;
-		SET Environment.ISO.ApprovalCode_038 = PCREF;	
-	END; 
+
 		
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
 		DECLARE I INTEGER 1;

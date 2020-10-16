@@ -3,14 +3,19 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 	BEGIN
 		-- CALL CopyMessageHeaders();
 		 CALL CopyEntireMessage();
-		 CALL GetCBSdates();
+		 
 		DECLARE OGREF INTEGER;
 		DECLARE code,account CHAR;
-		CALL generateRandomnNumber();
+			
 		
-		IF LENGTH(Environment.ISO.ApprovalCode_038) <6 THEN
-			CALL generateRandomnNumber();
-		END IF;		
+		DECLARE PCREF CHAR '000000000000000'; -- 15 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000000000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		
 	--++++++++++++++++++++++START OF CONSTANTS
 		SET Environment.ISO.Field003 = InputBody.ns:ISO8583_1993.ProcessingCode_003;	
 		SET Environment.ISO.PAN = CAST (LEFT (InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002, 6) AS CHAR);
@@ -49,7 +54,7 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 		--SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
 		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
 		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);					 
-		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 
+		 
 				
 		 
 		 
@@ -57,11 +62,24 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 		 
 		--++++++++++++++++++++++END OF CONSTANTS 
 				
+				
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
+		SET Environment.BET.RPYQUEUE  = 'ESB.RESPONSES.QUEUE';
+		SET Environment.BET.BALRPYQUEUE= 'ESB_ENQ_Q';
+		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		SET Environment.ISO.CardAcceptorNameLocation_043 = InputBody.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+		SET Environment.ISO.AdditionalDataPrivate_048 = InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048;
+		SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.ISO.CurrencyCodeTransaction_049 = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+		SET Environment.ISO.AccountIdentification1_102 =InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.ISO.PCREF = PCREF;
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
 		 
 		 --check if the reversal was done or not 
-		 SET OGREF = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.RETRIEVALREFERENCENUMBER =InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037  AND T.ACTIONCODE = '000' AND T.ISREVERSED = 0);
+		SET OGREF = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.RETRIEVALREFERENCENUMBER =InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037  AND T.ACTIONCODE = '000' AND T.ISREVERSED = 0);
 		
-		SET Environment.DB.VALUES.ID = OGREF;
+		
 		
 		
 		IF Environment.ISO.Field003L02 = '11' THEN
@@ -76,9 +94,11 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 			-- pick card suspense account and set it to AccountIdentification1_102
 		END IF;	
 		
-		 	 
+		SET Environment.DB.VALUES.ID = OGREF; 	 
 		IF Environment.DB.VALUES.ID IS NOT NULL THEN
-			 
+		-- lets throw the iso to  collection tmbizvo @16072020
+		
+		PROPAGATE TO TERMINAL 'out2' MESSAGE InputRoot;	
 			CALL createReversalMessage() ;
 				
 		ELSE
@@ -106,7 +126,12 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 			--deposit working @tmbizvo 10032020
 											
 			SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-			SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+			--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+			 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+					SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				 ELSE
+				 	SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.USDACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				 END IF;
 													
 			ELSE
 			---	for transacstions that decrease the customer's balance 
@@ -120,7 +145,15 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 			
 			ELSE -- THIS CDREDITS THE POS/ATM ACCOUNT
 				
-				SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		
+				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+				  IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+				
+						SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				  ELSE
+				  	SET Environment.ISO.DEBITACC = THE(SELECT ITEM T.USDACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+				  	
+				  END IF;		
 				SET Environment.ISO.CREDITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
 			END IF;	
 			
@@ -140,7 +173,12 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 				IF Environment.ISO.Field003L02 = '21' THEN 	
 				
 					SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-					SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+								 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+									SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+								 ELSE
+									 SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+							
+								 END IF;		
 				
 				ELSE
 						IF Environment.ISO.Field003L02 = '40' THEN
@@ -151,7 +189,13 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 							ELSE
 					
 								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-								SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);		
+								
+							IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+								SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+					 		ELSE
+					 			SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.ATMUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+					 		END IF;	
 						END IF;
 						 					
 					
@@ -163,7 +207,11 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 			IF Environment.ISO.Field003L02 = '21' THEN 	
 				
 				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-				SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+				IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 						 	
+								SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+						 	ELSE
+						 		SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+						 	END IF;		
 				
 			ELSE
 				
@@ -174,7 +222,14 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 					
 					ELSE				
 						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-						SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+						IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo
+				 	 
+					SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				 ELSE
+				 
+				 SET Environment.ISO.DEBITACC = THE(SELECT ITEM A.POSUSDACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+				 END IF; 
 				END IF;
 									
 			END IF;		 
@@ -187,34 +242,8 @@ CREATE COMPUTE MODULE REVERSAL_REVERSAL_MESSAGE
 
 
 
-	CREATE PROCEDURE GetCBSdates() BEGIN
-		
-		--* PICK DATA 
-		DECLARE workdate INTEGER;
-		DECLARE worktimestamp TIMESTAMP;
-		SET worktimestamp = CURRENT_TIMESTAMP;
-		SET workdate = EXTRACT(DAY FROM worktimestamp);
-		IF workdate = EXTRACT(DAY FROM lastcall) THEN 
-			RETURN;
-		END IF;
-		SET lastcall = worktimestamp;
-		-- assume EQ dates are formatted CYYMMDD (CONFIRMED) -- the following code is an emulation of the EQ Call Function
-		SET workdate = (EXTRACT(YEAR FROM lastcall) - 1900) * 10000 + EXTRACT(MONTH FROM lastcall) * 100 + EXTRACT(DAY FROM lastcall);
-		SET credvaldate = CAST(workdate AS CHARACTER);
-		SET debvaldate = credvaldate;
-	END;
 	
-	CREATE PROCEDURE generateRandomnNumber() BEGIN
-		
-		DECLARE PCREF CHAR '000000'; -- 15 character unique reference code
-		DECLARE TIMESTRING CHAR;
-		DECLARE SEED, RNDNUM INT;
-		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
-		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
-		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
-		SET PCREF = CAST(RNDNUM AS CHAR);
-		SET Environment.ISO.ApprovalCode_038 = PCREF;	
-	END; 
+
 
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
 		DECLARE I INTEGER 1;

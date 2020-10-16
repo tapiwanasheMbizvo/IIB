@@ -1,0 +1,44 @@
+CREATE PROCEDURE getBillerInfo(IN AdditionalDataPrivate_048 CHARACTER,
+ 							   OUT BillerID CHARACTER, 
+ 							   OUT CustomerAccountNumber CHARACTER, 
+ 							   OUT MobileNumber CHARACTER   ) BEGIN 
+
+
+	DECLARE field048, value, tagid, TAG, VALUE CHARACTER;
+	DECLARE  lenval INTEGER;
+	
+	SET field048 = AdditionalDataPrivate_048;
+	
+	
+		WHILE LENGTH(field048) > 0 DO
+		SET tagid = SUBSTRING ( field048 FROM 1 FOR 3);
+        SET TAG =  tagid;       
+        SET lenval = CAST (SUBSTRING(field048 FROM 4 FOR 3)AS INTEGER);
+        SET value = SUBSTRING (field048 FROM 7 FOR lenval);
+        SET VALUE = value;       
+        SET field048 = SUBSTRING (field048 FROM 7 + lenval);
+        
+        IF tagid = '010' THEN
+        	
+        	
+        	SET BillerID = value; --this gives us the BILLER ID from filed084
+        END IF;	
+        
+        IF tagid = '021' THEN
+        	
+        	
+        	SET CustomerAccountNumber = value; -- the customer Account Number the Customer was paying to
+        END IF;	
+        
+        IF tagid = '022' THEN
+        	
+        	-- the customer Mobile number (this is optional)
+        	SET MobileNumber = value;
+        	
+        END IF;	
+        
+              
+	END WHILE;
+	
+	
+  END;

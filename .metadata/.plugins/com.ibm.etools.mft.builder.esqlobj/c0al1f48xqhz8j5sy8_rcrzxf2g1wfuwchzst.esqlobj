@@ -1,0 +1,7 @@
+CREATE PROCEDURE getBillerInfo(IN AdditionalDataPrivate_048 CHARACTER,
+ OUT BillerID CHARACTER, 
+ OUT CustomerAccountNumber CHARACTER, 
+ OUT MobileNumber CHARACTER   ) BEGIN 
+
+	
+END;

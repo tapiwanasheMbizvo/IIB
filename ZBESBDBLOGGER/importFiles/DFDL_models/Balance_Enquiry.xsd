@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/" xmlns:dfdlCobolFmt="http://www.ibm.com/dfdl/CobolDataDefinitionFormat" xmlns:ibmDfdlExtn="http://www.ibm.com/dfdl/extensions" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions">
+  <xsd:import namespace="http://www.ibm.com/dfdl/CobolDataDefinitionFormat" schemaLocation="../../IBMdefined/CobolDataDefinitionFormat.xsd"/>
+  <xsd:complexType name="BALANCEENQUIRY">
+    <xsd:sequence>
+      <xsd:element dfdl:lengthKind="implicit" name="BALANCE_ENQUIRY_HEADER">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element default="0100" dfdl:length="4" ibmDfdlExtn:sampleValue="0100" name="MSGTYPE" type="dfdlCobolFmt:PICX__string">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="200"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(3) display</xsd:documentation>
+              </xsd:annotation>
+                          </xsd:element>
+            <xsd:element default="                                  BETX" dfdl:length="36" name="SRCSYS" type="dfdlCobolFmt:PICX__string">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="ESBX"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(8) display</xsd:documentation>
+              </xsd:annotation>
+                          </xsd:element>
+            <xsd:element default=" " dfdl:length="32" name="ORIGTYPE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(32) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="32"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="EQUATION" dfdl:length="8" name="TGTSYS">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="EQUATION"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(8) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="8"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="10" name="USER">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="10" name="PWD">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="FIXED" dfdl:length="8" name="FORMAT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="FIXED"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(8) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="8"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="E3C" dfdl:length="8" name="VERSION">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="E3C"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(8) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="8"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="ESB.RESPONSES.QUEUE" dfdl:length="20" dfdl:lengthKind="explicit" name="RPYQUEUE" type="dfdlCobolFmt:PICX__string">
+                          </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="RESPMODE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="MAPLOCN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="150" name="SPAREA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(150) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="150"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="H46HMR" dfdl:length="10" name="DRV">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="H46HMR"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="H68EER" dfdl:length="10" name="RPGM">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="H68EER"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="ZIMOWNER" dfdl:length="10" name="USID">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="ZIMOWNER"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="ESBX" dfdl:length="10" name="WSID">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="ESBX"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(10) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="10"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="E" dfdl:length="1" name="JTT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="E"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="4131" dfdl:length="4" name="BRNM">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="4131"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="ESB.RESPONSES.QUEUE" dfdl:length="32" dfdl:lengthKind="explicit" name="REPLYMSG" type="dfdlCobolFmt:PICX__string">
+                          </xsd:element>
+            <xsd:element default="12364979749754" dfdl:length="15" dfdl:lengthKind="explicit" name="PCREF" type="dfdlCobolFmt:PICX__string">
+                          </xsd:element>
+            <xsd:element default="00518" dfdl:length="10" name="FIXEDDATASIZE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="00518"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(13) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="13"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="00000" dfdl:length="5" name="REPEATINGBLOCKSIZE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="00000"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(14) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="14"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+                                    <xsd:element default="Y" dfdl:length="1" name="REPLY">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="Y"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+                        <xsd:element default=" " dfdl:length="70" name="TSTAMP">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="ESBX" dfdl:length="4" name="ORIGIN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="ESBX"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="SPAREB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(42) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="42"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="CUSTOMERDETAILS">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(20) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="20"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="SPAREC">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(2) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="2"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="N" dfdl:length="1" name="ACKREQUIRED">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="N"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="Y" dfdl:length="1" name="CONFREQUIRED">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="Y"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="N" dfdl:length="1" name="FORCETRANSACTION">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="N"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="4" name="REFERTRANSACTION">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="4" name="CCSID">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="4" name="SINGLERESPONSE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="VALIDATEONLY">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="2" name="EQREFERENCEPSN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(2) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="2"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="2" name="EQREFERENCELEN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(2) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="2"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="N" dfdl:length="1" name="APPLYDURINGREC">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="N"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="N" dfdl:length="1" name="APPLYDURINGEXT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="N"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="N" dfdl:length="1" name="APPLYDURINGNIGHT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="N"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="42" name="SPLITRESPONSE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element dfdl:lengthKind="implicit" name="BALANCE_ENQUIRY_BODY">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element default="0000" dfdl:length="4" name="HZAB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="0000"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(4) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="4"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="000000" dfdl:length="6" name="HZAN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="000000"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(6) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="6"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="000" dfdl:length="3" name="HZAS">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="000"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(3) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="3"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="15" name="HZSHN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(15) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="15"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="15" name="HZSHNA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(15) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="15"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="6" name="HZCUS">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(6) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="6"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="3" name="HZCLC">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(3) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="3"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="35" name="HZCUN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(35) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="35"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="35" name="HZCUNA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(35) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="35"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="2" name="HZACT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(2) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="2"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="2" name="HZAPP">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(2) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="2"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZACS">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="3" name="HZCCY">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(3) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="3"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZCED">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAI47">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAI14">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAI17">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAI20">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAI30">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZODL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default="0000000" dfdl:length="7" name="HZLED">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="string_value" value="0000000"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(7) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="7"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZYODE">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZRBA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZLDBL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSTBL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZPCBL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZCCBL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZCABL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZYCAB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZLABL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZYLAB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZNABL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZNAB1">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZYNAB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZFWBL">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZYFWB">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSM0">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSML">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSM1">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSM2">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSMD">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSMC">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZSMA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAII4">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAII5">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZAII7">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZNWT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAICT">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZNWN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAICN">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="16" name="HZNWA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(16) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="16"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAICA">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="21" name="HZRBC">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(21) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="21"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="6" name="HZGRP">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X(6) display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="6"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element default=" " dfdl:length="1" name="HZAIA7">
+              <xsd:annotation>
+                <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                  <initialValue kind="SPACE"/>
+                </xsd:appinfo>
+                <xsd:documentation>PIC X display</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="dfdlCobolFmt:PICX__string">
+                  <xsd:maxLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+      <dfdl:format binaryFloatRep="{$dfdl:binaryFloatRep}" byteOrder="{$dfdl:byteOrder}" encoding="{$dfdl:encoding}" ignoreCase="yes" leadingSkip="0" occursCountKind="fixed" ref="dfdlCobolFmt:CobolDataFormat" textNumberPadCharacter="0" textStringJustification="left" textStringPadCharacter="%SP;" textZonedSignStyle="asciiStandard" trailingSkip="0"/>
+    </xsd:appinfo>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation>
+	This XSD was created by importing COBOL copybook.
+
+	Source file:	importFiles\Balance_Enquiry.cpy
+
+	Import options:
+		CODEPAGE=ISO-8859-1
+		ENDIAN=Little
+		EXTENSION_CBL=FP
+		EXTENSION_CCP=FP
+		EXTENSION_COB=FP
+		EXTENSION_CPY=DS
+		EXT_DECIMAL_SIGN=ASCII
+		FLOATING_POINT_FORMAT=0
+		NSYMBOL=NATIONAL
+		NUMPROC=PFD
+		PLATFORM_SELECTION=0
+		QUOTE=DOUBLE
+		REMOTE_ENDIAN=Little
+		TRUNC=STD
+		SCHEMA_TARGET_NAMESPACE_URI=null
+		CREATE_DEFAULT_VALUES_FROM_INITIAL_VALUES=true
+		CREATE_FACETS_FROM_LEVEL_88_VALUE_CLAUSES=false
+		PRESERVE_CASE_IN_VARIABLE_NAMES=true
+		CREATE_NULL_VALUES_FOR_FIELDS=false
+		NULL_CHARACTER_FOR_STRING=%SP; 
+		NULL_CHARACTER_FOR_NUMBER=%#r00; 
+		STRING_PADDING_CHARACTER=%SP;
+		NUMBER_PADDING_CHARACTER=0
+		DEFAULT_FOR_STRING= 
+		DEFAULT_FOR_NUMBER=0
+
+</xsd:documentation>
+  </xsd:annotation>
+  <xsd:element dfdl:lengthKind="implicit" ibmSchExtn:docRoot="true" name="BALANCEENQUIRY" type="BALANCEENQUIRY"/>
+</xsd:schema>

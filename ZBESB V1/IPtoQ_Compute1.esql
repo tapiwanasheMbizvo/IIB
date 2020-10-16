@@ -6,6 +6,7 @@ CREATE COMPUTE MODULE IPtoQ_Compute1
 		-- CALL CopyMessageHeaders();
 		CALL CopyEntireMessage();
 		SET Environment.Key = CAST(SUBSTRING ( InputBody.BLOB from 1 for 4) as CHAR CCSID 1208);
+		
 		RETURN TRUE;
 	END;
 

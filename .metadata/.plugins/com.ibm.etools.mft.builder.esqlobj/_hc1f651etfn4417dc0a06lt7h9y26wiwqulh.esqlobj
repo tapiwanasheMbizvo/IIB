@@ -1,0 +1,43 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		 
+		 
+		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+		SET Environment.ISO.AccountIdentification1_102 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		
+		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		
+		--SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 1 FOR 4);
+		 
+		--SET Environment.BET.GZBRNM = THE(SELECT ITEM T.POSTINGBRANCH FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
+		SET Environment.HOLD.GZBRNM = 'TEST'; 
+		--SET Environment.HOLD.Amount = '';
+		SET Environment.HOLD.Acquirer = '1';
+		SET Environment.HOLD.Amount =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		IF (Environment.HOLD.Amount IS NULL) THEN 
+			SET Environment.HOLD.Amount = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+		END IF;	
+		 
+		RETURN TRUE;
+	END;
+	
+	
+	
+	
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

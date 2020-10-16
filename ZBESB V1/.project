@@ -6,6 +6,7 @@
 		<project>ISO8583</project>
 		<project>ZB_Trn0001Java</project>
 		<project>ZBESB V1Java</project>
+		<project>COMMON</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

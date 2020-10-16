@@ -1,0 +1,4 @@
+CREATE PROCEDURE getBillerInfo(IN AdditionalDataPrivate_048 CHARACTER ) BEGIN 
+
+	
+END;

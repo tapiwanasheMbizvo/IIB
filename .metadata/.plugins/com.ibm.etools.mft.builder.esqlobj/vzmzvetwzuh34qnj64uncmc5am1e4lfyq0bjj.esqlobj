@@ -1,0 +1,12 @@
+CREATE PROCEDURE getBillerInfo(IN AdditionalDataPrivate_048 CHARACTER,
+ OUT BillerID CHARACTER, 
+ OUT CustomerAccountNumber CHARACTER, 
+ OUT MobileNumber CHARACTER   ) BEGIN 
+
+
+	DECLARE field048, value, tagid CHARACTER;
+	DECLARE  lenval INTEGER;
+	
+	SET field048 = AdditionalDataPrivate_048;
+	
+END;

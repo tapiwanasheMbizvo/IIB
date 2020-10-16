@@ -99,3 +99,207 @@ ZBLIVE0707.bar>>ZBDEV1NODE>>default>>0>>1594110066849
 2871<<Administration Result<<2020-07-07 17:07:28.877 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVE0707.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
 ZBESB V1>>ZBDEV1NODE>>default>>0>>1594118407803
 2871<<Administration Result<<2020-07-07 19:26:32.008 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594297596059
+2871<<Administration Result<<2020-07-09 21:13:27.861 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594297860258
+2871<<Administration Result<<2020-07-09 21:17:45.289 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594298059394
+2871<<Administration Result<<2020-07-09 21:20:52.508 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594299152675
+2871<<Administration Result<<2020-07-09 21:39:04.190 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ISO8583>>ZBDEV1NODE>>exe>>0>>1594299956202
+2871<<Administration Result<<2020-07-09 21:52:14.884 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ISO8583project.generated.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594300024607
+2871<<Administration Result<<2020-07-09 21:53:21.258 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594367351451
+2871<<Administration Result<<2020-07-10 16:35:34.599 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594368689849
+2871<<Administration Result<<2020-07-10 16:57:54.772 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594369529772
+2871<<Administration Result<<2020-07-10 17:11:54.407 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ISO8583>>ZBDEV1NODE>>exe>>0>>1594636086924
+2871<<Administration Result<<2020-07-13 19:14:46.377 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ISO8583project.generated.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594636124414
+2871<<Administration Result<<2020-07-13 19:15:05.300 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>2>>1594636287419
+2087<<Runtime Response<<2020-07-13 19:18:05.266 CAT<<ZBDEV1NODE<<6d30cca4-0470-11e9-b2fd-0a88c0ac0000
+4041<<Runtime Response<<2020-07-13 19:18:05.267 CAT<<default<<5f26a2fe-bbf5-4aff-9472-5d0ca2ebaf50
+3594<<Runtime Response<<2020-07-13 19:18:05.267 CAT<<1111<<The socket name is already in use.
+2871<<Administration Result<<2020-07-13 19:18:05.268 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<FAILED
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594636554568
+2871<<Administration Result<<2020-07-13 19:22:28.731 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594636794115
+2871<<Administration Result<<2020-07-13 19:26:22.840 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>0>>1594636909032
+2871<<Administration Result<<2020-07-13 19:28:14.478 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594637272346
+2871<<Administration Result<<2020-07-13 19:34:27.179 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594637468354
+2871<<Administration Result<<2020-07-13 19:37:29.851 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594637495871
+2871<<Administration Result<<2020-07-13 19:37:57.158 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594638620686
+2871<<Administration Result<<2020-07-13 19:56:42.547 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594638817065
+2871<<Administration Result<<2020-07-13 20:00:01.842 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594641797552
+2871<<Administration Result<<2020-07-13 20:49:39.488 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594642002818
+2871<<Administration Result<<2020-07-13 20:53:01.458 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594642287863
+2871<<Administration Result<<2020-07-13 20:57:47.268 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594642442498
+2871<<Administration Result<<2020-07-13 21:00:27.409 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594642588424
+2871<<Administration Result<<2020-07-13 21:02:52.902 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594642730008
+2871<<Administration Result<<2020-07-13 21:05:34.857 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594643929169
+2871<<Administration Result<<2020-07-13 21:25:09.451 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594646174693
+2871<<Administration Result<<2020-07-13 22:03:21.600 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594646246536
+2871<<Administration Result<<2020-07-13 22:04:15.889 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594646302662
+2871<<Administration Result<<2020-07-13 22:04:55.841 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594646338113
+2871<<Administration Result<<2020-07-13 22:05:25.703 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594646371253
+2871<<Administration Result<<2020-07-13 22:05:59.658 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594710106424
+2871<<Administration Result<<2020-07-14 15:48:02.577 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594710412346
+2871<<Administration Result<<2020-07-14 15:53:29.532 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594710660958
+2871<<Administration Result<<2020-07-14 15:57:26.427 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594710696054
+2871<<Administration Result<<2020-07-14 15:58:00.437 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594710803589
+2871<<Administration Result<<2020-07-14 15:59:46.162 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594711055837
+2871<<Administration Result<<2020-07-14 16:03:54.058 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>exe>>2>>1594711549945
+2087<<Runtime Response<<2020-07-14 16:12:39.451 CAT<<ZBDEV1NODE<<6d30cca4-0470-11e9-b2fd-0a88c0ac0000
+4041<<Runtime Response<<2020-07-14 16:12:39.451 CAT<<exe<<5469a4f8-1afe-40ae-80dd-36fa9b564fcd
+3594<<Runtime Response<<2020-07-14 16:12:39.451 CAT<<1111<<The socket name is already in use.
+2871<<Administration Result<<2020-07-14 16:12:39.452 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<exe<<ExecutionGroup<<FAILED
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594711610384
+2871<<Administration Result<<2020-07-14 16:13:12.729 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594711890061
+2871<<Administration Result<<2020-07-14 16:17:53.733 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594711979331
+2871<<Administration Result<<2020-07-14 16:19:23.144 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594712100616
+2871<<Administration Result<<2020-07-14 16:21:23.529 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594712337105
+2871<<Administration Result<<2020-07-14 16:26:00.977 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594712963892
+2871<<Administration Result<<2020-07-14 16:36:11.190 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594713602106
+2871<<Administration Result<<2020-07-14 16:46:39.499 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594713694930
+2871<<Administration Result<<2020-07-14 16:48:25.268 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594714138954
+2871<<Administration Result<<2020-07-14 16:56:03.437 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594714843421
+2871<<Administration Result<<2020-07-14 17:07:21.849 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594715172504
+2871<<Administration Result<<2020-07-14 17:12:56.951 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594715723912
+2871<<Administration Result<<2020-07-14 17:21:41.329 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594716100788
+2871<<Administration Result<<2020-07-14 17:27:57.798 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594716346364
+2871<<Administration Result<<2020-07-14 17:32:12.657 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594716908265
+2871<<Administration Result<<2020-07-14 17:41:25.288 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594717216444
+2871<<Administration Result<<2020-07-14 17:46:52.339 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594717340260
+2871<<Administration Result<<2020-07-14 17:48:54.021 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594717763168
+2871<<Administration Result<<2020-07-14 17:55:58.287 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594718058622
+2871<<Administration Result<<2020-07-14 18:00:52.247 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594718837243
+2871<<Administration Result<<2020-07-14 18:13:38.447 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594719095679
+2871<<Administration Result<<2020-07-14 18:18:08.618 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594719479037
+2871<<Administration Result<<2020-07-14 18:24:31.448 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594719607833
+2871<<Administration Result<<2020-07-14 18:26:40.538 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594719794618
+2871<<Administration Result<<2020-07-14 18:29:46.491 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594719917099
+2871<<Administration Result<<2020-07-14 18:31:51.621 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594720001278
+2871<<Administration Result<<2020-07-14 18:33:14.360 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594720579711
+2871<<Administration Result<<2020-07-14 18:42:33.038 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594721347695
+2871<<Administration Result<<2020-07-14 18:55:30.470 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594721967137
+2871<<Administration Result<<2020-07-14 19:05:42.828 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBLIVETESTS.bar>>ZBDEV1NODE>>default>>0>>1594726730967
+2871<<Administration Result<<2020-07-14 20:25:43.297 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/BARfiles/ZBLIVETESTS.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594733364708
+2871<<Administration Result<<2020-07-14 22:15:49.107 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594733546735
+2871<<Administration Result<<2020-07-14 22:18:50.519 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594818279771
+2871<<Administration Result<<2020-07-15 21:51:30.689 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594818520979
+2871<<Administration Result<<2020-07-15 21:55:20.878 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594820404831
+2871<<Administration Result<<2020-07-15 22:26:36.523 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594820662701
+2871<<Administration Result<<2020-07-15 22:30:40.982 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594820895884
+2871<<Administration Result<<2020-07-15 22:34:39.527 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594821073074
+2871<<Administration Result<<2020-07-15 22:37:30.050 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594821340807
+2871<<Administration Result<<2020-07-15 22:42:02.932 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594821793534
+2871<<Administration Result<<2020-07-15 22:49:29.453 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>2>>1594822189558
+2087<<Runtime Response<<2020-07-15 22:56:05.687 CAT<<ZBDEV1NODE<<6d30cca4-0470-11e9-b2fd-0a88c0ac0000
+4041<<Runtime Response<<2020-07-15 22:56:05.688 CAT<<fly<<73e2f68d-8619-4b39-85c6-7cb46db2f6c4
+2432<<Runtime Response<<2020-07-15 22:56:05.688 CAT<<.TXN_FLOW_TXN_EQ_MSG.Main<<299.31<<PCREF<<PCREF_shared, ns, credvaldate, debvaldate, lastcall, Environment, InputLocalEnvironment, OutputLocalEnvironment, InputRoot, InputBody, InputProperties, OutputRoot, InputExceptionList, OutputExceptionList, InputDestinationList, OutputDestinationList
+2871<<Administration Result<<2020-07-15 22:56:05.688 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<FAILED
+ZBESB V1>>ZBDEV1NODE>>fly>>2>>1594822296296
+2087<<Runtime Response<<2020-07-15 22:57:52.618 CAT<<ZBDEV1NODE<<6d30cca4-0470-11e9-b2fd-0a88c0ac0000
+4041<<Runtime Response<<2020-07-15 22:57:52.618 CAT<<fly<<73e2f68d-8619-4b39-85c6-7cb46db2f6c4
+2432<<Runtime Response<<2020-07-15 22:57:52.618 CAT<<.TXN_FLOW_TXN_EQ_MSG.Main<<299.31<<PCREF<<PCREF_shared, ns, credvaldate, debvaldate, lastcall, Environment, InputLocalEnvironment, OutputLocalEnvironment, InputRoot, InputBody, InputProperties, OutputRoot, InputExceptionList, OutputExceptionList, InputDestinationList, OutputDestinationList
+2871<<Administration Result<<2020-07-15 22:57:52.619 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<FAILED
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594822389208
+2871<<Administration Result<<2020-07-15 22:59:24.211 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594882398142
+2871<<Administration Result<<2020-07-16 15:39:36.638 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594883015441
+2871<<Administration Result<<2020-07-16 15:49:53.352 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594884623869
+2871<<Administration Result<<2020-07-16 16:16:41.217 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594884831053
+2871<<Administration Result<<2020-07-16 16:20:05.534 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594885287391
+2871<<Administration Result<<2020-07-16 16:27:37.761 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594885610705
+2871<<Administration Result<<2020-07-16 16:33:08.577 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594885826051
+2871<<Administration Result<<2020-07-16 16:36:36.432 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594886424255
+2871<<Administration Result<<2020-07-16 16:46:41.582 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ISO8583>>ZBDEV1NODE>>default>>0>>1594889988616
+2871<<Administration Result<<2020-07-16 17:46:25.393 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ISO8583project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594890155094
+2871<<Administration Result<<2020-07-16 17:48:53.078 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594896925294
+2871<<Administration Result<<2020-07-16 19:41:49.441 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>default>>0>>1594975628452
+2871<<Administration Result<<2020-07-17 17:33:43.814 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/ZBESB V1project.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+ISO8583>>ZBDEV1NODE>>fly>>0>>1594978208417
+2871<<Administration Result<<2020-07-17 18:16:45.719 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ISO8583project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594978278304
+2871<<Administration Result<<2020-07-17 18:17:36.238 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE

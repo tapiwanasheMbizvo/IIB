@@ -7,13 +7,13 @@ CREATE COMPUTE MODULE DB_LOGGER_Compute
 		
 		--SET Environment.DB_VALUES.STATUS = InputBody.ns:ISO8583_1993.ActionCode_039;
 		SET Environment.DB_VALUES.REF = CAST (InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037 AS CHAR); 
-		SET Environment.DB_VALUES.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
 		
 		--SET Environment.DB_VALUES.MTI = RIGHT(Environment.DB_VALUES.MTI, 3);
 		
 		
 		--IF Environment.DB_VALUES.MTI = ''
-		SET Environment.DB_VALUES.GROUPID = Environment.DB_VALUES.MTI||Environment.DB_VALUES.REF;
+		SET Environment.DB_VALUES.GROUPID = Environment.ISO.MTI || Environment.DB_VALUES.REF;
 		  --lets see if this transacstion is available 
 	    SET Environment.DB_VALUES.ID  = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.RETRIEVALREFERENCENUMBER = Environment.DB_VALUES.REF);
 		  
@@ -43,7 +43,8 @@ CREATE COMPUTE MODULE DB_LOGGER_Compute
 				AMOUNTTRANSACTION,
 				PROCESSINGCODE,	  
 			 	PRIMARYACCOUNTNUMBER,
-				GROUPID
+				GROUPID,
+				ACCOUNTIDENTIFICATION1_103
 		  
 		  ) VALUES(
 			 InputBody.ns:ISO8583_1993.MerchantType_018,
@@ -69,7 +70,8 @@ CREATE COMPUTE MODULE DB_LOGGER_Compute
 		  	InputBody.ns:ISO8583_1993.AmountTransaction_004,
 			InputBody.ns:ISO8583_1993.ProcessingCode_003,	  
 		  	InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002,
-			Environment.DB_VALUES.GROUPID
+			Environment.DB_VALUES.GROUPID,
+			InputBody.ns:ISO8583_1993.AccountIdentification2_103
 		  );
 			ELSE
 			

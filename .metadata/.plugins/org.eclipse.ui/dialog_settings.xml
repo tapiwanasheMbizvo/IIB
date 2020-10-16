@@ -2,13 +2,17 @@
 <section name="Workbench">
 	<section name="ProjectInterchangeZipFileExportWizard">
 		<list key="PROJ_INTER_EXPORT_interchange">
+			<item value="C:\ESB\intercahnge files\ZBESB08102020midnight.zip"/>
+			<item value="C:\ESB\intercahnge files\ZBESBLIVE07102020.zip"/>
+			<item value="C:\ESB\intercahnge files\17JULY2020.zip"/>
+			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\1200msgs\ZIMSWITCH\problemcild.zip"/>
 			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE062020.zip"/>
 			<item value="C:\ESB\intercahnge files\26JUNEBACKUP.zip"/>
-			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE012020.zip"/>
 		</list>
 	</section>
 	<section name="ProjectInterchangeImportWizard">
 		<list key="PROJ_INTER_IMPORT_interchange_import">
+			<item value="C:\ESB\OBI\ZBESBLIVEPREBILL.zip"/>
 			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\uatS\JUNE012020.zip"/>
 		</list>
 	</section>

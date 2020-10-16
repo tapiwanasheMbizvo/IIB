@@ -1,0 +1,293 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- CALL CopyMessageHeaders();
+	CALL CopyEntireMessage();
+	CALL getBillerData(); -- INITIALISE THE BILLERid, ACCOUNT NUMBER AND MOBILE NUMBER
+
+	
+	DECLARE code,account,serviceProvider, BPC_DSTV_BILLERID,BPC_COH_BILLERID, BPC_CUT_BILLERID,
+		BPC_GZU_BILLERID, BPC_ZIMRA_BILLERID, BPC_TELONE_BILLERID, BPC_BUSE_BILLERID,
+		BPC_TOPICS_BILLERID,BPC_CIMAS_BILLERID, BPC_ZBLIFE_BILLERID, BPC_KADOMA_BILLERID, 
+		BPC_MEIKLES_BILLERID, BPC_MASVINGO_BILLERID, BPC_CHINHOYI_BILLERID, BPC_RUWA_BILLERID,
+		BPC_EDGARS_BILLERID,BPC_ZETDC_PREPAID_BILLERID, BPC_TRUWORTHS_BILLERID,
+		BPC_ZETDC_POSTPAID_BILLERID, BPC_ECONET_TOPUP_BILLERID CHAR;
+		
+		SET  BPC_DSTV_BILLERID = '1';
+		SET  BPC_COH_BILLERID= '2';
+		SET  BPC_CUT_BILLERID= '3';
+		SET  BPC_GZU_BILLERID= '4';
+		SET  BPC_ZIMRA_BILLERID= '5';
+		SET  BPC_TELONE_BILLERID= '7';
+		SET  BPC_BUSE_BILLERID= '8';
+		SET  BPC_TOPICS_BILLERID= '9';
+		SET  BPC_CIMAS_BILLERID= '10';
+		SET  BPC_ZBLIFE_BILLERID= '11';
+		SET  BPC_KADOMA_BILLERID= '12';
+		SET  BPC_MEIKLES_BILLERID= '13';
+		SET  BPC_MASVINGO_BILLERID= '14';
+		SET  BPC_CHINHOYI_BILLERID= '15';
+		SET  BPC_RUWA_BILLERID= '16';
+		SET  BPC_EDGARS_BILLERID= '17';
+		SET  BPC_ZETDC_PREPAID_BILLERID= '18';
+		SET  BPC_TRUWORTHS_BILLERID= '19';
+		SET  BPC_ZETDC_POSTPAID_BILLERID= '20';
+		SET  BPC_ECONET_TOPUP_BILLERID= '21';
+		
+		--++++++++++++++++++++++START OF CONSTANTS
+		SET Environment.ISO.Field003 = InputBody.ns:ISO8583_1993.ProcessingCode_003;	
+		SET Environment.ISO.PAN = CAST (LEFT (InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002, 6) AS CHAR);
+		SET code = CAST (LEFT(Environment.ISO.Field003,2)AS CHAR);
+		SET Environment.ISO.Field003L02 = code;
+		SET Environment.SHARED.lastcall = lastcall;
+		SET Environment.SHARED.credvaldate = credvaldate;
+		SET Environment.SHARED.debvaldate = debvaldate;
+		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;		
+		SET Environment.ISO.AccountIdentification1_102 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.BET.GZBRNM = THE(SELECT ITEM T.POSTINGBRANCH FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		
+		
+		--
+--		amt1 = msg.getISOField(Constants.ISO_FIELD_ACCOUNT_AMOUNT).getValue();//Inclusive of charges
+--		amt2 = msg.getISOField(Constants.ISO_FIELD_TRANSACTION_AMOUNT).getValue();
+--		if (msg.getISOField(Constants.ISO_FIELD_ACCOUNT_AMOUNT).getValue()==""){
+--				amt1 =amt2;
+--		}
+		
+		DECLARE PCREF CHAR '000000000000000'; -- 15 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000000000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+			
+		
+		SET Environment.ISO.Field032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.BET.GZNR2 = Environment.ISO.Field041 || ' | ' || Environment.ISO.Field032;		
+		SET Environment.BET.GZPBR = 'ATM11'; -- constant for now as per instructions
+		SET Environment.BET.MCC = InputBody.ns:ISO8583_1993.MerchantType_018;
+		SET Environment.ISO.Field007 = InputBody.ns:ISO8583_1993.DateTimeTransmission_007;   
+		SET Environment.BET.GZVFR1 = COALESCE(Environment.ISO.Field007, Environment.SHARED.credvaldate); -- note: Field007 not in bitmap
+		SET Environment.BET.GZVFR2 = Environment.SHARED.credvaldate;
+		--SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);					 
+		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 
+				
+		 
+		 
+		IF Environment.BET.Acquirer = '1' THEN 
+		 
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02 AND T.SOURCE = Environment.BET.TerminalSource);
+		SET Environment.ISO.CREDITACC = THE(SELECT ITEM T.ACCOUNTNO FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID = Environment.ISO.Field041);
+		
+		 ELSE
+		 
+		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.ADVICEDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);
+		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.ADVICECREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.Field003L02);		
+			
+			IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
+				 
+				--set Environment.ISO.CREDITACC with a value of ATMACOUNT 
+				SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.ATMACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+			ELSE
+				SET Environment.ISO.CREDITACC = THE(SELECT ITEM A.POSACCOUNT FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);
+				
+				--set Environment.ISO.CREDITACC with a value of POSACOUNT 
+			 --this is an advise transaction pick advice credit and debit codes
+			 
+			END IF; 
+		 	
+		 END IF;
+		 
+		--++++++++++++++++++++++END OF CONSTANTS 
+		
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
+		SET Environment.BET.RPYQUEUE  = 'BILL.RESP.QUEUE';
+		SET Environment.BET.BALRPYQUEUE= 'BILL.BAL.QUEUE';
+		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		SET Environment.ISO.CardAcceptorNameLocation_043 = InputBody.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+		SET Environment.ISO.AdditionalDataPrivate_048 = InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048;
+		SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.ISO.CurrencyCodeTransaction_049 = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+		SET Environment.ISO.AccountIdentification1_102 =InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.ISO.PCREF = PCREF;
+		SET Environment.BET.CREDITAMOUNT =InputBody.ns:ISO8583_1993.AmountTransaction_004;		
+		SET Environment.BET.DEBITAMOUNT =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		 	
+		IF (Environment.BET.DEBITAMOUNT IS NULL) THEN 
+			SET Environment.BET.DEBITAMOUNT = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+		END IF;
+		SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		
+		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW	 	
+		
+		
+	 	IF Environment.BILL.billerid = BPC_DSTV_BILLERID THEN 
+		 		
+		 		SET Environment.ISO.CREDITACC = CAST (4191150266001 AS CHAR); --DSTV
+		 		SET serviceProvider ='DSTV';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_COH_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4178168389200 AS CHAR); --CITY OF HARARE
+		 		SET serviceProvider ='COH';
+		 		
+
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZIMRA_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4151830255932 AS CHAR); --BPC_ZIMRA_BILLERID
+		 		SET serviceProvider ='ZIMRA';
+		 		
+
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_TELONE_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4158393333202 AS CHAR); --BPC_TELONE_BILLERID
+		 		SET serviceProvider ='TELONE';
+		 		
+
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_TOPICS_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4166106129204 AS CHAR); --BPC_TOPICS_BILLERID
+		 		SET serviceProvider ='TOPICS';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_CIMAS_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4178060937203 AS CHAR); --BPC_CIMAS_BILLERID
+		 		SET serviceProvider ='CIMAS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZBLIFE_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4158225968205 AS CHAR); --BPC_ZBLIFE_BILLERID
+		 		SET serviceProvider ='ZBLIFE';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_KADOMA_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4520147210092 AS CHAR); --BPC_KADOMA_BILLERID
+		 		SET serviceProvider ='KADOMA CITY';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_MEIKLES_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4158243814200 AS CHAR); --BPC_MEIKLES_BILLERID
+		 		SET serviceProvider ='MEIKLES';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_MASVINGO_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4407094505203 AS CHAR); --BPC_MASVINGO_BILLERID
+		 		SET serviceProvider ='MASVINGO CITY';
+		 	
+		 	ELSEIF Environment.BILL.billerid = BPC_CHINHOYI_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4178168389200 AS CHAR); --BPC_CHINHOYI_BILLERID
+		 		SET serviceProvider ='DSTV';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_RUWA_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4136060989085 AS CHAR); --BPC_RUWA_BILLERID
+		 		SET serviceProvider ='RUWA LOCAL BOARD';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_EDGARS_BILLERID THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4372052038205 AS CHAR); --BPC_EDGARS_BILLERID
+		 		SET serviceProvider ='EDGARS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = BPC_ZETDC_PREPAID_BILLERID  THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4131845500932 AS CHAR); --BPC_ZETDC_PREPAID_BILLERID
+		 		SET serviceProvider ='ZETDC';
+		 		
+		 	ELSEIF Environment.BILL.billerid = '19' THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4166106188204 AS CHAR); --BPC_TRUWORTHS_BILLERID
+		 		SET serviceProvider ='TRUWORTHS';
+		 		
+		 	ELSEIF Environment.BILL.billerid = '20' THEN
+		 		 
+		 		SET Environment.ISO.CREDITACC = CAST (4158361024210 AS CHAR); --BPC_ZETDC_POSTPAID_BILLERID
+		 		SET serviceProvider ='ZETDC';	
+		 	
+																			
+		 	END IF;							 												
+		 		
+		  SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsFees_046     = serviceProvider || Environment.BILL.CustomerAccountNumber;
+		
+		---well before we return true , since all is set just check if this is not a reversal and switch accounts
+		
+		IF Environment.ISO.MTI = '420'  THEN 
+			SET OGREF = THE(SELECT ITEM T.ID FROM Database.ZBDB_ESB.DB2INST1.TRANCLOG AS T WHERE T.RETRIEVALREFERENCENUMBER =InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037  AND T.ACTIONCODE = '000' AND T.ISREVERSED = 0);
+			
+				SET Environment.DB.VALUES.ID = OGREF; 	 
+			IF Environment.DB.VALUES.ID IS NOT NULL THEN
+		-- lets throw the iso to  collection tmbizvo @16072020
+		
+			PROPAGATE TO TERMINAL 'out2' MESSAGE InputRoot;	
+			
+			SET Environment.ISO.DEBITACC =  Environment.ISO.CREDITACC;
+			SET Environment.ISO.CREDITACC =  Environment.ISO.CREDITACC
+				
+			END IF;	
+		ELSE--
+			
+		END IF;		  		
+		RETURN TRUE;
+	END;
+	
+	
+	
+	CREATE PROCEDURE getBillerData() BEGIN -- procedure to get biller data 
+
+	DECLARE field048, value, tagid CHARACTER;
+	DECLARE  lenval INTEGER;
+	SET field048 = CAST (InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048 as CHAR CCSID 1208);
+	SET Environment.BILL.field048 = field048;
+	WHILE LENGTH(field048) > 0 DO
+		SET tagid = SUBSTRING ( field048 FROM 1 FOR 3);
+        SET OutputRoot.XMLNSC.Message.Field48.TAG =  tagid;       
+        SET lenval = CAST (SUBSTRING(field048 FROM 4 FOR 3)AS INTEGER);
+        SET value = SUBSTRING (field048 FROM 7 FOR lenval);
+        SET OutputRoot.XMLNSC.Message.Field048.VALUE = value;       
+        SET field048 = SUBSTRING (field048 FROM 7 + lenval);
+        
+        IF tagid = '010' THEN
+        	
+        	
+        	SET Environment.BILL.billerid = value; --this gives us the BILLER ID from filed084
+        END IF;	
+        
+        IF tagid = '021' THEN
+        	
+        	
+        	SET Environment.BILL.CustomerAccountNumber = value; -- the customer Account Number the Customer was paying to
+        END IF;	
+        
+        IF tagid = '022' THEN
+        	
+        	-- the customer Mobile number (this is optional)
+        	SET Environment.BILL.MobileNumber = value;
+        	
+        END IF;	
+        
+              
+	END WHILE;	
+		
+	END;
+
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

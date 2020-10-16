@@ -1,0 +1,122 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		SET Environment.DB_VALUES.ID  = THE(SELECT ITEM R.ID FROM Database.ZBDB_ESB.DB2INST1.RCPT101 AS R WHERE R.RETRIEVAL_REFERENCE_NUMBER = InputBody.OBIRCTP10.RETRIEVAL_REFERENCE_NUMBER AND R.REFERENCE_REF = InputBody.OBIRCTP10.REFERENCE_REF );		
+
+	SET Environment.DB_VALUES.fileName=InputLocalEnvironment.File.Name;
+	SET Environment.DB_VALUES.tableName= SUBSTRING( Environment.DB_VALUES.fileName FROM 1 FOR LENGTH(Environment.DB_VALUES.fileName)-4);
+		
+		IF Environment.DB_VALUES.ID IS NULL THEN
+			CALL logRCPT10();
+		END IF;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE logRCPT10() BEGIN
+		INSERT INTO Database.ZBDB_ESB.DB2INST1.RCPT101(
+				
+	FILE_NAME,			
+	 RECORD_TYPE,		    			                                 
+     RECORD_NUMBER,                           
+     ACCOUNT_NUMBER,                         
+     BACK_OFFICE_ACCOUNT_TYPE,               
+     FILLER_01,                               
+     AMOUNT,                                  
+     DEBIT_CREDIT_INDICATOR,                 
+     CURRENCY_CODE,                           
+     FILLER_02,                               
+     EFFECTIVE_DATE,                         
+     FILLER_03,                               
+     REFERENCE_REF,                          
+     FILLER_04,                               
+     BACK_OFFICE_TRANSACTION_TYPE,           
+     FILLER_05,                              
+     USER_ID,                                 
+     FILLER_06,                              
+     CORRESPONDING_ACCOUNT,                  
+     FRONT_END_TRANSACTION_TYPE,             
+     FILLER_07,                               
+     TRANSACTION_PLACE,                      
+     OPTIONAL_1,                              
+     OPTIONAL_2,                              
+     OPTIONAL_3,                              
+     OPTIONAL_4,                              
+     OPTIONAL_5,                              
+     OPTIONAL_6,                              
+     OPTIONAL_7,                             
+     OPTIONAL_8,                              
+     TRANSACTIONS_GROUP_ID,                   
+     ISO_TERMINAL_ID,                        
+     ISO_MERCHANT_ID,                        
+     FILLER_08,                              
+     RETRIEVAL_REFERENCE_NUMBER,             
+     SYSTEM_TRACE_AUDIT_NUMBER,              
+     FILLER_09,                              
+     CARD_CONTRACT_ID,                       
+     DEBIT_CREDIT_CONTRACT_IND,              
+     INTERNAL_CARD_TYPE,                      
+     ACQUIRER_BIN,                           
+     ACCOUNT_NUMBER_2,                       
+     CURRENCY_CODE_ACCOUNT_NO_2,              
+     FILLER_10,                               
+     FRONT_END_UNIQUE_TRANS_NO,              
+     SERVICE_ID,                             
+     EXTERNAL_TRANSACTION_NUMBER,             
+     CARD_NETWORK,                            
+     SETTLEMENT_TYPE   
+		)
+		 
+		VALUES(
+				Environment.DB_VALUES.tableName,
+	 InputBody.OBIRCTP10.RECORD_TYPE,		    			                                 
+     InputBody.OBIRCTP10.RECORD_NUMBER,                           
+     InputBody.OBIRCTP10.ACCOUNT_NUMBER,                         
+     InputBody.OBIRCTP10.BACK_OFFICE_ACCOUNT_TYPE,               
+     InputBody.OBIRCTP10.FILLER_01,                               
+     InputBody.OBIRCTP10.AMOUNT,                                  
+     InputBody.OBIRCTP10.DEBIT_CREDIT_INDICATOR,                 
+     InputBody.OBIRCTP10.CURRENCY_CODE,                           
+     InputBody.OBIRCTP10.FILLER_02,                               
+     InputBody.OBIRCTP10.EFFECTIVE_DATE,                         
+     InputBody.OBIRCTP10.FILLER_03,                               
+     InputBody.OBIRCTP10.REFERENCE_REF,                          
+     InputBody.OBIRCTP10.FILLER_04,                               
+     InputBody.OBIRCTP10.BACK_OFFICE_TRANSACTION_TYPE,           
+     InputBody.OBIRCTP10.FILLER_05,                              
+     InputBody.OBIRCTP10.USER_ID,                                 
+     InputBody.OBIRCTP10.FILLER_06,                              
+     InputBody.OBIRCTP10.CORRESPONDING_ACCOUNT,                  
+     InputBody.OBIRCTP10.FRONT_END_TRANSACTION_TYPE,             
+     InputBody.OBIRCTP10.FILLER_07,                               
+     InputBody.OBIRCTP10.TRANSACTION_PLACE,                      
+     InputBody.OBIRCTP10.OPTIONAL_1,                              
+     InputBody.OBIRCTP10.OPTIONAL_2,                              
+     InputBody.OBIRCTP10.OPTIONAL_3,                              
+     InputBody.OBIRCTP10.OPTIONAL_4,                              
+     InputBody.OBIRCTP10.OPTIONAL_5,                              
+     InputBody.OBIRCTP10.OPTIONAL_6,                              
+     InputBody.OBIRCTP10.OPTIONAL_7,                             
+     InputBody.OBIRCTP10.OPTIONAL_8,                              
+     InputBody.OBIRCTP10.TRANSACTIONS_GROUP_ID,                   
+     InputBody.OBIRCTP10.ISO_TERMINAL_ID,                        
+     InputBody.OBIRCTP10.ISO_MERCHANT_ID,                        
+     InputBody.OBIRCTP10.FILLER_08,                              
+     InputBody.OBIRCTP10.RETRIEVAL_REFERENCE_NUMBER,             
+     InputBody.OBIRCTP10.SYSTEM_TRACE_AUDIT_NUMBER,              
+     InputBody.OBIRCTP10.FILLER_09,                              
+     InputBody.OBIRCTP10.CARD_CONTRACT_ID,                       
+     InputBody.OBIRCTP10.DEBIT_CREDIT_CONTRACT_IND,              
+     InputBody.OBIRCTP10.INTERNAL_CARD_TYPE,                      
+     InputBody.OBIRCTP10.ACQUIRER_BIN,                           
+     InputBody.OBIRCTP10.ACCOUNT_NUMBER_2,                       
+     InputBody.OBIRCTP10.CURRENCY_CODE_ACCOUNT_NO_2,              
+     InputBody.OBIRCTP10.FILLER_10,                               
+     InputBody.OBIRCTP10.FRONT_END_UNIQUE_TRANS_NO,              
+     InputBody.OBIRCTP10.SERVICE_ID,                             
+     InputBody.OBIRCTP10.EXTERNAL_TRANSACTION_NUMBER,             
+     InputBody.OBIRCTP10.CARD_NETWORK,                            
+     InputBody.OBIRCTP10.SETTLEMENT_TYPE  
+		);
+		
+		END;
+	

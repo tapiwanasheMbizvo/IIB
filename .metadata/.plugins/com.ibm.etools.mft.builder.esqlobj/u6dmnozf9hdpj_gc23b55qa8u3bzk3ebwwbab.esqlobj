@@ -1,0 +1,4 @@
+CREATE PROCEDURE getBillerAccount(IN BillerID CHARACTER, OUT BillerAccount CHARACTER, OUT serviceProvider CHARACTER ) BEGIN 
+ 
+ 
+ END;

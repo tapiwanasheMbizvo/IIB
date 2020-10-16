@@ -12,7 +12,7 @@
       <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="340,21">
         <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="TXN_EXCEPTIONS" pluginId="ZBESB V1"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="180,35" computeExpression="esql://routine/#TXN_EXCEPTIONS_MAKE.Main">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="172,20" computeExpression="esql://routine/#TXN_EXCEPTIONS_MAKE.Main">
         <translation xmi:type="utility:ConstantString" string="Compute"/>
       </nodes>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>

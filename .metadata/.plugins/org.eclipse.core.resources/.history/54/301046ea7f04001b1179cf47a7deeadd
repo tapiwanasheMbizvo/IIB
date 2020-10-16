@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:BALANCE_ENQUIRY.subflow="BALANCE_ENQUIRY.subflow" xmlns:ComIbmCollector.msgnode="ComIbmCollector.msgnode" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFlowOrder.msgnode="ComIbmFlowOrder.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmTrace.msgnode="ComIbmTrace.msgnode" xmlns:TRANSACTION.subflow="TRANSACTION.subflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="TXN_FLOW.msgflow" nsPrefix="TXN_FLOW.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.cardtocard.suspense.account" name="cardtocard.suspense.account" defaultValueLiteral="4131847311932">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="TXN_FLOW" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/TXN_FLOW.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/TXN_FLOW.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="102,-5" destination="file" filePath="/ESBLOG/TXN/MAIN_CATCH.txt" pattern="==================================================================================================================================&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;TIME ::++${CURRENT_TIMESTAMP}+++&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;EXCEPITIONS ++${ExceptionList}&#xD;&#xA;==================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="MAIN_CATCH"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="158,148" destination="file" filePath="/ESBLOG/TXN/ISO_IN_trace.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;======================================================================================================================================================================================">
+        <translation xmi:type="utility:ConstantString" string="TRACE_ISO_IN"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFlowOrder.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="269,148">
+        <translation xmi:type="utility:ConstantString" string="FLOW_ORDER"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="384,84" destination="file" filePath="/ESBLOG/TXN/INPUT1.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="371,225" destination="file" filePath="/ESBLOG/TXN/BAL_SUBFLOW_VALUES.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace1"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="490,85" dataSource="ZBDB_ESB" connectDatasourceBeforeFlowStarts="true" transaction="commit" computeExpression="esql://routine/#TXN_FLOW_RULES.Main">
+        <translation xmi:type="utility:ConstantString" string="RULES"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="795,-4" destination="file" filePath="/ESBLOG/TXN/BAD_INPUT.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace2"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_13" location="552,276" destination="file" filePath="/ESBLOG/TXN/BAL_ENQ.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace3"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_14" location="639,277" queueName="EQUATION.TRANS.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="BAL_REQ_TO_EQ"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_16" location="769,86" destination="file" filePath="/ESBLOG/TXN/EQ_TXN_RQST.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace4"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="835,70" queueName="LOG_EQ_REQ">
+        <translation xmi:type="utility:ConstantString" string="LOG_EQ_REQUEST"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_18" location="858,154" queueName="EQUATION.TRANS.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="TXN_TO_EQ"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="853,355" collectionName="TXN-RESP" collectionExpiry="7" persistenceMode="Persistent">
+        <inTerminals terminalNodeID="ISO_Request" dynamic="true" label="ISO_Request"/>
+        <inTerminals terminalNodeID="BAL_RESP" dynamic="true" label="BAL_RESP"/>
+        <inTerminals terminalNodeID="TXN_RESP" dynamic="true" label="TXN_RESP"/>
+        <translation xmi:type="utility:ConstantString" string="ISO_BAL_RESP"/>
+        <eventHandlerPropertyTable terminal="ISO_Request" quantity="1" correlationPath="$Environment/ISO/PCREF" correlationPattern=""/>
+        <eventHandlerPropertyTable terminal="BAL_RESP" quantity="1" correlationPath="$Body/BALANCEENQUIRYRESPONSE/PCREF" correlationPattern=""/>
+        <eventHandlerPropertyTable terminal="TXN_RESP" quantity="1" correlationPath="$Root/DFDL/TRANSACTIONRSP/TRANSACTION_RSP_HEADER/PCREF" correlationPattern=""/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_20" location="386,368" queueName="EQUATION.RESPONSE.QUEUE" messageDomainProperty="DFDL" messageTypeProperty="{}:TRANSACTIONRSP">
+        <translation xmi:type="utility:ConstantString" string="TXN_RESPONSE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_22" location="394,539" queueName="ESB_ENQ_Q" messageDomainProperty="DFDL" messageTypeProperty="{}:BALANCEENQUIRYRESPONSE">
+        <translation xmi:type="utility:ConstantString" string="BAL_RESPONSE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_23" location="515,367" destination="file" filePath="/ESBLOG/TXN/TXN_RESP.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace5"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_24" location="557,541" destination="file" filePath="/ESBLOG/TXN/BAL_RESP.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace6"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_25" location="500,453" destination="file" filePath="/ESBLOG/TXN/TXN_RESP_CATCH.txt" pattern="==================================================================================================================================&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;TIME ::++${CURRENT_TIMESTAMP}+++&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;EXCEPITIONS ++${ExceptionList}&#xD;&#xA;==================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace7"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_26" location="990,351" destination="file" filePath="/ESBLOG/TXN/TXN_COLLECTION.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace8"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_27" location="1007,431" destination="file" filePath="/ESBLOG/TXN/TXN_COL_EXPIRE.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace9"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_28" location="998,507" destination="file" filePath="/ESBLOG/TXN/TXN_COLLECTION_CATCH.txt" pattern="==================================================================================================================================&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;TIME ::++${CURRENT_TIMESTAMP}+++&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;EXCEPITIONS ++${ExceptionList}&#xD;&#xA;==================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace10"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_29" location="1130,351" transaction="commit" computeExpression="esql://routine/#TXN_FLOW_ISO_RESPONSE.Main">
+        <translation xmi:type="utility:ConstantString" string="ISO_RESPONSE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_30" location="1264,353" destination="file" filePath="/ESBLOG/TXN/TXN_OUT_MSG.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace11"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_31" location="1334,263" queueName="TO_IP">
+        <translation xmi:type="utility:ConstantString" string="TO_IP"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_32" location="1332,434" queueName="OUT.LOGGER">
+        <translation xmi:type="utility:ConstantString" string="TO_LOG"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_33" location="483,590" destination="file" filePath="/ESBLOG/TXN/BAL_RESP_CATCH.txt" pattern="==================================================================================================================================&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;TIME ::++${CURRENT_TIMESTAMP}+++&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;EXCEPITIONS ++${ExceptionList}&#xD;&#xA;==================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace12"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_34" location="1099,471" computeExpression="esql://routine/#TXN_FLOW_ISO_RESPONSE_BAD.Main">
+        <translation xmi:type="utility:ConstantString" string="BAD_RESPONSE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_35" location="589,446" queueName="LOG_EQ_RESP">
+        <translation xmi:type="utility:ConstantString" string="TO_LOG_EQ_RESP"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_36" location="297,-6" computeExpression="esql://routine/#TXN_FLOW_FINALLY.Main">
+        <translation xmi:type="utility:ConstantString" string="FINALLY"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="980,-34" queueName="OUT.LOGGER">
+        <translation xmi:type="utility:ConstantString" string="TO_LOG_ERR"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="1019,67" queueName="TO_IP">
+        <translation xmi:type="utility:ConstantString" string="TO_IP_ERR"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="30,148" queueName="TXN_IN" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993">
+        <translation xmi:type="utility:ConstantString" string="MQ Input"/>
+      </nodes>
+      <nodes xmi:type="TRANSACTION.subflow:FCMComposite_1" xmi:id="FCMComposite_1_21" location="672,86">
+        <translation xmi:type="utility:ConstantString" string="TRANSACTION"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_37" location="592,86" destination="file" filePath="/ESBLOG/TXN/TXN_SUBFLOW_VALUES.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+        <translation xmi:type="utility:ConstantString" string="Trace13"/>
+      </nodes>
+      <nodes xmi:type="BALANCE_ENQUIRY.subflow:FCMComposite_1" xmi:id="FCMComposite_1_8" location="425,275">
+        <translation xmi:type="utility:ConstantString" string="BALANCE_ENQUIRY"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.second" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.first" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out1" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_19" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_21" targetNode="FCMComposite_1_24" sourceNode="FCMComposite_1_22" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_22" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_24" sourceTerminalName="OutTerminal.out" targetTerminalName="BAL_RESP"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_23" targetNode="FCMComposite_1_25" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_24" targetNode="FCMComposite_1_26" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_26" targetNode="FCMComposite_1_28" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_27" targetNode="FCMComposite_1_29" sourceNode="FCMComposite_1_26" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_28" targetNode="FCMComposite_1_30" sourceNode="FCMComposite_1_29" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_29" targetNode="FCMComposite_1_31" sourceNode="FCMComposite_1_30" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_31" targetNode="FCMComposite_1_33" sourceNode="FCMComposite_1_22" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_38" targetNode="FCMComposite_1_35" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_40" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_36" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.expire" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_33" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.out" targetTerminalName="TXN_RESP"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_20" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_32" sourceNode="FCMComposite_1_30" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_30" targetNode="FCMComposite_1_36" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_35" targetNode="FCMComposite_1_30" sourceNode="FCMComposite_1_34" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_21" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_18" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out2" targetTerminalName="ISO_Request"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_36" targetNode="FCMComposite_1_37" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_37" targetNode="FCMComposite_1_21" sourceNode="FCMComposite_1_37" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_45" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_46" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_47" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_13" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_34" sourceNode="FCMComposite_1_27" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.cardtocard.suspense.account">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.cardtocard.suspense.account" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>
