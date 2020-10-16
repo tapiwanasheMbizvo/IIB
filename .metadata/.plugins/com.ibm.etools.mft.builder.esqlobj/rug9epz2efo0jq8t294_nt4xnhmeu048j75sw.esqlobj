@@ -1,0 +1,99 @@
+CREATE PROCEDURE processTHEMonUS(IN ISOMSG REFERENCE, INOUT DEBITACC CHARACTER,INOUT CREDITACC CHARACTER, OUT CREDITCODE CHARACTER, OUT DEBITCODE CHARACTER) BEGIN
+	
+			DECLARE PROCESSINGCODE, MCC CHARACTER;
+			SET MCC = ISOMSG.MerchantType_018;			
+			SET  PROCESSINGCODE= CAST(LEFT(ISOMSG.ProcessingCode_003,2)AS CHAR);   
+	
+	
+	IF MCC = '6011' OR MCC = '6012' THEN
+		
+				IF PROCESSINGCODE = '21' THEN 	
+				---for transacstions that increase the customer's balance 
+					CALL getTerminalAccount( ISOMSG.CardAcceptorTerminalIdentification_041, DEBITACC);				 	
+				 	SET DEBITACC = DEBITACC;
+						
+					
+					 IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+					 	--getAcquirerATMAccount(IN ACQUIRERID CHARACTER , OUT ACCOUNT CHARACTER )
+					 	
+					 		CALL getAcquirerATMAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032,CREDITACC );
+							SET CREDITACC = CREDITACC;
+									
+						 ELSE
+							 CALL getAcquirerATMUSDAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032, CREDITACC);
+							SET CREDITACC = CREDITACC;
+					 	
+					 END IF;	
+				
+				ELSE -- a
+						IF PROCESSINGCODE = '40' THEN
+							
+								SET DEBITACC = ISOMSG.AccountIdentification1_102;
+								SET CREDITACC = ISOMSG.AccountIdentification2_103;
+							
+						ELSE
+							
+								CALL getTerminalAccount( ISOMSG.CardAcceptorTerminalIdentification_041, CREDITACC);				 	
+				 				SET CREDITACC = CREDITACC;
+				 						
+								
+								 IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+								 	
+								 	CALL getAcquirerATMAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032,DEBITACC );
+									SET DEBITACC = DEBITACC;
+									
+								 ELSE
+								 	CALL getAcquirerATMUSDAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032, DEBITACC);
+									 SET DEBITACC = DEBITACC;
+							
+								 END IF;	 	
+								 				
+						END IF;
+						 														
+				END IF;			 
+								
+			ELSE
+				
+			IF PROCESSINGCODE = '21' THEN 	
+				--CREDIT TERMINAL ACCOUNT and DEBIT ACQUIRER GL
+				---for transacstions that increase the customer's balance 
+				
+				CALL getTerminalAccount( ISOMSG.CardAcceptorTerminalIdentification_041, DEBITACC);				 	
+				SET DEBITACC = DEBITACC;
+						
+				
+				 IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo
+				 	 
+				 	 	CALL getAcquirerPOSAccount (ISOMSG.AcquiringInstitutionIdentificationCode_032,CREDITACC);
+						SET CREDITACC = CREDITACC;
+				 ELSE
+				 		CALL getAcquirerPOSUSDAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032,CREDITACC);
+						 SET CREDITACC = CREDITACC;
+				
+				 END IF; 			
+				
+			ELSE
+				
+				IF PROCESSINGCODE = '40' THEN
+					
+						SET DEBITACC = ISOMSG.AccountIdentification1_102;
+						SET CREDITACC = ISOMSG.AccountIdentification2_103;
+					
+					ELSE				
+						CALL getTerminalAccount( ISOMSG.CardAcceptorTerminalIdentification_041, CREDITACC);				 	
+						SET CREDITACC = CREDITACC;
+						
+						 	IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
+						 	
+						 	CALL getAcquirerPOSAccount (ISOMSG.AcquiringInstitutionIdentificationCode_032,DEBITACC);
+								SET CREDITACC = CREDITACC;
+						 	ELSE
+						 		CALL getAcquirerPOSUSDAccount(ISOMSG.AcquiringInstitutionIdentificationCode_032,DEBITACC);
+						 		SET DEBITACC = DEBITACC;
+						 	END IF;			
+				END IF;
+
+			END IF;		 
+			END IF;
+	
+END;

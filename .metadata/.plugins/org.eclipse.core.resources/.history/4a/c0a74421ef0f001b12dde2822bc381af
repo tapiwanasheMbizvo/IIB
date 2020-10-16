@@ -1,0 +1,59 @@
+BROKER SCHEMA COMMON
+
+
+
+CREATE PROCEDURE processUSonUS(IN ISOMG REFERENCE, INOUT DEBITACC CHARACTER,INOUT CREDITACC CHARACTER, OUT CREDITCODE CHARACTER, OUT DEBITCODE CHARACTER) BEGIN
+	
+			DECLARE PROCESSINGCODE, TerminalID, TerminalSource CHARACTER;
+			
+			SET  PROCESSINGCODE= CAST(LEFT(ISOMSG.ProcessingCode_003,2)AS CHAR);  			
+			SET TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =ISOMSG.CardAcceptorTerminalIdentification_041);
+			SET TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =ISOMSG.CardAcceptorTerminalIdentification_041);
+		
+			
+		 	SET DEBITCODE = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = PROCESSINGCODE AND T.SOURCE = TerminalSource );-- WILL NEED TO USE 6 CHARS
+			SET CREDITCODE = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = PROCESSINGCODE AND T.SOURCE = TerminalSource);	
+			
+			IF PROCESSINGCODE = '21' THEN 
+				---for transacstions that increase the customer's balance 
+				--deposit working @tmbizvo 10032020
+				
+				--GOOD CODE
+				SET CREDITACC = ISOMSG.AccountIdentification1_102;								
+				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+				  IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+				
+						CALL getTerminalAccount( TerminalID, DEBITACC);
+						SET DEBITACC = DEBITACC;
+						
+				  ELSE
+				  			CALL getTerminalUSDAccount(TerminalID, DEBITACC);
+				  			SET DEBITACC = DEBITACC;
+				  	
+				  END IF;		
+				--GOOD CODE END
+												
+			ELSE
+				IF PROCESSINGCODE = '40' THEN -- THIS IS A FUNDS TRANSFER , SHOULD CREDIT THE RECEIVING ACCOUNT 
+			
+				SET CREDITACC = ISOMSG.AccountIdentification2_103;
+				SET DEBITACC =  ISOMSG.AccountIdentification1_102;
+			
+			ELSE -- THIS CDREDITS THE POS/ATM ACCOUNT
+				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
+				 IF ISOMSG.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
+				 	
+				 	CALL getTerminalAccount( Environment.ISO.Field041, CREDITACC);				 	
+				 	SET CREDITACC = CREDITACC;
+										
+				 ELSE
+				 	CALL getTerminalUSDAccount(Environment.ISO.Field041, CREDITACC);
+				 	SET CREDITACC = CREDITACC;
+				 	
+				 END IF;
+				 	
+				SET DEBITACC =  ISOMSG.AccountIdentification1_102;
+			END IF;	
+			END IF;
+
+END;	

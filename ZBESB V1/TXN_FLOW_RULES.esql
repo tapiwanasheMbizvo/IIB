@@ -7,400 +7,94 @@ CREATE COMPUTE MODULE TXN_FLOW_RULES
 	BEGIN
 
 
-		DECLARE  pcref, ApprovalCode_038, DEBITACC, CREDITACC CHARACTER;
+		DECLARE  pcref, ApprovalCode_038, DEBITACC, CREDITACC, CREDITCODE, DEBITCODE CHARACTER;
 		CALL createPCREF(pcref);
 		SET  Environment.ISO.PCREF = pcref;
+		
+		DECLARE ISOMSG REFERENCE TO InputBody.ns:ISO8583_1993;	
 		
 		CALL createRandomSix(ApprovalCode_038);
 		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;	
 		
 		DECLARE  account, code CHAR;
-		SET Environment.ISO.Field003 = InputBody.ns:ISO8583_1993.ProcessingCode_003;
+		SET Environment.ISO.Field003 = ISOMSG.ProcessingCode_003;
 		SET code = CAST (LEFT(Environment.ISO.Field003,2)AS CHAR);
 		
 		SET Environment.ISO.PROCESSINGCODE = code;
-		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+		SET Environment.ISO.Field041 = ISOMSG.CardAcceptorTerminalIdentification_041;
 
 		
 		SET Environment.BET.GZBRNM ='4131';
 		
-		SET Environment.BET.CREDITAMOUNT =InputBody.ns:ISO8583_1993.AmountTransaction_004;		
-		SET Environment.BET.DEBITAMOUNT =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		SET Environment.BET.CREDITAMOUNT =ISOMSG.AmountTransaction_004;		
+		SET Environment.BET.DEBITAMOUNT =ISOMSG.AmountReconciliation_005;
 		 	
 		IF (Environment.BET.DEBITAMOUNT IS NULL) THEN 
-			SET Environment.BET.DEBITAMOUNT = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+			SET Environment.BET.DEBITAMOUNT = ISOMSG.AmountTransaction_004;
 		END IF;	
 
-		SET Environment.ISO.Field032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.ISO.Field032 = ISOMSG.AcquiringInstitutionIdentificationCode_032;
 		SET Environment.BET.GZNR2 = Environment.ISO.Field041 || ' | ' || Environment.ISO.Field032;
 		
 		SET Environment.BET.GZPBR = 'ATM11'; -- constant for now as per instructions
-		SET Environment.BET.MCC = InputBody.ns:ISO8583_1993.MerchantType_018;
-		SET Environment.ISO.Field007 = InputBody.ns:ISO8583_1993.DateTimeTransmission_007;   
+		SET Environment.BET.MCC = ISOMSG.MerchantType_018;
+		SET Environment.ISO.Field007 = ISOMSG.DateTimeTransmission_007;   
 
 		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
 		SET Environment.BET.RPYQUEUE  = 'ESB.RESPONSES.QUEUE';
 		SET Environment.BET.BALRPYQUEUE= 'ESB_ENQ_Q';
-		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
-		SET Environment.ISO.CardAcceptorNameLocation_043 = InputBody.ns:ISO8583_1993.CardAcceptorNameLocation_043;
-		SET Environment.ISO.AdditionalDataPrivate_048 = InputBody.ns:ISO8583_1993.AdditionalDataPrivate_048;
-		SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
-		SET Environment.ISO.CurrencyCodeTransaction_049 = InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049;
-		SET Environment.ISO.AccountIdentification1_102 =InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.ISO.RetrievalReferenceNumber_037 = ISOMSG.RetrievalReferenceNumber_037;
+		SET Environment.ISO.CardAcceptorNameLocation_043 = ISOMSG.CardAcceptorNameLocation_043;
+		SET Environment.ISO.AdditionalDataPrivate_048 = ISOMSG.AdditionalDataPrivate_048;
+		SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = ISOMSG.AcquiringInstitutionIdentificationCode_032;
+		SET Environment.ISO.CurrencyCodeTransaction_049 = ISOMSG.CurrencyCodeTransaction_049;
+		SET Environment.ISO.AccountIdentification1_102 =ISOMSG.AccountIdentification1_102;
 	
 		--++++++++++++++++++ VALUES REQUIRED BY THE TRANSACTION SUBFLOW
 		
 
 
 
-		SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
-		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041);
-		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032);	
+		SET Environment.BET.TerminalID = 	THE(SELECT ITEM T.TERMINALID FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =ISOMSG.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.TerminalSource = THE(SELECT ITEM T.SOURCE FROM Database.ZBDB_ESB.DB2INST1.TERMINAL AS T WHERE T.TERMINALID =ISOMSG.CardAcceptorTerminalIdentification_041);
+		SET Environment.BET.Acquirer = THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =ISOMSG.AcquiringInstitutionIdentificationCode_032);	
 			
 		 
-		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR); 			
-		SET Environment.ISO.ACQUIEREBIN = LEFT( InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002, 6);
+		SET Environment.ISO.MTI = CAST(ISOMSG.MTI_MessageClass * 100 + ISOMSG.MTI_MessageFunction * 10 + ISOMSG.MTI_MessageOrigin AS CHAR); 			
+		SET Environment.ISO.ACQUIEREBIN = LEFT( ISOMSG.PrimaryAccountNumber_002, 6);
 		SET Environment.ISO.ISSUERER =THE(SELECT ITEM A.US FROM Database.ZBDB_ESB.DB2INST1.ACQUIRER AS A WHERE A.ID =Environment.ISO.ACQUIEREBIN);
 		
-		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
-		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource);
---			
---		--check 3 things 
---		IF Environment.ISO.ISSUERER = '1' AND Environment.BET.TerminalID IS NOT NULL THEN --THIS IS US ON US 
---			--CREDIT THE TERMINAL ACCOUNT AND DEBIT FIEDL  AccountIdentification1_102
---			
---			
---				IF Environment.ISO.PROCESSINGCODE = '21' THEN 
---					---for transacstions that increase the customer's balance 
---					--deposit working @tmbizvo 10032020
---					SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---					--07/07/2020 check if its a zwl or usd txn @tmbizvo 
---					  IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
---					
---							CALL getTerminalAccount( Environment.BET.TerminalID, DEBITACC);
---							SET Environment.ISO.DEBITACC = DEBITACC;
---							
---					  ELSE
---					  			CALL getTerminalUSDAccount(Environment.BET.TerminalID, DEBITACC);
---					  			SET Environment.ISO.DEBITACC = DEBITACC;
---					  	
---					  END IF;
---					ELSE ---	for transacstions that decrease the customer's balance 
---						IF Environment.ISO.PROCESSINGCODE = '40' THEN -- THIS IS A FUNDS TRANSFER , SHOULD CREDIT THE RECEIVING ACCOUNT 
---			
---							SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
---							SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---			
---						ELSE
---								IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
---					 	
---					 					CALL getTerminalAccount( Environment.ISO.Field041, CREDITACC);				 	
---					 					SET Environment.ISO.CREDITACC = CREDITACC;
---											
---					 			ELSE
---					 					CALL getTerminalUSDAccount(Environment.ISO.Field041, CREDITACC);
---					 					SET Environment.ISO.CREDITACC = CREDITACC;
---					 	
---								 END IF;
---					 	
---									SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---							
---						END IF;
---						
---					
---				END IF;		  
---					  	
---					
---					
---					
---			ELSEIF Environment.ISO.ISSUERER = '1' AND Environment.BET.TerminalID IS NULL  THEN -- THIS IS US ON THEM  
---				--CREDIT ACQUIER GL AND DEBIT AccountIdentification1_102
---				
---				IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
---		
---				IF Environment.ISO.PROCESSINGCODE = '21' THEN 	
---				
---					SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---					 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
---					 	
---					 	
---					 	CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC );
---						SET Environment.ISO.DEBITACC = DEBITACC;
---				
---					 ELSE
---					 	CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, DEBITACC);
---					 	SET Environment.ISO.DEBITACC = DEBITACC;
---					 END IF;	
---				
---				ELSE
---					IF Environment.ISO.PROCESSINGCODE = '40' THEN
---							
---								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
---							
---							ELSE					
---								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
---								 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
---								 	
---								 	CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC );
---									SET Environment.ISO.CREDITACC = CREDITACC;
---									
---								 ELSE
---								 	CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, DEBITACC);
---									 SET Environment.ISO.CREDITACC = DEBITACC;
---							
---								 END IF;	 	
---								 				
---						END IF;
---					
---					
---					
---			
---			ELSEIF 	Environment.ISO.ISSUERER = '0' AND Environment.BET.TerminalID IS NOT NULL THEN --this is them on us 
---			--CREDIT TERMINAL ACCOUNT and DEBIT ACQUIRER GL
---			
---		END IF;  
---		 
---		--check 3 things US ON US , THEM ON US, US ON THEM 
-		
-		
-		
-		 IF Environment.ISO.ISSUERER = '1' AND Environment.BET.TerminalID IS NOT NULL THEN --THIS IS US ON US
-		 	--CREDIT THE TERMINAL ACCOUNT AND DEBIT FIEDL  AccountIdentification1_102 
-		 	SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
-			SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource);			 		 		 					 	
-				IF Environment.ISO.PROCESSINGCODE = '21' THEN 
-				---for transacstions that increase the customer's balance 
-				--deposit working @tmbizvo 10032020
-				
-				--GOOD CODE
-				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;								
-				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
-				  IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
-				
-						CALL getTerminalAccount( Environment.ISO.Field041, DEBITACC);
-						SET Environment.ISO.DEBITACC = DEBITACC;
-						
-				  ELSE
-				  			CALL getTerminalUSDAccount(Environment.ISO.Field041, DEBITACC);
-				  			SET Environment.ISO.DEBITACC = DEBITACC;
-				  	
-				  END IF;		
-				--GOOD CODE END
-												
-				ELSE
-			---	for transacstions that decrease the customer's balance 
-			--cash withdrwal, purchase, purchase w/cash back,   working @tmbizvo 10032020
+		SET Environment.BET.DEBITCODE = THE(SELECT ITEM T.DEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+		SET Environment.BET.CREDITCODE = THE(SELECT ITEM T.CREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource);
+--	
 
-			--BEGIN LOGIC FOR FUNDS TRANSFER
-			IF Environment.ISO.PROCESSINGCODE = '40' THEN -- THIS IS A FUNDS TRANSFER , SHOULD CREDIT THE RECEIVING ACCOUNT 
+		IF Environment.ISO.ISSUERER = '1' AND Environment.BET.TerminalID IS NOT NULL THEN -- THIS IS US ON US 
 			
-				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
-				SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+			CALL processUSonUS(ISOMSG, DEBITACC, CREDITACC, CREDITCODE, DEBITCODE);
+			SET Environment.BET.CREDITCODE = CREDITCODE;
+			SET Environment.BET.DEBITCODE = DEBITCODE;
+			SET Environment.ISO.CREDITACC= CREDITACC;
+			SET Environment.ISO.DEBITACC = DEBITACC;
 			
-			ELSE -- THIS CDREDITS THE POS/ATM ACCOUNT
-				--07/07/2020 check if its a zwl or usd txn @tmbizvo 
-				 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN 
-				 	
-				 	CALL getTerminalAccount( Environment.ISO.Field041, CREDITACC);				 	
-				 	SET Environment.ISO.CREDITACC = CREDITACC;
-										
-				 ELSE
-				 	CALL getTerminalUSDAccount(Environment.ISO.Field041, CREDITACC);
-				 	SET Environment.ISO.CREDITACC = CREDITACC;
-				 	
-				 END IF;
-				 	
-				SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-			END IF;	
-			
-			--END LOGIC FOR FUNDS TRANSFER		
-			
-
-			---		 												
-			END IF;
-				
+		 -- end us on us 
+		
 		ELSEIF Environment.ISO.ISSUERER = '1' AND Environment.BET.TerminalID IS NULL  THEN -- THIS IS US ON THEM
-		 	
-		 --Advice transactions 
-		 
-		SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.ADVICEDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE);
-		SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.ADVICECREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE);		
 			
-			IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
+			CALL processUSonTHEM(ISOMSG, DEBITACC, CREDITACC, CREDITCODE, DEBITCODE);
+			SET Environment.BET.CREDITCODE = CREDITCODE;
+			SET Environment.BET.DEBITCODE = DEBITCODE;
+			SET Environment.ISO.CREDITACC= CREDITACC;
+			SET Environment.ISO.DEBITACC = DEBITACC;
 		
-				IF Environment.ISO.PROCESSINGCODE = '21' THEN 	
+		-- END US  ON THEM		 			
+		ELSEIF 	Environment.ISO.ISSUERER = '0' AND Environment.BET.TerminalID IS NOT NULL THEN --this is them on us 
+			CALL processTHEMonUS(ISOMSG, DEBITACC, CREDITACC, CREDITCODE, DEBITCODE);
+			SET Environment.BET.CREDITCODE = CREDITCODE;
+			SET Environment.BET.DEBITCODE = DEBITCODE;
+			SET Environment.ISO.CREDITACC= CREDITACC;
+			SET Environment.ISO.DEBITACC = DEBITACC;
+		END IF;	 -- end them on us 
 				
-					SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-					 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-					 	--getAcquirerATMAccount(IN ACQUIRERID CHARACTER , OUT ACCOUNT CHARACTER )
-					 	
-					 	CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC );
-						SET Environment.ISO.DEBITACC = DEBITACC;
-				
-					 ELSE
-					 	CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, DEBITACC);
-					 	SET Environment.ISO.DEBITACC = DEBITACC;
-					 END IF;	
-				
-				ELSE -- a
-						IF Environment.ISO.PROCESSINGCODE = '40' THEN
-							
-								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
-							
-							ELSE					
-								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-								 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-								 	
-								 	CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC );
-									SET Environment.ISO.CREDITACC = CREDITACC;
-									
-								 ELSE
-								 	CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, CREDITACC);
-									 SET Environment.ISO.CREDITACC = CREDITACC;
-							
-								 END IF;	 	
-								 				
-						END IF;
-						 														
-				END IF;			 
-								
-			ELSE
-				
-			IF Environment.ISO.PROCESSINGCODE = '21' THEN 	
-				
-				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-				 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo
-				 	 
-				 	 	CALL getAcquirerPOSAccount (InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC);
-						SET Environment.ISO.DEBITACC = DEBITACC;
-				 ELSE
-				 		CALL getAcquirerPOSUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC);
-						 SET Environment.ISO.DEBITACC = DEBITACC;
-				
-				 END IF; 			
-				
-			ELSE
-				
-				IF Environment.ISO.PROCESSINGCODE = '40' THEN
-					
-						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
-					
-					ELSE				
-						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-						 	IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-						 	
-						 	CALL getAcquirerPOSAccount (InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC);
-								SET Environment.ISO.CREDITACC = CREDITACC;
-						 	ELSE
-						 		CALL getAcquirerPOSUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC);
-						 		SET Environment.ISO.CREDITACC = CREDITACC;
-						 	END IF;			
-				END IF;
-
-			END IF;		 
-			END IF; 
-			
-			ELSEIF 	Environment.ISO.ISSUERER = '0' AND Environment.BET.TerminalID IS NOT NULL THEN --this is them on us 
---			--CREDIT TERMINAL ACCOUNT and DEBIT ACQUIRER GL
-
-				IF Environment.BET.MCC = '6011' OR Environment.BET.MCC = '6012' THEN
-		
-				IF Environment.ISO.PROCESSINGCODE = '21' THEN 	
-				---for transacstions that increase the customer's balance 
-					CALL getTerminalAccount( Environment.ISO.Field041, DEBITACC);				 	
-				 	SET Environment.ISO.DEBITACC = DEBITACC;
-						
-					
-					 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-					 	--getAcquirerATMAccount(IN ACQUIRERID CHARACTER , OUT ACCOUNT CHARACTER )
-					 	
-					 		CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC );
-							SET Environment.ISO.CREDITACC = CREDITACC;
-									
-						 ELSE
-							 CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, CREDITACC);
-							SET Environment.ISO.CREDITACC = CREDITACC;
-					 	
-					 END IF;	
-				
-				ELSE -- a
-						IF Environment.ISO.PROCESSINGCODE = '40' THEN
-							
-								SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-								SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
-							
-						ELSE
-							
-								CALL getTerminalAccount( Environment.ISO.Field041, CREDITACC);				 	
-				 				SET Environment.ISO.CREDITACC = CREDITACC;
-				 						
-								
-								 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-								 	
-								 	CALL getAcquirerATMAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC );
-									SET Environment.ISO.DEBITACC = DEBITACC;
-									
-								 ELSE
-								 	CALL getAcquirerATMUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032, DEBITACC);
-									 SET Environment.ISO.DEBITACC = DEBITACC;
-							
-								 END IF;	 	
-								 				
-						END IF;
-						 														
-				END IF;			 
-								
-			ELSE
-				
-			IF Environment.ISO.PROCESSINGCODE = '21' THEN 	
-				--CREDIT TERMINAL ACCOUNT and DEBIT ACQUIRER GL
-				---for transacstions that increase the customer's balance 
-				
-				CALL getTerminalAccount( Environment.ISO.Field041, DEBITACC);				 	
-				SET Environment.ISO.DEBITACC = DEBITACC;
-						
-				
-				 IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo
-				 	 
-				 	 	CALL getAcquirerPOSAccount (InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC);
-						SET Environment.ISO.CREDITACC = CREDITACC;
-				 ELSE
-				 		CALL getAcquirerPOSUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,CREDITACC);
-						 SET Environment.ISO.CREDITACC = CREDITACC;
-				
-				 END IF; 			
-				
-			ELSE
-				
-				IF Environment.ISO.PROCESSINGCODE = '40' THEN
-					
-						SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
-						SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
-					
-					ELSE				
-						CALL getTerminalAccount( Environment.ISO.Field041, CREDITACC);				 	
-						SET Environment.ISO.CREDITACC = CREDITACC;
-						
-						 	IF InputBody.ns:ISO8583_1993.CurrencyCodeTransaction_049 = '932' THEN   -- then ZWL TXN --07/07/2020 check if its a zwl or usd txn @tmbizvo 
-						 	
-						 	CALL getAcquirerPOSAccount (InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC);
-								SET Environment.ISO.CREDITACC = CREDITACC;
-						 	ELSE
-						 		CALL getAcquirerPOSUSDAccount(InputBody.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032,DEBITACC);
-						 		SET Environment.ISO.DEBITACC = DEBITACC;
-						 	END IF;			
-				END IF;
-
-			END IF;		 
-			END IF;
-						
-		 END IF;
-
-
-
 --set up loic for zipit send and receieve  tmbizvo @02102020
 --ZIPIT RECEIVE  ProCode -29, P2P  Credit 103, debit Suspense 
 --ZIPIT SEND ProCode  - 11 , P2P Debit  102, credit Suspense 
@@ -409,25 +103,25 @@ CREATE COMPUTE MODULE TXN_FLOW_RULES
 			IF Environment.ISO.PROCESSINGCODE = '29' THEN
 			
 				SET Environment.ISO.DEBITACC = CARDTOCARDSUSPENSEACCOUNT;
-				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+				SET Environment.ISO.CREDITACC = ISOMSG.AccountIdentification2_103;
 				
 			END IF;
 			
 			IF Environment.ISO.PROCESSINGCODE = '11' THEN
 			
 				SET Environment.ISO.CREDITACC = CARDTOCARDSUSPENSEACCOUNT;
-				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+				SET Environment.ISO.DEBITACC = ISOMSG.AccountIdentification1_102;
 			END IF;
 			
 			IF Environment.ISO.PROCESSINGCODE = '30' THEN
 			
 				SET Environment.ISO.DEBITACC = ATOASUSPENSEACCOUNT;
-				SET Environment.ISO.CREDITACC = InputBody.ns:ISO8583_1993.AccountIdentification2_103;
+				SET Environment.ISO.CREDITACC = ISOMSG.AccountIdentification2_103;
 			END IF;
 			
 			IF Environment.ISO.PROCESSINGCODE = '12' THEN
 				SET Environment.ISO.CREDITACC = ATOASUSPENSEACCOUNT;
-				SET Environment.ISO.DEBITACC = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+				SET Environment.ISO.DEBITACC = ISOMSG.AccountIdentification1_102;
 			END IF;
 			
 			
@@ -440,7 +134,7 @@ IF Environment.ISO.PROCESSINGCODE = '50' THEN
 	
 	--set up zvirikudiwa ne TRANSACTION subflow 
 	
-		SET Environment.ISO.DEBITACC =  InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET Environment.ISO.DEBITACC =  ISOMSG.AccountIdentification1_102;
  		DECLARE CustomerAccountNumber, BillerID,MobileNumber, BillerAccount, serviceProvider CHARACTER;   
  							   
  							   
@@ -463,12 +157,12 @@ END IF;	--END FOR BP
 	SET IS_REVERSAL = FALSE;
 	--isReversal (IN RETRIEVALREFERENCENUMBER CHARACTER, OUT IS_REVERSAL BOOLEAN  )
 	
-		CALL isReversal(InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037, IS_REVERSAL);
+		CALL isReversal(ISOMSG.RetrievalReferenceNumber_037, IS_REVERSAL);
 		
 			SET Environment.ISO.IS_REVERSAL = IS_REVERSAL;
 			-- SET REVRSAL CREDIT AND DEBIT CODES
-			SET Environment.BET.GZTCD1 = THE(SELECT ITEM T.REVERSALDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
-			SET Environment.BET.GZTCD2 = THE(SELECT ITEM T.REVERSALCREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource);			 		 		 					 	
+			SET Environment.BET.DEBITCODE = THE(SELECT ITEM T.REVERSALDEBITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource );-- WILL NEED TO USE 6 CHARS
+			SET Environment.BET.CREDITCODE = THE(SELECT ITEM T.REVERSALCREDITCODE FROM Database.ZBDB_ESB.DB2INST1.TRANSACTIONCODE AS T WHERE T.PROCESSINGCODE = Environment.ISO.PROCESSINGCODE AND T.SOURCE = Environment.BET.TerminalSource);			 		 		 					 	
 				
 			IF Environment.ISO.IS_REVERSAL = FALSE  THEN -- THIS 420 HAS NOT BEEN CLEARED FOR REVERSAL AND NEEDDS  TO BE THROWN OUT 
 				
@@ -489,8 +183,8 @@ END IF;	--END FOR BP
 		
 		IF LENGTH(Environment.ISO.CREDITACC)>0
 			  AND  LENGTH(Environment.ISO.DEBITACC)>0 
-			   AND LENGTH(Environment.BET.GZTCD1)>0 
-			    AND LENGTH(Environment.BET.GZTCD2)> 0 THEN 
+			   AND LENGTH(Environment.BET.DEBITCODE)>0 
+			    AND LENGTH(Environment.BET.CREDITCODE)> 0 THEN 
 			CALL CopyEntireMessage();
 			-- lets throw the iso to  collection tmbizvo @15072020
 		
@@ -504,11 +198,11 @@ END IF;	--END FOR BP
 			PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot;		
 			 THROW USER EXCEPTION CATALOG 'INPUTMESSAGE_ERRORS' MESSAGE 1 VALUES
 			(
-			'::VALUES MISSING  ON RN:: ',InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037,
+			'::VALUES MISSING  ON RN:: ',ISOMSG.RetrievalReferenceNumber_037,
 			 '::CREDIT ACC::',Environment.ISO.CREDITACC,
 			 '::DEBIT ACC::',Environment.ISO.DEBITACC,
-			 '::DEBIT CODE::',Environment.BET.GZTCD1,
-			  '::CREDIT CODE::',Environment.BET.GZTCD2      
+			 '::DEBIT CODE::',Environment.BET.DEBITCODE,
+			  '::CREDIT CODE::',Environment.BET.CREDITCODE      
 			 );	
 			 RETURN FALSE; 
 		END IF;					

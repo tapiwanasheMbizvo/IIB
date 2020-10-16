@@ -191,7 +191,7 @@
     <xs:element dfdl:lengthKind="implicit" ibmSchExtn:docRoot="true" name="ISO8583_1993">
         <xs:complexType>
             <xs:sequence dfdl:separator="">
-                <xs:element dfdl:length="1" dfdl:textNumberPattern="#0" ibmDfdlExtn:sampleValue="1" name="MTI_Version" type="xs:integer"/>
+                <xs:element default="1" dfdl:length="1" dfdl:textNumberPattern="#0" ibmDfdlExtn:sampleValue="1" name="MTI_Version" type="xs:integer"/>
                 <xs:element dfdl:length="1" dfdl:textNumberPattern="#0" ibmDfdlExtn:sampleValue="1" name="MTI_MessageClass" type="xs:integer"/>
                 <xs:element dfdl:length="1" dfdl:textNumberPattern="#0" ibmDfdlExtn:sampleValue="1" name="MTI_MessageFunction" type="xs:integer"/>
                 <xs:element dfdl:length="1" dfdl:textNumberPattern="#0" ibmDfdlExtn:sampleValue="1" name="MTI_MessageOrigin" type="xs:integer"/>

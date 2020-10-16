@@ -6744,3 +6744,146 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 -showlocation -product
 
 !ENTRY org.eclipse.osgi 2 1 2020-10-16 09:36:20.017
 !MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages
+!SESSION 2020-10-16 11:30:51.515 -----------------------------------------------
+eclipse.buildId=4.2.2.M20140918-1444
+java.fullversion=8.0.5.5 - pwa6480sr5fp5-20171114_01(SR5 FP5)
+JRE 1.8.0 IBM J9 2.9 Windows 10 amd64-64 Compressed References 20171102_369060 (JIT enabled, AOT enabled)
+OpenJ9   - 7ade437
+OMR      - 1b656cb
+IBM      - 59c3d96
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ZW
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+
+!ENTRY org.eclipse.core.resources 2 10035 2020-10-16 11:30:54.405
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.emf.ecore 2 0 2020-10-16 11:30:55.404
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 11:30:58.651
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.adapter.c, page: com.ibm.adapter.c.ui.preferencepage.CPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 11:30:58.655
+!MESSAGE Invalid preference category path: com.ibm.debug.breakpoints.common.pref.tracepoint (bundle: com.ibm.debug.wsa, page: com.ibm.debug.wsa.WSATracepointPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 11:30:58.656
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.etools.cobol.preference.ui, page: com.ibm.etools.cobol.preference.ui.preferencepage.CobolPreferencePage)
+
+!ENTRY com.ibm.etools.mft.uri 0 0 2020-10-16 11:30:59.672
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 11:31:03.089
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogTitle in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 11:31:03.089
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogDescription in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 11:31:04.739
+!MESSAGE NLS unused message: SendMessage_msgNameLabel in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 11:31:04.740
+!MESSAGE NLS missing message: SendLastMessageAction_label in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY com.ibm.etools.mft.pattern.community 4 0 2020-10-16 11:31:06.661
+!MESSAGE Connection error occurred : ot4i.github.io
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 11:31:06.823
+!MESSAGE 
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 11:31:06.824
+!MESSAGE C:\Program Files\IBM\IIB\10.0.0.11\tools>mqsifindmqpath
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 11:31:06.994
+!MESSAGE BIP8071I: Successful command completion. C:\Program Files\IBM\WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 11:31:06.994
+!MESSAGE MQ Install location found:C:/Program Files/IBM/WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 11:31:06.995
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 17:03:07.043
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorSchemaInAppImportSchemaInSharedLib in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 17:03:07.044
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages
+!SESSION 2020-10-16 19:54:48.911 -----------------------------------------------
+eclipse.buildId=4.2.2.M20140918-1444
+java.fullversion=8.0.5.5 - pwa6480sr5fp5-20171114_01(SR5 FP5)
+JRE 1.8.0 IBM J9 2.9 Windows 10 amd64-64 Compressed References 20171102_369060 (JIT enabled, AOT enabled)
+OpenJ9   - 7ade437
+OMR      - 1b656cb
+IBM      - 59c3d96
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ZW
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+Command-line arguments:  -data C:\ESB\ZBESBLIVE -os win32 -ws win32 -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+
+!ENTRY org.eclipse.emf.ecore 2 0 2020-10-16 19:54:51.670
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 19:54:58.260
+!MESSAGE 
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 19:54:58.263
+!MESSAGE C:\Program Files\IBM\IIB\10.0.0.11\tools>mqsifindmqpath
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 19:54:58.481
+!MESSAGE BIP8071I: Successful command completion. C:\Program Files\IBM\WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 19:54:58.482
+!MESSAGE MQ Install location found:C:/Program Files/IBM/WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-16 19:54:58.482
+!MESSAGE 
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 19:55:01.225
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.adapter.c, page: com.ibm.adapter.c.ui.preferencepage.CPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 19:55:01.226
+!MESSAGE Invalid preference category path: com.ibm.debug.breakpoints.common.pref.tracepoint (bundle: com.ibm.debug.wsa, page: com.ibm.debug.wsa.WSATracepointPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-16 19:55:01.227
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.etools.cobol.preference.ui, page: com.ibm.etools.cobol.preference.ui.preferencepage.CobolPreferencePage)
+
+!ENTRY com.ibm.etools.mft.uri 0 0 2020-10-16 19:55:01.386
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 19:55:03.224
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogTitle in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 19:55:03.225
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogDescription in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 19:55:08.779
+!MESSAGE NLS unused message: SendMessage_msgNameLabel in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 19:55:08.781
+!MESSAGE NLS missing message: SendLastMessageAction_label in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 20:39:08.864
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorSchemaInAppImportSchemaInSharedLib in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-16 20:39:08.864
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.jface 2 0 2020-10-16 22:35:34.744
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2020-10-16 22:35:34.744
+!MESSAGE A conflict occurred for CTRL+SHIFT+F:
+Binding(CTRL+SHIFT+F,
+	ParameterizedCommand(Command(com.ibm.etools.mft.esql.editor.contentFormatter,Format,
+		Format the selected code,
+		Category(com.ibm.etools.mft.esql.editor.category,ESQL Editing,Integration Toolkit ESQL Editor Actions,true),
+		org.eclipse.ui.internal.MakeHandlersGo@2a8d46b6,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	com.ibm.etools.mft.esql.editor.context,,,system)
+Binding(CTRL+SHIFT+F,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.format,Format,
+		Format the selected text,
+		Category(org.eclipse.jdt.ui.category.source,Source,Java Source Actions,true),
+		org.eclipse.ui.internal.MakeHandlersGo@929d88fc,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.jdt.ui.javaEditorScope,,,system)

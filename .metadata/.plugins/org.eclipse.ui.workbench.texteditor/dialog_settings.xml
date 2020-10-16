@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Environment.ISO.PROCESSINGCODE" key="selection"/>
+		<item value="" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="4131847311932"/>
 			<item value="Environment.ISO.Field003L02"/>
 			<item value="InputBody"/>
 			<item value="Environment.ISO.Field041"/>
@@ -15,7 +16,6 @@
 			<item value="Environment.ISO.CREDITACC1"/>
 			<item value="Environment.BILL.billerid"/>
 			<item value="OutputRoot.XMLNSC"/>
-			<item value="CREDITACC"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Environment.ISO.PROCESSINGCODE"/>
