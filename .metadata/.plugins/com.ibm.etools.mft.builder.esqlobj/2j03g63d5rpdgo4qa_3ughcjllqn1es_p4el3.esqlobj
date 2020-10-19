@@ -1,0 +1,205 @@
+CREATE COMPUTE MODULE EQ_HOLD_HOLD_ISO_RESP
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	
+		CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		DECLARE OUTISOMSG REFERENCE TO OutputRoot.DFDL.ns:ISO8583_1993;
+		DECLARE PRIMARYBITMAP REFERENCE TO OUTISOMSG.PrimaryBitmap;
+		DECLARE SECONDARYBITMAP REFERENCE TO OUTISOMSG.SecondaryBitmap;
+		
+		SET OutputRoot.Properties.MessageSet = '{ISO8583}';
+        SET OutputRoot.Properties.MessageType = '{}ns:ISO8583_1993';
+
+        SET OUTISOMSG.MTI_Version          = 1;
+        SET OUTISOMSG.MTI_MessageClass     = 2;
+        SET OUTISOMSG.MTI_MessageFunction  = 1;
+        SET OUTISOMSG.MTI_MessageOrigin    = 0;
+
+        SET PRIMARYBITMAP.Bit001 = 1;
+        SET PRIMARYBITMAP.Bit002 = 1;
+        SET PRIMARYBITMAP.Bit003 = 1;
+        SET PRIMARYBITMAP.Bit004 = 1;
+        SET PRIMARYBITMAP.Bit005 = 1;
+        SET PRIMARYBITMAP.Bit006 = 0;
+        SET PRIMARYBITMAP.Bit007 = 0;
+        SET PRIMARYBITMAP.Bit008 = 0;
+        SET PRIMARYBITMAP.Bit009 = 0;
+        SET PRIMARYBITMAP.Bit010 = 0;
+        SET PRIMARYBITMAP.Bit011 = 1;
+        SET PRIMARYBITMAP.Bit012 = 1;
+        SET PRIMARYBITMAP.Bit013 = 0;
+        SET PRIMARYBITMAP.Bit014 = 0;
+        SET PRIMARYBITMAP.Bit015 = 0;
+        SET PRIMARYBITMAP.Bit016 = 0;
+        SET PRIMARYBITMAP.Bit017 = 0;
+        SET PRIMARYBITMAP.Bit018 = 1;
+        SET PRIMARYBITMAP.Bit019 = 0;
+        SET PRIMARYBITMAP.Bit020 = 0;
+        SET PRIMARYBITMAP.Bit021 = 0;
+        SET PRIMARYBITMAP.Bit022 = 0;
+        SET PRIMARYBITMAP.Bit023 = 0;
+        SET PRIMARYBITMAP.Bit024 = 0;
+        SET PRIMARYBITMAP.Bit025 = 0;
+        SET PRIMARYBITMAP.Bit026 = 0;
+        SET PRIMARYBITMAP.Bit027 = 0;
+        SET PRIMARYBITMAP.Bit028 = 0;
+        SET PRIMARYBITMAP.Bit029 = 0;
+        SET PRIMARYBITMAP.Bit030 = 0;
+        SET PRIMARYBITMAP.Bit031 = 0;
+        SET PRIMARYBITMAP.Bit032 = 1;
+        SET PRIMARYBITMAP.Bit033 = 0;
+        SET PRIMARYBITMAP.Bit034 = 0;
+        SET PRIMARYBITMAP.Bit035 = 0;
+        SET PRIMARYBITMAP.Bit036 = 0;
+        SET PRIMARYBITMAP.Bit037 = 1;
+        SET PRIMARYBITMAP.Bit038 = 1;
+        SET PRIMARYBITMAP.Bit039 = 1;
+        SET PRIMARYBITMAP.Bit040 = 0;
+        SET PRIMARYBITMAP.Bit041 = 1;
+        SET PRIMARYBITMAP.Bit042 = 0;
+        SET PRIMARYBITMAP.Bit043 = 1;
+        SET PRIMARYBITMAP.Bit044 = 0;
+        SET PRIMARYBITMAP.Bit045 = 0;
+        SET PRIMARYBITMAP.Bit046 = 0;
+        SET PRIMARYBITMAP.Bit047 = 0;
+        SET PRIMARYBITMAP.Bit048 = 1;
+        SET PRIMARYBITMAP.Bit049 = 1;
+        SET PRIMARYBITMAP.Bit050 = 1;
+        SET PRIMARYBITMAP.Bit051 = 1;
+        SET PRIMARYBITMAP.Bit052 = 0;
+        SET PRIMARYBITMAP.Bit053 = 0;
+        SET PRIMARYBITMAP.Bit054 = 1;
+        SET PRIMARYBITMAP.Bit055 = 0;
+        SET PRIMARYBITMAP.Bit056 = 0;
+        SET PRIMARYBITMAP.Bit057 = 0;
+        SET PRIMARYBITMAP.Bit058 = 0;
+        SET PRIMARYBITMAP.Bit059 = 0;
+        SET PRIMARYBITMAP.Bit060 = 0;
+        SET PRIMARYBITMAP.Bit061 = 0;
+        SET PRIMARYBITMAP.Bit062 = 0;
+        SET PRIMARYBITMAP.Bit063 = 0;
+        SET PRIMARYBITMAP.Bit064 = 0;
+		
+
+        SET SECONDARYBITMAP.Bit065 = 0;
+        SET SECONDARYBITMAP.Bit066 = 0;
+        SET SECONDARYBITMAP.Bit067 = 0;
+        SET SECONDARYBITMAP.Bit068 = 0;
+        SET SECONDARYBITMAP.Bit069 = 0;
+        SET SECONDARYBITMAP.Bit070 = 0;
+        SET SECONDARYBITMAP.Bit071 = 0;
+        SET SECONDARYBITMAP.Bit072 = 0;
+        SET SECONDARYBITMAP.Bit073 = 0;
+        SET SECONDARYBITMAP.Bit074 = 0;
+        SET SECONDARYBITMAP.Bit075 = 0;
+        SET SECONDARYBITMAP.Bit076 = 0;
+        SET SECONDARYBITMAP.Bit077 = 0;
+        SET SECONDARYBITMAP.Bit078 = 0;
+        SET SECONDARYBITMAP.Bit079 = 0;
+        SET SECONDARYBITMAP.Bit080 = 0;
+        SET SECONDARYBITMAP.Bit081 = 0;
+        SET SECONDARYBITMAP.Bit082 = 0;
+        SET SECONDARYBITMAP.Bit083 = 0;
+        SET SECONDARYBITMAP.Bit084 = 0;
+        SET SECONDARYBITMAP.Bit085 = 0;
+        SET SECONDARYBITMAP.Bit086 = 0;
+        SET SECONDARYBITMAP.Bit087 = 0;
+        SET SECONDARYBITMAP.Bit088 = 0;
+        SET SECONDARYBITMAP.Bit089 = 0;
+        SET SECONDARYBITMAP.Bit090 = 0;
+        SET SECONDARYBITMAP.Bit091 = 0;
+        SET SECONDARYBITMAP.Bit092 = 0;
+        SET SECONDARYBITMAP.Bit093 = 0;
+        SET SECONDARYBITMAP.Bit094 = 0;
+        SET SECONDARYBITMAP.Bit095 = 0;
+        SET SECONDARYBITMAP.Bit096 = 0;
+        SET SECONDARYBITMAP.Bit097 = 0;
+        SET SECONDARYBITMAP.Bit098 = 0;
+        SET SECONDARYBITMAP.Bit099 = 0;
+        SET SECONDARYBITMAP.Bit100 = 0;
+        SET SECONDARYBITMAP.Bit101 = 0;
+        SET SECONDARYBITMAP.Bit102 = 1;
+        SET SECONDARYBITMAP.Bit103 = 0;
+        SET SECONDARYBITMAP.Bit104 = 0;
+        SET SECONDARYBITMAP.Bit105 = 0;
+        SET SECONDARYBITMAP.Bit106 = 0;
+        SET SECONDARYBITMAP.Bit107 = 0;
+        SET SECONDARYBITMAP.Bit108 = 0;
+        SET SECONDARYBITMAP.Bit109 = 0;
+        SET SECONDARYBITMAP.Bit110 = 0;
+        SET SECONDARYBITMAP.Bit111 = 0;
+        SET SECONDARYBITMAP.Bit112 = 0;
+        SET SECONDARYBITMAP.Bit113 = 0;
+        SET SECONDARYBITMAP.Bit114 = 0;
+        SET SECONDARYBITMAP.Bit115 = 0;
+        SET SECONDARYBITMAP.Bit116 = 0;
+        SET SECONDARYBITMAP.Bit117 = 0;
+        SET SECONDARYBITMAP.Bit118 = 0;
+        SET SECONDARYBITMAP.Bit119 = 0;
+        SET SECONDARYBITMAP.Bit120 = 0;
+        SET SECONDARYBITMAP.Bit121 = 0;
+        SET SECONDARYBITMAP.Bit122 = 0;
+        SET SECONDARYBITMAP.Bit123 = 0;
+        SET SECONDARYBITMAP.Bit124 = 0;
+        SET SECONDARYBITMAP.Bit125 = 0;
+        SET SECONDARYBITMAP.Bit126 = 0;
+        SET SECONDARYBITMAP.Bit127 = 0;
+        SET SECONDARYBITMAP.Bit128 = 0;
+
+		SET OUTISOMSG.PrimaryAccountNumber_002                   = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002;
+        SET OUTISOMSG.ProcessingCode_003                         = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.ProcessingCode_003;
+        SET OUTISOMSG.AmountTransaction_004                      = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AmountTransaction_004;
+        SET OUTISOMSG.AmountReconciliation_005                   = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AmountReconciliation_005;
+        SET OUTISOMSG.SystemsTraceAuditNumber_011                = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
+        SET OUTISOMSG.DateTimeLocalTransaction_012                   = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012;
+        SET OUTISOMSG.MerchantType_018                           = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.MerchantType_018;
+        SET OUTISOMSG.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
+        SET OUTISOMSG.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+        SET OUTISOMSG.ApprovalCode_038                           =COMMON.createRandomSix(); -- parser says it must be six characters
+                                                                                       -- Field 038 is not in input message because it is not in the bitmap
+
+        SET OUTISOMSG.ActionCode_039                             = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.ActionCode_039; -- some logic needs to be applied here
+
+        SET OUTISOMSG.CardAcceptorTerminalIdentification_041     = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
+        SET OUTISOMSG.CardAcceptorNameLocation_043               = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043;
+        
+        
+        SET OUTISOMSG.AdditionalDataPrivate_048                  = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048;
+        
+        SET OUTISOMSG.CurrencyCodeTransaction_049                = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049;
+        SET OUTISOMSG.CurrencyCodeReconciliation_050             = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
+        SET OUTISOMSG.CurrencyCodeCardholderBilling_051          = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
+
+        SET OUTISOMSG.AmountsAdditional_054                      = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AmountsAdditional_054; -- Prime the field
+        DECLARE WORK CHAR '007016C000000090188932010016C000000091688932';
+        DECLARE BAL1 CHAR '000000000000';
+        DECLARE BAL2 CHAR '000000000000';
+        SET BAL1 = SUBSTRING (InputRoot.Collection.BAL_ENQ_RESP.DFDL.BALANCEENQUIRYRESPONSE.STATUSBAL FROM 5);
+        SET BAL2 = SUBSTRING (InputRoot.Collection.BAL_ENQ_RESP.DFDL.BALANCEENQUIRYRESPONSE.AVAILABLEBALANCE FROM 5);
+        SET WORK = OVERLAY (WORK PLACING BAL1 FROM 8);
+        SET WORK = OVERLAY (WORK PLACING BAL2 FROM 30);
+        SET OUTISOMSG.AmountsAdditional_054                      = WORK;
+        -- May also need some more processing ...
+        
+        SET OUTISOMSG.AccountIdentification1_102                 = InputRoot.Collection.ISO_INPUT.DFDL.ns:ISO8583_1993.AccountIdentification1_102;
+        --SET OUTISOMSG.AccountIdentification2_103                 = 'This is conditional lets leave for now';
+		
+		RETURN TRUE;
+		
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

@@ -1,0 +1,265 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+
+		--CALL CopyMessageHeaders();
+
+		
+		
+		
+		DECLARE   ApprovalCode_038, responseCode, XRREC,MsgTxt  CHARACTER;
+		CALL createRandomSix(ApprovalCode_038);
+		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;				
+		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
+		--SET OutputRoot.MQMD = Environment.MQMD;             
+		
+		DECLARE OUTMSG REFERENCE TO OutputRoot.DFDL.ns:ISO8583_1993;
+		DECLARE ISOINMSG REFERENCE TO  InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993;
+		
+		SET MsgTxt =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt;
+		SET XRREC =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.XRREC; 
+		           	                                          
+        SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
+        
+        SET OUTMSG.MTI_Version          = 1;
+        SET OUTMSG.MTI_MessageClass     = ISOINMSG.MTI_MessageClass;
+        SET OUTMSG.MTI_MessageFunction  =1;
+        SET OUTMSG.MTI_MessageOrigin    =ISOINMSG.MTI_MessageOrigin;
+
+
+        SET OUTMSG.PrimaryBitmap.Bit001 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit002 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit003 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit004 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit005 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit006 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit007 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit008 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit009 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit010 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit011 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit012 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit013 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit014 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit015 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit016 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit017 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit018 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit019 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit020 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit021 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit022 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit023 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit024 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit025 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit026 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit027 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit028 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit029 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit030 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit031 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit032 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit033 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit034 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit035 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit036 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit037 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit038 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit039 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit040 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit041 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit042 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit043 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit044 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit045 = 0;
+        
+        --AmountsFees_046 need to be on for BP tranasctions 07102020
+               
+        
+        IF ISOINMSG.PrimaryBitmap.Bit046 = '1'THEN 
+        	SET OUTMSG.PrimaryBitmap.Bit046 = 1;
+        ELSE
+        	SET OUTMSG.PrimaryBitmap.Bit046 = 0;
+        END IF;
+        
+        SET OUTMSG.PrimaryBitmap.Bit047 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit048 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit049 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit050 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit051 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit052 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit053 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit054 = 1;
+        SET OUTMSG.PrimaryBitmap.Bit055 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit056 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit057 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit058 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit059 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit060 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit061 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit062 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit063 = 0;
+        SET OUTMSG.PrimaryBitmap.Bit064 = 0;
+
+
+        SET OUTMSG.SecondaryBitmap.Bit065 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit066 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit067 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit068 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit069 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit070 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit071 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit072 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit073 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit074 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit075 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit076 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit077 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit078 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit079 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit080 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit081 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit082 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit083 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit084 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit085 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit086 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit087 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit088 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit089 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit090 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit091 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit092 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit093 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit094 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit095 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit096 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit097 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit098 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit099 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit100 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit101 = 0;
+        
+		IF ISOINMSG.SecondaryBitmap.Bit102 = '1'THEN 
+        	SET OUTMSG.SecondaryBitmap.Bit102 = 1;
+        ELSE
+        	SET OUTMSG.SecondaryBitmap.Bit102 = 0;
+        END IF;	
+        
+        
+        IF ISOINMSG.SecondaryBitmap.Bit103 = '1'THEN 
+        	SET OUTMSG.SecondaryBitmap.Bit103 = 1;
+        ELSE
+        	SET OUTMSG.SecondaryBitmap.Bit103 = 0;
+        END IF;	
+        
+        SET OUTMSG.SecondaryBitmap.Bit104 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit105 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit106 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit107 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit108 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit109 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit110 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit111 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit112 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit113 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit114 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit115 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit116 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit117 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit118 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit119 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit120 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit121 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit122 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit123 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit124 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit125 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit126 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit127 = 0;
+        SET OUTMSG.SecondaryBitmap.Bit128 = 0;
+
+		SET OUTMSG.PrimaryAccountNumber_002                   = ISOINMSG.PrimaryAccountNumber_002;
+        SET OUTMSG.ProcessingCode_003                         = ISOINMSG.ProcessingCode_003;
+        SET OUTMSG.AmountTransaction_004                      = ISOINMSG.AmountTransaction_004;
+        SET OUTMSG.AmountReconciliation_005                   = ISOINMSG.AmountReconciliation_005;
+        SET OUTMSG.SystemsTraceAuditNumber_011                = ISOINMSG.SystemsTraceAuditNumber_011;
+        SET OUTMSG.DateTimeLocalTransaction_012               = ISOINMSG.DateTimeLocalTransaction_012;
+        SET OUTMSG.MerchantType_018                           = ISOINMSG.MerchantType_018;
+        SET OUTMSG.AcquiringInstitutionIdentificationCode_032 = ISOINMSG.AcquiringInstitutionIdentificationCode_032;
+        SET OUTMSG.RetrievalReferenceNumber_037               = ISOINMSG.RetrievalReferenceNumber_037;
+        SET OUTMSG.ApprovalCode_038                           = Environment.ISO.ApprovalCode_038;
+       
+       	CALL getResponseCode(XRREC,MsgTxt,responseCode ); 
+       		IF responseCode IS NULL THEN 
+       		SET responseCode ='124';
+       	END IF;    
+       	SET OUTMSG.ActionCode_039                             = responseCode;
+       	
+        SET OUTMSG.CardAcceptorTerminalIdentification_041     = ISOINMSG.CardAcceptorTerminalIdentification_041;
+        SET OUTMSG.CardAcceptorNameLocation_043               = ISOINMSG.CardAcceptorNameLocation_043;
+        SET OUTMSG.AdditionalDataPrivate_048                  = ISOINMSG.AdditionalDataPrivate_048;
+        SET OUTMSG.CurrencyCodeTransaction_049                = ISOINMSG.CurrencyCodeTransaction_049;
+        SET OUTMSG.CurrencyCodeReconciliation_050             = ISOINMSG.CurrencyCodeReconciliation_050;
+        SET OUTMSG.CurrencyCodeCardholderBilling_051          = ISOINMSG.CurrencyCodeCardholderBilling_051;
+
+
+
+		IF ISOINMSG.PrimaryBitmap.Bit046 = '1'THEN 
+        	SET OUTMSG.AmountsFees_046 =ISOINMSG.AmountsFees_046;
+        ELSE
+        	--SET OUTMSG.PrimaryBitmap.Bit046 = 0;
+        END IF;
+        
+        --SET OUTMSG.AmountsAdditional_054                      = '007016C000000090188932010016C000000091688932'; 
+        DECLARE BAL1 CHAR '000000000000';
+        DECLARE BAL2 CHAR '000000000000';
+        SET BAL1 = SUBSTRING (InputRoot.Collection.BAL_RESP.DFDL.BALANCEENQUIRYRESPONSE.STATUSBAL FROM 5);
+        SET BAL2 = SUBSTRING (InputRoot.Collection.BAL_RESP.DFDL.BALANCEENQUIRYRESPONSE.AVAILABLEBALANCE FROM 5);
+        
+        SET Environment.Trace.PUREBAL = InputRoot.Collection.BAL_RESP.DFDL.BALANCEENQUIRYRESPONSE.AVAILABLEBALANCE;
+        DECLARE WORK CHAR '007016C000000090188932010016C000000091688932';
+        
+        IF CONTAINS(Environment.Trace.PUREBAL, '-') THEN
+        	 SET WORK = '007016D000000090188932010016D000000091688932'; 
+        	 ELSE 
+        	 	SET WORK =  '007016C000000090188932010016C000000091688932';
+        END IF;
+        	 	
+        SET WORK = OVERLAY (WORK PLACING BAL1 FROM 8);
+        SET WORK = OVERLAY (WORK PLACING BAL2 FROM 30);
+       
+        SET OUTMSG.AmountsAdditional_054                      = WORK;	
+        IF ISOINMSG.SecondaryBitmap.Bit102 = '1'THEN 
+        	SET OUTMSG.AccountIdentification1_102                 = ISOINMSG.AccountIdentification1_102;
+       
+        END IF;	
+        
+        
+        IF ISOINMSG.SecondaryBitmap.Bit103 = '1'THEN 
+        	SET OUTMSG.AccountIdentification2_103                 = ISOINMSG.AccountIdentification2_103;
+        	
+        END IF;	
+        CALL addToMQDestinationList(InputLocalEnvironment ,'OUT.LOGGER');
+		CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP');
+
+		RETURN TRUE;
+	END;
+	
+	
+	
+ 
+		
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

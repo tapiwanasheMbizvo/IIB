@@ -8,31 +8,31 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="4131847311932"/>
-			<item value="Environment.ISO.Field003L02"/>
-			<item value="InputBody"/>
+			<item value="Env"/>
+			<item value="En"/>
+			<item value="ISOMG"/>
+			<item value="ISOMSG"/>
+			<item value="DEBITACC"/>
+			<item value="Environment.ISO."/>
 			<item value="Environment.ISO.Field041"/>
-			<item value="AmountsFees_046"/>
-			<item value="Environment.ISO.CREDITACC1"/>
-			<item value="Environment.BILL.billerid"/>
-			<item value="OutputRoot.XMLNSC"/>
+			<item value="Environment.BET.MCC"/>
 		</list>
 		<list key="replacehistory">
+			<item value="ISOMSG"/>
+			<item value=""/>
+			<item value="ISOMSG.CardAcceptorTerminalIdentification_041"/>
+			<item value="CREDITCODE"/>
+			<item value="DEBITCODE"/>
 			<item value="Environment.ISO.PROCESSINGCODE"/>
 			<item value="InputRoot.Collection.ISO_Request.DFDL"/>
 			<item value="BillerAccount"/>
-			<item value="BillerID"/>
-			<item value="CREDITACC1"/>
-			<item value="DEBITACC1"/>
-			<item value="BAL_RESP"/>
-			<item value="TXN_RESP"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="257" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="381" key="DIALOG_HEIGHT"/>
-		<item value="902" key="DIALOG_X_ORIGIN"/>
-		<item value="365" key="DIALOG_Y_ORIGIN"/>
+		<item value="1420" key="DIALOG_X_ORIGIN"/>
+		<item value="269" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

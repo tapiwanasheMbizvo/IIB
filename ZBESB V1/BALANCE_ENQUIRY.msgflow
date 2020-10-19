@@ -3,6 +3,9 @@
     xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="BALANCE_ENQUIRY.msgflow" nsPrefix="BALANCE_ENQUIRY.msgflow">
   <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
     <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.BALREPLYQUEUE" name="BALREPLYQUEUE" defaultValueLiteral="ESB.ENQ.QUEUE">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
     <translation xmi:type="utility:TranslatableString" key="BALANCE_ENQUIRY" bundleName="BALANCE_ENQUIRY" pluginId="ZBESB V1"/>
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/BALANCE_ENQUIRY.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/BALANCE_ENQUIRY.gif"/>
@@ -50,7 +53,7 @@
       <nodes xmi:type="ComIbmFileOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="340,405" outputDirectory="/balance_enq/ZB_Kenac/output_files" outputFilename="BAL_FILE.txt">
         <translation xmi:type="utility:ConstantString" string="File Output"/>
       </nodes>
-      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="821,407" queueName="BAL_IN_LOGGER">
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="821,407" queueName="ISO_LOGGER_IN">
         <translation xmi:type="utility:ConstantString" string="BAL_IN_LOGGER"/>
       </nodes>
       <nodes xmi:type="BALANCE_ENQUIRY.subflow:FCMComposite_1" xmi:id="FCMComposite_1_13" location="334,125">
@@ -71,7 +74,11 @@
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out1" targetTerminalName="ISO_request"/>
     </composition>
-    <propertyOrganizer/>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.BALREPLYQUEUE">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.BALREPLYQUEUE" bundleName="BALANCE_ENQUIRY" pluginId="ZBESB V1"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
     <stickyBoard/>
   </eClassifiers>
 </ecore:EPackage>

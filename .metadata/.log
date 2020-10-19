@@ -6887,3 +6887,177 @@ Binding(CTRL+SHIFT+F,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.jdt.ui.javaEditorScope,,,system)
+!SESSION 2020-10-17 07:13:33.253 -----------------------------------------------
+eclipse.buildId=4.2.2.M20140918-1444
+java.fullversion=8.0.5.5 - pwa6480sr5fp5-20171114_01(SR5 FP5)
+JRE 1.8.0 IBM J9 2.9 Windows 10 amd64-64 Compressed References 20171102_369060 (JIT enabled, AOT enabled)
+OpenJ9   - 7ade437
+OMR      - 1b656cb
+IBM      - 59c3d96
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ZW
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+
+!ENTRY org.eclipse.emf.ecore 2 0 2020-10-17 07:13:36.849
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY org.eclipse.ui 2 2 2020-10-17 07:13:40.164
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.adapter.c, page: com.ibm.adapter.c.ui.preferencepage.CPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-17 07:13:40.167
+!MESSAGE Invalid preference category path: com.ibm.debug.breakpoints.common.pref.tracepoint (bundle: com.ibm.debug.wsa, page: com.ibm.debug.wsa.WSATracepointPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-17 07:13:40.167
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.etools.cobol.preference.ui, page: com.ibm.etools.cobol.preference.ui.preferencepage.CobolPreferencePage)
+
+!ENTRY com.ibm.etools.mft.uri 0 0 2020-10-17 07:13:41.174
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:13:45.382
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogTitle in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:13:45.382
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogDescription in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-17 07:13:48.218
+!MESSAGE 
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-17 07:13:48.219
+!MESSAGE C:\Program Files\IBM\IIB\10.0.0.11\tools>mqsifindmqpath
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-17 07:13:48.448
+!MESSAGE BIP8071I: Successful command completion. C:\Program Files\IBM\WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-17 07:13:48.449
+!MESSAGE MQ Install location found:C:/Program Files/IBM/WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-17 07:13:48.451
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:22:33.001
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorSchemaInAppImportSchemaInSharedLib in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:22:33.002
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:26:55.752
+!MESSAGE NLS unused message: SendMessage_msgNameLabel in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-17 07:26:55.753
+!MESSAGE NLS missing message: SendLastMessageAction_label in: com.ibm.etools.mft.testmode.TestModeStrings
+!SESSION 2020-10-18 07:54:07.649 -----------------------------------------------
+eclipse.buildId=4.2.2.M20140918-1444
+java.fullversion=8.0.5.5 - pwa6480sr5fp5-20171114_01(SR5 FP5)
+JRE 1.8.0 IBM J9 2.9 Windows 10 amd64-64 Compressed References 20171102_369060 (JIT enabled, AOT enabled)
+OpenJ9   - 7ade437
+OMR      - 1b656cb
+IBM      - 59c3d96
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ZW
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+
+!ENTRY org.eclipse.core.resources 2 10035 2020-10-18 07:54:10.107
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.emf.ecore 2 0 2020-10-18 07:54:11.102
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY org.eclipse.ui 2 2 2020-10-18 07:54:13.619
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.adapter.c, page: com.ibm.adapter.c.ui.preferencepage.CPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-18 07:54:13.621
+!MESSAGE Invalid preference category path: com.ibm.debug.breakpoints.common.pref.tracepoint (bundle: com.ibm.debug.wsa, page: com.ibm.debug.wsa.WSATracepointPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-18 07:54:13.622
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.etools.cobol.preference.ui, page: com.ibm.etools.cobol.preference.ui.preferencepage.CobolPreferencePage)
+
+!ENTRY com.ibm.etools.mft.uri 0 0 2020-10-18 07:54:13.988
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 07:54:15.911
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogTitle in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 07:54:15.912
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogDescription in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-18 07:54:18.032
+!MESSAGE 
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-18 07:54:18.033
+!MESSAGE C:\Program Files\IBM\IIB\10.0.0.11\tools>mqsifindmqpath
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 07:54:18.144
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorSchemaInAppImportSchemaInSharedLib in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 07:54:18.145
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-18 07:54:18.191
+!MESSAGE BIP8071I: Successful command completion. C:\Program Files\IBM\WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-18 07:54:18.192
+!MESSAGE MQ Install location found:C:/Program Files/IBM/WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-18 07:54:18.192
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 08:00:20.181
+!MESSAGE NLS unused message: SendMessage_msgNameLabel in: com.ibm.etools.mft.testmode.TestModeStrings
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-18 08:00:20.182
+!MESSAGE NLS missing message: SendLastMessageAction_label in: com.ibm.etools.mft.testmode.TestModeStrings
+!SESSION 2020-10-19 23:10:42.466 -----------------------------------------------
+eclipse.buildId=4.2.2.M20140918-1444
+java.fullversion=8.0.5.5 - pwa6480sr5fp5-20171114_01(SR5 FP5)
+JRE 1.8.0 IBM J9 2.9 Windows 10 amd64-64 Compressed References 20171102_369060 (JIT enabled, AOT enabled)
+OpenJ9   - 7ade437
+OMR      - 1b656cb
+IBM      - 59c3d96
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_ZW
+Framework arguments:  -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+Command-line arguments:  -data C:\ESB\ZBESBLIVE -os win32 -ws win32 -arch x86_64 -showlocation -product com.ibm.etools.msgbroker.tooling.ide tools_auto -showlocation -product com.ibm.etools.msgbroker.tooling.ide
+
+!ENTRY org.eclipse.core.resources 2 10035 2020-10-19 23:10:44.697
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.emf.ecore 2 0 2020-10-19 23:10:45.546
+!MESSAGE Both 'com.ibm.etools.javaee.core' and 'com.ibm.etools.mft.service.model' register an extension parser for 'application'
+
+!ENTRY org.eclipse.ui 2 2 2020-10-19 23:10:48.068
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.adapter.c, page: com.ibm.adapter.c.ui.preferencepage.CPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-19 23:10:48.070
+!MESSAGE Invalid preference category path: com.ibm.debug.breakpoints.common.pref.tracepoint (bundle: com.ibm.debug.wsa, page: com.ibm.debug.wsa.WSATracepointPreferencePage)
+
+!ENTRY org.eclipse.ui 2 2 2020-10-19 23:10:48.071
+!MESSAGE Invalid preference category path: com.ibm.importer.preferences (bundle: com.ibm.etools.cobol.preference.ui, page: com.ibm.etools.cobol.preference.ui.preferencepage.CobolPreferencePage)
+
+!ENTRY com.ibm.etools.mft.uri 0 0 2020-10-19 23:10:49.021
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-19 23:10:51.763
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogTitle in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-19 23:10:51.764
+!MESSAGE NLS missing message: overrideSavedTrustStorePasswordDialogDescription in: com.ibm.etools.mft.broker.runtime.messages
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-19 23:10:53.692
+!MESSAGE 
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-19 23:10:53.693
+!MESSAGE C:\Program Files\IBM\IIB\10.0.0.11\tools>mqsifindmqpath
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-19 23:10:53.895
+!MESSAGE BIP8071I: Successful command completion. C:\Program Files\IBM\WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-19 23:10:53.895
+!MESSAGE MQ Install location found:C:/Program Files/IBM/WebSphere MQ
+
+!ENTRY com.ibm.mq.runtime 1 0 2020-10-19 23:10:53.897
+!MESSAGE 
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-19 23:11:33.294
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorSchemaInAppImportSchemaInSharedLib in: com.ibm.etools.msg.builder.messages
+
+!ENTRY org.eclipse.osgi 2 1 2020-10-19 23:11:33.295
+!MESSAGE NLS unused message: DFDLXSDResourceBuilder_errorProjectReferenceIsMissing in: com.ibm.etools.msg.builder.messages

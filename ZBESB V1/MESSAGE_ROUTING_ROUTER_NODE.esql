@@ -12,16 +12,15 @@ CREATE COMPUTE MODULE MESSAGE_ROUTING_ROUTER_NODE
 		SET Environment.ISO.PAN = CAST (LEFT (InputBody.ns:ISO8583_1993.PrimaryAccountNumber_002, 6) AS CHAR);
 		SET Environment.ISO.PROCODE = CAST (LEFT (InputBody.ns:ISO8583_1993.ProcessingCode_003, 2) AS CHAR);
 		
+		CALL addToMQDestinationList(InputLocalEnvironment, 'ISO_LOGGER_IN');
 		IF Environment.ISO.PAN =  '41629' THEN 
 			CALL addToMQDestinationList(InputLocalEnvironment ,'VISA_IN');
-			CALL addToMQDestinationList(InputLocalEnvironment ,'ISO_1200');
-		
+			
 		ELSEIF Environment.ISO.PROCODE = '31' THEN
 			CALL addToMQDestinationList(InputLocalEnvironment ,'BALANCE_IN');
-			CALL addToMQDestinationList(InputLocalEnvironment ,'BAL_IN_LOGGER');
+			
 		ELSE
-			CALL addToMQDestinationList(InputLocalEnvironment ,'TXN_IN');
-			CALL addToMQDestinationList(InputLocalEnvironment ,'ISO_1200');
+			CALL addToMQDestinationList(InputLocalEnvironment ,'TXN_IN');					
 		END IF;	
 					 
 		 

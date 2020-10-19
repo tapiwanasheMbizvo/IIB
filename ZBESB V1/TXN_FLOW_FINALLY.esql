@@ -4,9 +4,8 @@ CREATE COMPUTE MODULE TXN_FLOW_FINALLY
 	BEGIN
 
 		--CALL CopyMessageHeaders();
-		DECLARE   ApprovalCode_038 CHARACTER;
-		CALL createRandomSix(ApprovalCode_038);
-		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;	
+		
+		SET Environment.ISO.ApprovalCode_038 = createRandomSix();	
 		
 		
 						

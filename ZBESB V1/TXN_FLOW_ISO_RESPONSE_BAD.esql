@@ -4,21 +4,31 @@ CREATE COMPUTE MODULE TXN_FLOW_ISO_RESPONSE_BAD
 	BEGIN
 
 		--CALL CopyMessageHeaders();
-		DECLARE   ApprovalCode_038, responseCode, XRREC,MsgTxt  CHARACTER;	
-		CALL createRandomSix(ApprovalCode_038);
-		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;
+		DECLARE   ApprovalCode_038, responseCode, XRREC,MsgTxt  CHARACTER;
+
+		DECLARE ISOMSG REFERENCE TO InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993;	
+		DECLARE TRANSACTION_RESP REFERENCE TO InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP;
+		DECLARE BALANCEENQ_RESP REFERENCE TO InputRoot.Collection.BAL_RESP.DFDL.BALANCEENQUIRYRESPONSE;
 		
-		SET MsgTxt =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt;
-		SET XRREC =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.XRREC; 
-						
+IF ISOMSG.RetrievalReferenceNumber_037 IS NOT NULL THEN 
+	SET Environment.Trace.ISOIN = TRUE;
+		IF TRANSACTION_RESP.TRANSACTION_RSP_HEADER.MsgTxt IS NOT NULL THEN 
+			SET Environment.Trace.TXNPRESP = TRUE;
+			
+				SET MsgTxt =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.MsgTxt;
+				SET XRREC =InputRoot.Collection.TXN_RESP.DFDL.TRANSACTIONRSP.TRANSACTION_RSP_HEADER.XRREC; 
+					
+		SET Environment.ISO.ApprovalCode_038 = createRandomSix();
+		
+		
 		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
 		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
         SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
         
         SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_Version          = 1;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageClass;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = ISOMSG.MTI_MessageClass;
         SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageFunction  =1;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    =InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageOrigin;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    =ISOMSG.MTI_MessageOrigin;
 
 
 		
@@ -71,7 +81,7 @@ CREATE COMPUTE MODULE TXN_FLOW_ISO_RESPONSE_BAD
         --AmountsFees_046 need to be on for BP tranasctions 07102020
                
         
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = '1'THEN 
+        IF ISOMSG.PrimaryBitmap.Bit046 = '1'THEN 
         	SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 1;
         ELSE
         	SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
@@ -135,14 +145,14 @@ CREATE COMPUTE MODULE TXN_FLOW_ISO_RESPONSE_BAD
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit100 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit101 = 0;
         
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = '1'THEN 
+        IF ISOMSG.SecondaryBitmap.Bit102 = '1'THEN 
         	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 1;
         ELSE
         	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = 0;
         END IF;	
         
         
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = '1'THEN 
+        IF ISOMSG.SecondaryBitmap.Bit103 = '1'THEN 
         	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 1;
         ELSE
         	SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = 0;
@@ -175,80 +185,71 @@ CREATE COMPUTE MODULE TXN_FLOW_ISO_RESPONSE_BAD
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit127 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit128 = 0;
 
-		SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.ProcessingCode_003;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountTransaction_004;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountReconciliation_005;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012                   = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MerchantType_018;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = ISOMSG.PrimaryAccountNumber_002;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = ISOMSG.ProcessingCode_003;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = ISOMSG.AmountTransaction_004;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                   = ISOMSG.AmountReconciliation_005;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = ISOMSG.SystemsTraceAuditNumber_011;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012                   = ISOMSG.DateTimeLocalTransaction_012;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = ISOMSG.MerchantType_018;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = ISOMSG.AcquiringInstitutionIdentificationCode_032;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = ISOMSG.RetrievalReferenceNumber_037;
         SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038                           = Environment.ISO.ApprovalCode_038;
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = '124';--DEFAULT FIRST 
-       --responseCode, XRREC,MsgTxt 
-       	CALL getResponseCode(XRREC,MsgTxt,responseCode ); 
+       
+      
+		
+       	SET responseCode = getResponseCode(XRREC,MsgTxt ); 
        		IF responseCode IS NULL THEN 
        		SET responseCode ='124';
        	END IF;                          
        	SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                             = responseCode;
        	
-       
-       		
---       	SET Environment.ISO.MTI = CAST(InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageClass * 100 + InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
---       	IF Environment.ISO.MTI= '420' OR Environment.ISO.MTI = '421' THEN 
---		
---								
---					UPDATE Database.ZBDB_ESB.DB2INST1.TRANCLOG  
---					SET  ISREVERSED = 1  
---					WHERE TRANCLOG.RETRIEVALREFERENCENUMBER = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
---		END IF ;
-									
+       						
 	
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048                  = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = ISOMSG.CardAcceptorTerminalIdentification_041;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = ISOMSG.CardAcceptorNameLocation_043;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048                  = ISOMSG.AdditionalDataPrivate_048;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                = ISOMSG.CurrencyCodeTransaction_049;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050             = ISOMSG.CurrencyCodeReconciliation_050;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeCardholderBilling_051          = ISOMSG.CurrencyCodeCardholderBilling_051;
       
         
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = '1'THEN 
-        	SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsFees_046 =InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AmountsFees_046;
+        IF OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsFees_046 =ISOMSG.AmountsFees_046;
         ELSE
         	--SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit046 = 0;
         END IF;
        
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = '1'THEN 
-        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AccountIdentification1_102;
+        IF OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit102 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = ISOMSG.AccountIdentification1_102;
        
         END IF;	
         
         
-        IF InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = '1'THEN 
-        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification2_103                 = InputRoot.Collection.ISO_Request.DFDL.ns:ISO8583_1993.AccountIdentification2_103;
+        IF OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit103 = '1'THEN 
+        	SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification2_103                 = ISOMSG.AccountIdentification2_103;
         	
         END IF;	
-        CALL addToMQDestinationList(InputLocalEnvironment ,'OUT.LOGGER');
+        CALL addToMQDestinationList(InputLocalEnvironment ,'ISO_LOGGER_IN');
 		CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP');
 
-		RETURN TRUE;
+		
+			RETURN TRUE;			
+			ELSE	--END TXN RSP IS NOT NULL
+			--the txn resp is null 
+			--raise alarm EQUATION has not responded to the TXN REQUEST 
+			--CALL timeOutException();
+			
+			END IF	;
+		
+		--this is an impossibility ISO REQUEST IS THE FIRST ONE IN , it cannot be null on expiry
+		END IF ;
+		 				
 	END;
 	
+
 	
 	
---CREATE PROCEDURE generateRandomnNumber() BEGIN
---		
---		DECLARE PCREF CHAR '000000'; -- 6 character unique reference code
---		DECLARE TIMESTRING CHAR;
---		DECLARE SEED, RNDNUM INT;
---		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
---		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
---		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
---		SET PCREF = CAST(RNDNUM AS CHAR);
---		SET Environment.ISO.SEED = SEED;
---		SET Environment.ISO.ApprovalCode_038 = PCREF;	
---	END; 
 		
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
 		DECLARE I INTEGER 1;

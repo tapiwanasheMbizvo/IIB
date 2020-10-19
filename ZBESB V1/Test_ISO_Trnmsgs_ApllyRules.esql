@@ -11,27 +11,27 @@ CREATE COMPUTE MODULE Test_ISO_Trnmsgs_ApllyRules
 		
 		 CALL CopyEntireMessage();
 		 
-		DECLARE  pcref CHARACTER;
-		CALL createPCREF(pcref);
-		SET  Environment.ISO.PCREF = pcref;
 		
-		SET Environment.ISO.Field041 = InputBody.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
-		SET Environment.ISO.AccountIdentification1_102 = InputBody.ns:ISO8583_1993.AccountIdentification1_102;
+		SET  Environment.ISO.PCREF = createPCREF();
+		DECLARE ISOMSG REFERENCE TO InputBody.ns:ISO8583_1993;
 		
-		SET Environment.ISO.RetrievalReferenceNumber_037 = InputBody.ns:ISO8583_1993.RetrievalReferenceNumber_037;
+		SET Environment.ISO.Field041 = ISOMSG.CardAcceptorTerminalIdentification_041;
+		SET Environment.ISO.AccountIdentification1_102 = ISOMSG.AccountIdentification1_102;
+		
+		SET Environment.ISO.RetrievalReferenceNumber_037 = ISOMSG.RetrievalReferenceNumber_037;
 		
 		
 		 
 		
-		SET Environment.ISO.MTI = CAST(InputBody.ns:ISO8583_1993.MTI_MessageClass * 100 + InputBody.ns:ISO8583_1993.MTI_MessageFunction * 10 + InputBody.ns:ISO8583_1993.MTI_MessageOrigin AS CHAR);
+		SET Environment.ISO.MTI = CAST(ISOMSG.MTI_MessageClass * 100 + ISOMSG.MTI_MessageFunction * 10 + ISOMSG.MTI_MessageOrigin AS CHAR);
 		SET Environment.HOLD.GZBRNM = 'TEST';
 		SET Environment.HOLD.RPYQUEUE = 'ESB.HOLD.RESP.QUEUE';
 		SET Environment.HOLD.RPYQUEUE = 'ESB.HOLD.BAL.QUEUE'; 
 		--SET Environment.HOLD.Amount = '';
 		SET Environment.HOLD.Acquirer = '1';
-		SET Environment.HOLD.Amount =InputBody.ns:ISO8583_1993.AmountReconciliation_005;
+		SET Environment.HOLD.Amount =ISOMSG.AmountReconciliation_005;
 		IF (Environment.HOLD.Amount IS NULL) THEN 
-			SET Environment.HOLD.Amount = InputBody.ns:ISO8583_1993.AmountTransaction_004;
+			SET Environment.HOLD.Amount = ISOMSG.AmountTransaction_004;
 		END IF;	
 		
 		 

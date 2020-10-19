@@ -1,0 +1,35 @@
+CREATE PROCEDURE getResponseCode(IN XRREC CHARACTER, IN MsgTxt CHARACTER  )RETURNS CHARACTER  BEGIN
+	 
+	 IF XRREC = 'R'  THEN
+		
+		RETURN  '000';
+				
+	END IF;
+	
+	IF XRREC = 'F'  THEN
+	
+	IF CONTAINS(MsgTxt, 'is a blocked account')THEN
+		
+		RETURN         '112';
+		
+		ELSEIF CONTAINS(MsgTxt, 'Account does not exist on the database') THEN
+			
+		RETURN '124';	
+		
+		
+		ELSEIF CONTAINS(MsgTxt, 'No account held') THEN
+			
+		RETURN '124';
+			
+	
+	
+		ELSEIF CONTAINS(MsgTxt, 'Balance exceeded') THEN
+			
+			RETURN '116';
+			
+		ELSE
+		RETURN '124';
+			
+		END IF;
+	END IF ;
+END;

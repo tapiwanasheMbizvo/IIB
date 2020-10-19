@@ -9,9 +9,16 @@
     <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.ATOASUSPENSEACCOUNT" name="ATOASUSPENSEACCOUNT" defaultValueLiteral="4131847370932">
       <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.REPLYQUEUE" name="REPLYQUEUE" defaultValueLiteral="ESB.RESPONSES.QUEUE">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.BALREPLYQUEUE" name="BALREPLYQUEUE" defaultValueLiteral="ESB_ENQ_Q">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
     <translation xmi:type="utility:TranslatableString" key="TXN_FLOW" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/TXN_FLOW.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/TXN_FLOW.gif"/>
+    <longDescription xmi:type="utility:ConstantString" string="MQ Queus used by the TXN flow to return Transaction responses "/>
     <composition>
       <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="102,-5" destination="file" filePath="/ESBLOG/TXN/MAIN_CATCH.txt" pattern="==================================================================================================================================&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;TIME ::++${CURRENT_TIMESTAMP}+++&#xD;&#xA;+++++++++++++++++++++&#xD;&#xA;EXCEPITIONS ++${ExceptionList}&#xD;&#xA;==================================================================================================================================&#xD;&#xA;">
         <translation xmi:type="utility:ConstantString" string="MAIN_CATCH"/>
@@ -46,7 +53,7 @@
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="869,86" destinationMode="list">
         <translation xmi:type="utility:ConstantString" string="LOG_EQ_REQUEST"/>
       </nodes>
-      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="853,355" collectionName="TXN-RESP" collectionExpiry="15" persistenceMode="Persistent">
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="853,355" collectionName="TXN-RESP" collectionExpiry="10" persistenceMode="Persistent">
         <inTerminals terminalNodeID="ISO_Request" dynamic="true" label="ISO_Request"/>
         <inTerminals terminalNodeID="BAL_RESP" dynamic="true" label="BAL_RESP"/>
         <inTerminals terminalNodeID="TXN_RESP" dynamic="true" label="TXN_RESP"/>
@@ -100,7 +107,7 @@
       <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_36" location="297,-6" computeExpression="esql://routine/#TXN_FLOW_FINALLY.Main">
         <translation xmi:type="utility:ConstantString" string="FINALLY"/>
       </nodes>
-      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="980,-34" queueName="OUT.LOGGER">
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="980,-34" queueName="ISO_LOGGER_IN">
         <translation xmi:type="utility:ConstantString" string="TO_LOG_ERR"/>
       </nodes>
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="1019,67" queueName="TO_IP">
@@ -158,6 +165,12 @@
         <propertyName xmi:type="utility:TranslatableString" key="Property.CARDTOCARDSUSPENSEACCOUNT" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
         <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.ATOASUSPENSEACCOUNT">
           <propertyName xmi:type="utility:TranslatableString" key="Property.ATOASUSPENSEACCOUNT" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
+          <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.REPLYQUEUE">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.REPLYQUEUE" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
+            <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.BALREPLYQUEUE">
+              <propertyName xmi:type="utility:TranslatableString" key="Property.BALREPLYQUEUE" bundleName="TXN_FLOW" pluginId="ZBESB V1"/>
+            </propertyDescriptor>
+          </propertyDescriptor>
         </propertyDescriptor>
       </propertyDescriptor>
     </propertyOrganizer>

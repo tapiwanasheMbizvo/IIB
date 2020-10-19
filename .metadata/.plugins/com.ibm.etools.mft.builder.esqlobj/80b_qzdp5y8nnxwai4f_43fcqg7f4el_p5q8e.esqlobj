@@ -1,0 +1,158 @@
+CREATE COMPUTE MODULE Compute_EQ_HOLD_MSG
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		
+		--CALL CopyMessageHeaders();
+--GZBBN	Branch number	4	String	First 4 digits of the account number
+--GZBNO	Customer number	6	String	Middle 6 digits of the account number
+--GZSFX	Account suffix	3	String	Last 3 digits of the account number
+--GZCUS	Customer mnemonic	6		Put Space of size 6
+--GZCLC	Customer location	3	String	Put Space of size 3
+--GZBRNM	Branch mnemonic	4		Posting Branch
+--GZACO	Responsibility code	3		AA0
+--GZHRC	Hold reason code	3		PTR
+--GZHDD1	Hold description line1	35		Retrieval Reference
+--GZHDD2	Hold description line2	35		Space of size 35
+--GZHDD3	Hold description line3	35		Space of size 35
+--GZHDD4	Hold description line4	35		Space of size 35
+--GZSTD	Start date	7		Value Date
+--GZEXD	Expiry date	7		Value Date + expiry period days e.g 21 days
+--GZAMTH	Hold amount	15		from ISO8583 Field 5
+--GZCCY	Currency mnemonic	3		Currency from ISO8583
+--GZHNO	Hold number	3		Put Space of size 3
+--GZINP	Input date	7		Value Date
+--GZDLM	Date last maintained	7		Value Date + expiry period days e.g 21 days
+		
+		-- CALL CopyEntireMessage();
+		
+		SET Environment.MQMD = InputRoot.MQMD;		
+		SET OutputRoot.MQMD.Format = MQFMT_STRING;
+        SET OutputRoot.Properties.MessageSet = 'EQ_HOLD_REQ';
+        SET OutputRoot.Properties.MessageType = 'EQHOLDREQ';
+        
+       DECLARE EQHOLDHEADER REFERENCE TO OutputRoot.DFDL.EQHOLDREQ.EQHOLD_REQ_HEADER;
+       DECLARE EQHOLDBODY REFERENCE TO OutputRoot.DFDL.EQHOLDREQ.EQHOLD_REQ_BODY; 
+        
+        --EQHOLDREQ.EQHOLD_REQ_HEADER
+        
+        SET EQHOLDHEADER.MSGTYPE   = Environment.ISO.MTI;
+    --SET EQHOLDHEADER.MSGTYPE   = '0200'; -- We no longer pick up the MTI from the ISO message for now; we fix it at 0200 - needs to change once this flow needs to handle other message types (like 1420)
+        SET EQHOLDHEADER.MSGTYPE2  = ' ';    -- We also insert these extra 28 bytes of "empty truck" - without knowing why, but EQ CBS wants it that way.
+		
+        SET EQHOLDHEADER.SRCSYS    = 'BETX'; -- The rest of the header should be as previously documented ...
+        SET EQHOLDHEADER.ORIGTYPE  = ' ';
+        SET EQHOLDHEADER.TGTSYS    = 'EQUATION';
+        SET EQHOLDHEADER.USER      = ' ';
+        
+        SET EQHOLDHEADER.PASSWRD   = ' ';
+        SET EQHOLDHEADER.FORMAT    = 'TAGGED F';
+        SET EQHOLDHEADER.VERSION   = 'E3C';
+        SET EQHOLDHEADER.RPYQUEUE  = Environment.HOLD.RPYQUEUE;
+        SET EQHOLDHEADER.RESPMODE  = ' ';
+        SET EQHOLDHEADER.MAPLOCN   = ' ';
+        SET EQHOLDHEADER.SPAREA    = ' ';
+        
+        --- set driver J40ARR FOR VISA 
+        SET EQHOLDHEADER.DRV       = 'H56H1R';
+        
+        SET EQHOLDHEADER.RPGM      = 'J40ARR';
+        SET EQHOLDHEADER.USID      = 'ZIMOWNER';
+        SET EQHOLDHEADER.WSID      = 'BETX';
+        SET EQHOLDHEADER.JTT       = 'A';
+        SET EQHOLDHEADER.BRNM      = '4131';
+        SET EQHOLDHEADER.REPLYMSG  = Environment.HOLD.RPYQUEUE;
+        SET EQHOLDHEADER.PCREF     = Environment.ISO.PCREF;
+        SET EQHOLDHEADER.NMSGS     = '0001';
+        SET EQHOLDHEADER.TRANSQ    = '0001';
+        SET EQHOLDHEADER.REPLY     = 'Y';
+        SET EQHOLDHEADER.WARNS     = 'N';
+        SET EQHOLDHEADER.TSTAMP    = ' ';
+        SET EQHOLDHEADER.ORIGIN    = 'BETX';
+        SET EQHOLDHEADER.SPAREB    = ' ';
+        --GZBBN	Branch number	4	String	First 4 digits of the account number
+--GZBNO	Customer number	6	String	Middle 6 digits of the account number
+--GZSFX	Account suffix	3	String	Last 3 digits of the account number
+--GZCUS	Customer mnemonic	6		Put Space of size 6
+        SET EQHOLDBODY.GZBBN_T     =  ':C4:';
+		SET EQHOLDBODY.GZBBN       = SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 1 FOR 4);
+		
+		SET EQHOLDBODY.GZBNO_T     =  ':C6:';
+		SET EQHOLDBODY.GZBNO       =  SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 5 FOR 6);
+		
+		SET EQHOLDBODY.GZSFX_T     =  ':C3:';
+		SET EQHOLDBODY.GZSFX       =  SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 11 FOR 3);
+		
+		SET EQHOLDBODY.GZCUS_T     =  ':C6:';
+		SET EQHOLDBODY.GZCUS       =  '      ';
+
+		SET EQHOLDBODY.GZCLC_T     =  ':C3:';
+		SET EQHOLDBODY.GZCLC       =  '   ';
+
+
+		SET EQHOLDBODY.GZBRNM_T     =  ':C4:';
+		SET EQHOLDBODY.GZBRNM       =   Environment.HOLD.GZBRNM;
+
+		SET EQHOLDBODY.GZACO_T     =  ':C3:';
+		SET EQHOLDBODY.GZACO       =  'AA0';		
+		SET EQHOLDBODY.GZHRC_T     =  ':C3:';
+		SET EQHOLDBODY.GZHRC       =  'PTR';
+
+		SET EQHOLDBODY.GZHDD1_T     =  ':C35:';
+		SET EQHOLDBODY.GZHDD1       =  Environment.ISO.RetrievalReferenceNumber_037;
+
+		SET EQHOLDBODY.GZHDD2_T     =  ':C35:';
+		SET EQHOLDBODY.GZHDD2       =  '                                   ';
+
+		SET EQHOLDBODY.GZHDD3_T     =  ':C35:';
+		SET EQHOLDBODY.GZHDD3       =  '                                   ';
+
+		SET EQHOLDBODY.GZHDD4_T     =  ':C35:';
+		SET EQHOLDBODY.GZHDD4       =  '                                   ';
+
+
+		SET EQHOLDBODY.GZSTD_T     =  ':S07:';
+		SET EQHOLDBODY.GZSTD       =  ' '||InputLocalEnvironment.eqDate||'.';
+
+		SET EQHOLDBODY.GZEXD_T     =  ':S07:';
+		SET EQHOLDBODY.GZEXD       =   ' '||InputLocalEnvironment.eqDate||'.'; --- VALUE FROM EQ CALL PLUS 21 DAYS 
+
+		SET EQHOLDBODY.GZAMTH_T     =  ':P15:';
+		SET EQHOLDBODY.GZAMTH       =   '-' || CAST(Environment.HOLD.Amount AS CHARACTER FORMAT '000000000000000') || '.';
+
+
+		SET EQHOLDBODY.GZCCY_T     =  ':C3:';
+		SET EQHOLDBODY.GZCCY       =  '826';
+
+		SET EQHOLDBODY.GZHNO_T     =  ':P03:';
+		SET EQHOLDBODY.GZHNO       =  '     ';
+
+		SET EQHOLDBODY.GZINP_T     =  ':S07:';
+		SET EQHOLDBODY.GZINP       =   ' '||InputLocalEnvironment.eqDate||'.';
+
+		SET EQHOLDBODY.GZDLM_T     =  ':S07:';
+		SET EQHOLDBODY.GZDLM       =   ' '||InputLocalEnvironment.eqDate||'.';--- VALUE FROM EQ CALL PLUS 21 DAYS
+
+		SET EQHOLDBODY.GZZZZZ_T     =  '::';
+		
+		
+		
+		--SET Environment.ISO.PCREF = PCREF;
+		PROPAGATE TO TERMINAL 'out1' MESSAGE InputRoot DELETE NONE;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

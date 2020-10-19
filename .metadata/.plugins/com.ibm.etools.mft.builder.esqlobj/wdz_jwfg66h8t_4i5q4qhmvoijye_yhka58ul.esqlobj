@@ -1,0 +1,312 @@
+CREATE COMPUTE MODULE TXN_FLOW_TXN_EQ_MSG
+		CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		
+		DECLARE EQMSGHEADER REFERENCE TO OutputRoot.DFDL.TRANSACTIONREQ.TRANSACTION_REQ_HEADER;
+		DECLARE EQMSGBODY REFERENCE TO 	OutputRoot.DFDL.TRANSACTIONREQ.TRANSACTION_REQ_BODY;
+		SET Environment.Trace.CurrentTimestamp = CURRENT_TIMESTAMP;
+		
+		SET Environment.MQMD = InputRoot.MQMD;		
+		SET OutputRoot.MQMD.Format = MQFMT_STRING;
+        SET OutputRoot.Properties.MessageSet = 'Transaction_Req';
+        SET OutputRoot.Properties.MessageType = 'TRANSACTIONREQ';
+
+      	SET EQMSGHEADER.MSGTYPE   = '0'||Environment.ISO.MTI;
+        SET EQMSGHEADER.MSGTYPE2  = ' ';   
+		
+        SET EQMSGHEADER.SRCSYS    = 'BETX';
+        SET EQMSGHEADER.ORIGTYPE  = ' ';
+        SET EQMSGHEADER.TGTSYS    = 'EQUATION';
+        SET EQMSGHEADER.USER      = ' ';
+        SET EQMSGHEADER.PASSWRD   = ' ';
+        SET EQMSGHEADER.FORMAT    = 'TAGGED F';
+        SET EQMSGHEADER.VERSION   = 'E3C';
+        SET EQMSGHEADER.RPYQUEUE  = Environment.BET.RPYQUEUE;
+        SET EQMSGHEADER.RESPMODE  = ' ';
+        SET EQMSGHEADER.MAPLOCN   = ' ';
+        SET EQMSGHEADER.SPAREA    = ' ';  
+     
+        --- set driver J40ARR FOR VISA 
+        SET EQMSGHEADER.DRV       = 'H56H1R';        
+        SET EQMSGHEADER.RPGM      = 'H18ARROAI';
+        SET EQMSGHEADER.USID      = 'ZIMOWNER';
+        SET EQMSGHEADER.WSID      = 'BETX';
+        SET EQMSGHEADER.JTT       = 'A';
+        SET EQMSGHEADER.BRNM      = '4131';
+        SET EQMSGHEADER.REPLYMSG  = Environment.BET.RPYQUEUE;
+        SET EQMSGHEADER.PCREF     = Environment.ISO.PCREF;
+        SET EQMSGHEADER.NMSGS     = '0001';
+        SET EQMSGHEADER.TRANSQ    = '0001';
+        SET EQMSGHEADER.REPLY     = 'Y';
+        SET EQMSGHEADER.WARNS     = 'N';
+        SET EQMSGHEADER.TSTAMP    = ' ';
+        SET EQMSGHEADER.ORIGIN    = 'BETX';
+        SET EQMSGHEADER.SPAREB    = ' ';
+
+        SET EQMSGBODY.GZREF_T  =  ':C5:';
+        SET EQMSGBODY.GZREF    =  RIGHT(Environment.ISO.RetrievalReferenceNumber_037,5);
+        SET EQMSGBODY.GZBRNM_T =  ':C4:';
+        SET EQMSGBODY.GZBRNM   =  Environment.BET.GZBRNM;
+        SET EQMSGBODY.GZPBR_T  =  ':C5:';
+        SET EQMSGBODY.GZPBR    =  Environment.BET.GZPBR;
+        SET EQMSGBODY.GZPSQ_T  =  ':P05:';
+        SET EQMSGBODY.GZPSQ    =  ' ';
+        SET EQMSGBODY.GZBRND_T =  ':C4:';
+        SET EQMSGBODY.GZBRND   =  ' ';
+        SET EQMSGBODY.GZEAND_T =  ':C20:';
+        SET EQMSGBODY.GZEAND   =  ' ';
+        SET EQMSGBODY.GZAB1_T  =  ':C4:';
+        
+        --GZAB1 is the account to be debited  @tmbizvo 09/03/2020 
+        --GZAB1 is the account to be CREDITED IF ITS A REVERSAL   @tmbizvo 08102020
+        
+        IF Environment.ISO.IS_REVERSAL  THEN 
+	        	
+	       SET EQMSGBODY.GZAB1    =  SUBSTRING(Environment.ISO.CREDITACC FROM 1 FOR 4);
+	        SET EQMSGBODY.GZAN1_T  =  ':C6:';
+	        SET EQMSGBODY.GZAN1    =  SUBSTRING(Environment.ISO.CREDITACC FROM 5 FOR 6);
+	        SET EQMSGBODY.GZAS1_T  =  ':C3:';
+	        SET EQMSGBODY.GZAS1    =  SUBSTRING(Environment.ISO.CREDITACC FROM 11 FOR 3);
+	        
+        ELSE
+	        SET EQMSGBODY.GZAB1    =  SUBSTRING(Environment.ISO.DEBITACC FROM 1 FOR 4);
+	        SET EQMSGBODY.GZAN1_T  =  ':C6:';
+	        SET EQMSGBODY.GZAN1    =  SUBSTRING(Environment.ISO.DEBITACC FROM 5 FOR 6);
+	        SET EQMSGBODY.GZAS1_T  =  ':C3:';
+	        SET EQMSGBODY.GZAS1    =  SUBSTRING(Environment.ISO.DEBITACC FROM 11 FOR 3);
+	        
+        END IF;
+        		
+        
+        
+        
+        SET EQMSGBODY.GZVFR1_T =  ':S07:';
+        SET EQMSGBODY.GZVFR1   =  ' ' || InputLocalEnvironment.eqDate || '.';
+        SET EQMSGBODY.GZDRF1_T =  ':C16:';
+        SET EQMSGBODY.GZDRF1   =  Environment.ISO.MTI||Environment.ISO.RetrievalReferenceNumber_037; -- last 3 bytes from MSGTYPE - needs to be revised if this flow can handle other MTIs as well.
+        SET EQMSGBODY.GZAMA1_T =  ':P15:';
+        
+        --TRASACTION DEBIT AMOUNT @tmbizvo 10/03/2020
+        
+        SET EQMSGBODY.GZAMA1   =  '-' || CAST(Environment.BET.DEBITAMOUNT AS CHARACTER FORMAT '000000000000000') || '.';
+        SET EQMSGBODY.GZAPP1_T =  ':C2:';
+        SET EQMSGBODY.GZAPP1   =  ' ';
+        SET EQMSGBODY.GZTCD1_T =  ':C3:';
+        SET EQMSGBODY.GZTCD1   =  Environment.BET.DEBITCODE;
+        SET EQMSGBODY.GZCCY1_T =  ':C3:';
+        SET EQMSGBODY.GZCCY1   =  'dmy';     
+        SET EQMSGBODY.GZSRC1_T =  ':C2:';
+        SET EQMSGBODY.GZSRC1   =  ' ';
+        SET EQMSGBODY.GZUC1_T  =  ':C3:';
+        SET EQMSGBODY.GZUC1    =  ' ';
+        SET EQMSGBODY.GZUC2_T  =  ':C3:';
+        SET EQMSGBODY.GZUC2    =  ' ';
+        
+       
+        -- Credit narrative lines @tmbizvo 18/03/2020        
+        SET EQMSGBODY.GZNR1_T  =  ':C35:';
+        SET EQMSGBODY.GZNR1    =  LEFT(Environment.ISO.CardAcceptorNameLocation_043,35);
+        SET EQMSGBODY.GZNR2_T  =  ':C35:';
+        SET EQMSGBODY.GZNR2    =  SUBSTRING(Environment.ISO.AdditionalDataPrivate_048 FROM 30 FOR 35 );
+        SET EQMSGBODY.GZNR3_T  =  ':C35:';--put acquier BIN and terminal ID
+        SET EQMSGBODY.GZNR3    =  Environment.BET.TerminalID|| ' | ' ||Environment.ISO.AcquiringInstitutionIdentificationCode_032;        
+        SET EQMSGBODY.GZNR4_T  =  ':C35:';
+        SET EQMSGBODY.GZNR4    =  Environment.ISO.ApprovalCode_038;
+       
+        
+        
+        SET EQMSGBODY.GZCED1_T =  ':C1:';
+        SET EQMSGBODY.GZCED1   =  ' ';
+        SET EQMSGBODY.GZMCH1_T =  ':C1:';
+        SET EQMSGBODY.GZMCH1   =  ' ';
+        SET EQMSGBODY.GZEANC_T =  ':C20:';
+        SET EQMSGBODY.GZEANC   =  ' ';
+        SET EQMSGBODY.GZAB2_T  =  ':C4:';
+        
+       --GZAB2 credit account  @tmbizvo 09032020
+       --GZAB2 DEBIT ACCOUNT IF ITS REERSAL  account  @tmbizvo 08102020
+       
+       IF Environment.ISO.IS_REVERSAL   THEN 
+	       	SET EQMSGBODY.GZAB2    =  SUBSTRING(Environment.ISO.DEBITACC FROM 1 FOR 4);
+	        SET EQMSGBODY.GZAN2_T  =  ':C6:';
+	        SET EQMSGBODY.GZAN2    =  SUBSTRING(Environment.ISO.DEBITACC FROM 5 FOR 6);
+	        SET EQMSGBODY.GZAS2_T  =  ':C3:';
+	        SET EQMSGBODY.GZAS2    =  SUBSTRING(Environment.ISO.DEBITACC FROM 11 FOR 3);
+        
+       ELSE
+	       	SET EQMSGBODY.GZAB2    =  SUBSTRING(Environment.ISO.CREDITACC FROM 1 FOR 4);
+	        SET EQMSGBODY.GZAN2_T  =  ':C6:';
+	        SET EQMSGBODY.GZAN2    =  SUBSTRING(Environment.ISO.CREDITACC FROM 5 FOR 6);
+	        SET EQMSGBODY.GZAS2_T  =  ':C3:';
+	        SET EQMSGBODY.GZAS2    =  SUBSTRING(Environment.ISO.CREDITACC FROM 11 FOR 3);
+        
+        END IF;
+        
+        
+       
+        
+        
+        --
+        SET EQMSGBODY.GZVFR2_T =  ':S07:';
+        SET EQMSGBODY.GZVFR2   =  ' ' || InputLocalEnvironment.eqDate || '.';
+        SET EQMSGBODY.GZDRF2_T =  ':C16:';
+        SET EQMSGBODY.GZDRF2   =  ' ';
+        
+        --TRANSASCTION CREDIT AMOUNT 
+        
+        SET EQMSGBODY.GZAMA2_T =  ':P15:';
+        SET EQMSGBODY.GZAMA2   =  CAST(Environment.BET.CREDITAMOUNT AS CHARACTER FORMAT ' 000000000000000') || '.';
+        SET EQMSGBODY.GZAPP2_T =  ':C2:';
+        SET EQMSGBODY.GZAPP2   =  ' ';
+        SET EQMSGBODY.GZTCD2_T =  ':C3:';
+        SET EQMSGBODY.GZTCD2   =  Environment.BET.CREDITCODE;
+        SET EQMSGBODY.GZCCY2_T =  ':C3:';
+        
+        
+        IF  Environment.ISO.CurrencyCodeTransaction_049 = '932' THEN  -- We now set both GZCCY1 and GZCCY2 from the same source 840 for VISA 
+			SET EQMSGBODY.GZCCY1   =  'ZWL';
+			SET EQMSGBODY.GZCCY2   =  'ZWL';
+        ELSE -- NOTE: only ZWL and USD supported here! Also note GZCCY2 further down!
+        	SET EQMSGBODY.GZCCY1   =  'USD';
+        	SET EQMSGBODY.GZCCY2   =  'USD';
+        END IF;
+        
+        SET EQMSGBODY.GZSRC2_T =  ':C2:';
+        SET EQMSGBODY.GZSRC2   =  ' ';
+        SET EQMSGBODY.GZUC3_T  =  ':C3:';
+        SET EQMSGBODY.GZUC3    =  ' ';
+        SET EQMSGBODY.GZUC4_T  =  ':C3:';
+        SET EQMSGBODY.GZUC4    =  ' ';
+        
+        -- Debit narrative lines @tmbizvo 18/03/2020
+        SET EQMSGBODY.GZNR5_T  =  ':C35:';
+        SET EQMSGBODY.GZNR5    =  EQMSGHEADER.MSGTYPE || Environment.ISO.RetrievalReferenceNumber_037;
+        SET EQMSGBODY.GZNR6_T  =  ':C35:';
+        SET EQMSGBODY.GZNR6    =  LEFT(Environment.ISO.CardAcceptorNameLocation_043,35);
+        SET EQMSGBODY.GZNR7_T  =  ':C35:';
+        SET EQMSGBODY.GZNR7    =  Environment.BET.TerminalID|| ' | ' ||Environment.ISO.AcquiringInstitutionIdentificationCode_032|| '|' || Environment.ISO.ApprovalCode_038; -- NR3 same as NR7 ?
+        SET EQMSGBODY.GZNR8_T  =  ':C35:';               -- NR4 same as NR8 ?
+        SET EQMSGBODY.GZNR8    =   SUBSTRING(Environment.ISO.AdditionalDataPrivate_048 FROM 30 FOR 35 );
+       
+        
+        SET EQMSGBODY.GZCED2_T =  ':C1:';
+        SET EQMSGBODY.GZCED2   =  ' ';
+        SET EQMSGBODY.GZMCH2_T =  ':C1:';
+        SET EQMSGBODY.GZMCH2   =  ' ';
+        SET EQMSGBODY.GZRRT_T  =  ':C3:';
+        SET EQMSGBODY.GZRRT    =  ' ';
+        SET EQMSGBODY.GZEXR_T  =  ':C14:';
+        SET EQMSGBODY.GZEXR    =  ' ';
+        SET EQMSGBODY.GZFONT_T =  ':C1:';
+        SET EQMSGBODY.GZFONT   =  ' ';
+        SET EQMSGBODY.GZEXRH_T =  ':P1509:';
+        SET EQMSGBODY.GZEXRH   =  '       .000000000';               
+        SET EQMSGBODY.GZBAM1_T =  ':P15:';
+        SET EQMSGBODY.GZBAM1   =  ' ';
+        SET EQMSGBODY.GZOAM1_T =  ':P15:';
+        SET EQMSGBODY.GZOAM1   =  ' ';
+        SET EQMSGBODY.GZBAM2_T =  ':P15:';
+        SET EQMSGBODY.GZBAM2   =  ' ';
+        SET EQMSGBODY.GZOAM2_T =  ':P15:';
+        SET EQMSGBODY.GZOAM2   =  ' ';
+        SET EQMSGBODY.GZIEA_T  =  ':C1:';
+        SET EQMSGBODY.GZIEA    =  'N';                   
+        SET EQMSGBODY.GZOID_T  =  ':C3:';
+        SET EQMSGBODY.GZOID    =  ' ';
+        SET EQMSGBODY.GZSOT_T  =  ':C1:';
+        SET EQMSGBODY.GZSOT    =  ' ';
+        SET EQMSGBODY.GZTREF_T =  ':C16:';
+        SET EQMSGBODY.GZTREF   =  '0000' || Environment.ISO.RetrievalReferenceNumber_037;
+        SET EQMSGBODY.GZANMD_T =  ':C6:';
+        SET EQMSGBODY.GZANMD   =  ' ';
+        SET EQMSGBODY.GZGDP_T  =  ':C1:';
+        SET EQMSGBODY.GZGDP    =  ' ';
+        SET EQMSGBODY.GZCRT_T  =  ':C1:';
+        SET EQMSGBODY.GZCRT    =  ' ';
+        SET EQMSGBODY.GZALL_T  =  ':C1:';
+        SET EQMSGBODY.GZALL    =  ' ';
+        SET EQMSGBODY.GZHOLD_T =  ':C1:';
+        SET EQMSGBODY.GZHOLD   =  ' ';
+        SET EQMSGBODY.GZPDTE_T =  ':S07:';
+        SET EQMSGBODY.GZPDTE   =  ' ';
+        SET EQMSGBODY.GZFOR_T  =  ':C1:';
+        SET EQMSGBODY.GZFOR    =  ' ';
+        SET EQMSGBODY.GZDRTY_T =  ':C3:';
+        SET EQMSGBODY.GZDRTY   =  ' ';
+        SET EQMSGBODY.GZMRTY_T =  ':C2:';
+        SET EQMSGBODY.GZMRTY   =  ' ';
+        SET EQMSGBODY.GZDTTY_T =  ':S07:';
+        SET EQMSGBODY.GZDTTY   =  ' ';
+        SET EQMSGBODY.GZQTR_T  =  ':C2:';
+        SET EQMSGBODY.GZQTR    =  ' ';
+        SET EQMSGBODY.GZQTR2_T =  ':C2:';
+        SET EQMSGBODY.GZQTR2   =  ' ';
+        SET EQMSGBODY.GZQSTS_T =  ':C5:';
+        SET EQMSGBODY.GZQSTS   =  ' ';
+        SET EQMSGBODY.GZQST2_T =  ':C5:';
+        SET EQMSGBODY.GZQST2   =  ' ';
+        SET EQMSGBODY.GZQRES_T =  ':C5:';
+        SET EQMSGBODY.GZQRES   =  ' ';
+        SET EQMSGBODY.GZQRS2_T =  ':C5:';
+        SET EQMSGBODY.GZQRS2   =  ' ';
+        SET EQMSGBODY.GZQNQ_T  =  ':C1:';
+        SET EQMSGBODY.GZQNQ    =  ' ';
+        SET EQMSGBODY.GZQMSQ_T =  ':P07:';
+        SET EQMSGBODY.GZQMSQ   =  ' ';
+        SET EQMSGBODY.GZQACT_T =  ':C2:';
+        SET EQMSGBODY.GZQACT   =  ' ';
+        SET EQMSGBODY.GZQSCR_T =  ':C1:';
+        SET EQMSGBODY.GZQSCR   =  ' ';
+        SET EQMSGBODY.GZQUID_T =  ':C10:';
+        SET EQMSGBODY.GZQUID   =  ' ';
+        SET EQMSGBODY.GZUPTY_T =  ':C5:';
+        SET EQMSGBODY.GZUPTY   =  ' ';
+        SET EQMSGBODY.GZQBAL_T =  ':P15:';
+        SET EQMSGBODY.GZQBAL   =  ' ';
+        SET EQMSGBODY.GZQDTE_T =  ':S07:';
+        SET EQMSGBODY.GZQDTE   =  ' ';
+        SET EQMSGBODY.GZQPTY_T =  ':C5:';
+        SET EQMSGBODY.GZQPTY   =  ' ';
+        SET EQMSGBODY.GZQRRC_T =  ':C3:';
+        SET EQMSGBODY.GZQRRC   =  ' ';
+        SET EQMSGBODY.GZQAID_T =  ':C10:';
+        SET EQMSGBODY.GZQAID   =  ' ';
+        SET EQMSGBODY.GZQGRP_T =  ':C10:';
+        SET EQMSGBODY.GZQGRP   =  ' ';
+        SET EQMSGBODY.GZQCHK_T =  ':S02:';
+        SET EQMSGBODY.GZQCHK   =  ' ';
+        SET EQMSGBODY.GZQCHD_T =  ':S02:';
+        SET EQMSGBODY.GZQCHD   =  ' ';
+        SET EQMSGBODY.GZQRED_T =  ':S07:';
+        SET EQMSGBODY.GZQRED   =  ' ';
+        SET EQMSGBODY.GZQRET_T =  ':S06:';
+        SET EQMSGBODY.GZQRET   =  ' ';
+        SET EQMSGBODY.GZQBID_T =  ':C16:';
+        SET EQMSGBODY.GZQBID   =  ' ';
+        SET EQMSGBODY.GZQLVL_T =  ':C2:';
+        SET EQMSGBODY.GZQLVL   =  ' ';
+        SET EQMSGBODY.GZQEVM_T =  ':C6:';
+        SET EQMSGBODY.GZQEVM   =  'OAI';
+        SET EQMSGBODY.GZDRR_T  =  ':C1:';
+        SET EQMSGBODY.GZDRR    =  ' ';
+        SET EQMSGBODY.GZCRR_T  =  ':C1:';
+        SET EQMSGBODY.GZCRR    =  ' ';
+        SET EQMSGBODY.GZDRCL_T =  ':P15:';
+        SET EQMSGBODY.GZDRCL   =  ' ';
+        SET EQMSGBODY.GZCRCL_T =  ':P15:';
+        SET EQMSGBODY.GZCRCL   =  ' ';
+        SET EQMSGBODY.GZDRO_T  =  ':C1:';
+        SET EQMSGBODY.GZDRO    =  ' ';
+        SET EQMSGBODY.GZCRO_T  =  ':C1:';
+        SET EQMSGBODY.GZCRO    =  ' ';
+        SET EQMSGBODY.GZPSQ7_T =  ':P07:';
+        SET EQMSGBODY.GZPSQ7   =  ' 0000001.';
+        SET EQMSGBODY.GZZZZZ_T =  '::';
+
+
+		CALL addToMQDestinationList(InputLocalEnvironment ,'LOG_EQ_REQ');
+		CALL addToMQDestinationList(InputLocalEnvironment ,'EQUATION.TRANS.QUEUE');
+		RETURN TRUE;
+	END;
+END MODULE;

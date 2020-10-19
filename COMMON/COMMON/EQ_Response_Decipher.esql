@@ -1,11 +1,11 @@
 BROKER SCHEMA COMMON
 
 
-CREATE PROCEDURE getResponseCode(IN XRREC CHARACTER, IN MsgTxt CHARACTER, OUT responseCode CHARACTER   ) BEGIN
+CREATE PROCEDURE getResponseCode(IN XRREC CHARACTER, IN MsgTxt CHARACTER  )RETURNS CHARACTER  BEGIN
 	 
 	 IF XRREC = 'R'  THEN
 		
-		SET responseCode       = '000';
+		RETURN  '000';
 				
 	END IF;
 	
@@ -13,25 +13,25 @@ CREATE PROCEDURE getResponseCode(IN XRREC CHARACTER, IN MsgTxt CHARACTER, OUT re
 	
 	IF CONTAINS(MsgTxt, 'is a blocked account')THEN
 		
-		SET responseCode                             = '112';
+		RETURN         '112';
 		
 		ELSEIF CONTAINS(MsgTxt, 'Account does not exist on the database') THEN
 			
-		SET responseCode                             = '124';	
+		RETURN '124';	
 		
 		
 		ELSEIF CONTAINS(MsgTxt, 'No account held') THEN
 			
-		SET responseCode                             = '124';
+		RETURN '124';
 			
 	
 	
 		ELSEIF CONTAINS(MsgTxt, 'Balance exceeded') THEN
 			
-			SET responseCode                             = '116';
+			RETURN '116';
 			
 		ELSE
-		SET responseCode                             = '124';
+		RETURN '124';
 			
 		END IF;
 	END IF ;

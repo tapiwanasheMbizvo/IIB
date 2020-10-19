@@ -4,27 +4,25 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 		 CALL CopyMessageHeaders();
-		-- CALL CopyEntireMessage();
+		
 
 
 
-		DECLARE   ApprovalCode_038 CHARACTER;
-		CALL createRandomSix(ApprovalCode_038);
-		SET Environment.ISO.ApprovalCode_038 = ApprovalCode_038;
+		
+		SET Environment.ISO.ApprovalCode_038 = createRandomSix();
 		SET OutputRoot.Properties.MessageSet = '{ISO8583}';   
-		--SET OutputRoot.MQMD = Environment.MQMD;                          	                                          
+		                   	                                          
         SET OutputRoot.Properties.MessageType = '{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993';
-        --SET OutputRoot.Properties.MessageType = '{}:ISO8583_1987';		
+       	
 		
 		SET OutputRoot.MQMD.Format = MQFMT_STRING;
 		
 		 
 		SET OutputRoot.MQMD = InputRoot.Collection.ISO_request.MQMD;
-		--SET OutputRoot.BLOB.BLOB = 
-		--SET OutputRoot.BLOB.BLOB = X'0024313831340030010002000000';	
 		
-
-			
+		
+		--DECLARE OutputRoot.DFDL.ns:ISO8583_1993 REFERENCE TO OutputRoot.DFDL.ns:ISO8583_1993;
+		DECLARE ISOMSG REFERENCE TO InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993;	
 			--OutputRoot.DFDL.ns:ISO8583_1993
         SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_Version          = 1;
         SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageClass     = 1;
@@ -32,7 +30,7 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
         SET OutputRoot.DFDL.ns:ISO8583_1993.MTI_MessageOrigin    = 0;
 
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit001 = 1;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit002 = 1;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit002 = 1;        
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit003 = 1;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit004 = 1;
         SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryBitmap.Bit005 = 1;
@@ -162,39 +160,35 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit127 = 0;
         SET OutputRoot.DFDL.ns:ISO8583_1993.SecondaryBitmap.Bit128 = 0;
 
-        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002;
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.ProcessingCode_003;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.PrimaryAccountNumber_002                   = ISOMSG.PrimaryAccountNumber_002;
+       
         SET OutputRoot.DFDL.ns:ISO8583_1993.ProcessingCode_003                         = '300000';
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AmountTransaction_004;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountTransaction_004                      = ISOMSG.AmountTransaction_004;
         
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                       = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AmountReconciliation_005;       
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountReconciliation_005                       = ISOMSG.AmountReconciliation_005;       
        
        
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.TransmissionDatetime_007                   = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.DateTimeTransmission_007; 
+         
       
-        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012               = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.SystemsTraceAuditNumber_011                = ISOMSG.SystemsTraceAuditNumber_011;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.DateTimeLocalTransaction_012               = ISOMSG.DateTimeLocalTransaction_012;
         
        
-        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.MerchantType_018;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032||'     ';
-        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037;
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.AuthorizationIdentificationResponse_038    = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.ApprovalCode_038;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.MerchantType_018                           = ISOMSG.MerchantType_018;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AcquiringInstitutionIdentificationCode_032 = ISOMSG.AcquiringInstitutionIdentificationCode_032||'     ';
+        SET OutputRoot.DFDL.ns:ISO8583_1993.RetrievalReferenceNumber_037               = ISOMSG.RetrievalReferenceNumber_037;
+        
 		SET OutputRoot.DFDL.ns:ISO8583_1993.ApprovalCode_038    						=  Environment.ISO.ApprovalCode_038;
         SET OutputRoot.DFDL.ns:ISO8583_1993.ActionCode_039                           	= '000'; -- cannot fail, wouldn't match if it did ... 
                                                                                             -- Note: ResponseCode_039 is only 2 chars (an 2)
 
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043;
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048               = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AdditionalDataPrivate_048;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                		= InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050                  = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorTerminalIdentification_041     = ISOMSG.CardAcceptorTerminalIdentification_041;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CardAcceptorNameLocation_043               = ISOMSG.CardAcceptorNameLocation_043;
+       
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeTransaction_049                		= ISOMSG.CurrencyCodeTransaction_049;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050                  = ISOMSG.CurrencyCodeReconciliation_050;
 
-		--SET OutputRoot.DFDL.ns:ISO8583_1993.CurrencyCodeSettlement_050                 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.CurrencyCodeReconciliation_050;
-
-		--SET OutputRoot.DFDL.ns:ISO8583_1993.ReservedPrivate_062                 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.ReservedForPrivateUse_062;
---CONTAINS('Hello World!', 'ello');
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AmountsAdditional_054; -- Prime the field
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = ISOMSG.AmountsAdditional_054; -- Prime the field
         
         DECLARE BAL1 CHAR '000000000000';
         DECLARE BAL2 CHAR '000000000000';
@@ -215,27 +209,15 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
        
         SET OutputRoot.DFDL.ns:ISO8583_1993.AmountsAdditional_054                      = WORK;	
         	SET Environment.Trace.WORK  = 		WORK;
-		--SET OutputRoot.DFDL.ns:ISO8583_1993.ReceivingInstitutionIdentificationCode_100                 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.ReceivingInstitutionIdentificationCode_100;
-        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AccountIdentification1_102||'                   ';
-        --SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification2_103                 = InputRoot.Collection.ISO_request.DFDL.ns:ISO8583_1993.AccountIdentification2_103;
+		--SET OutputRoot.DFDL.ns:ISO8583_1993.ReceivingInstitutionIdentificationCode_100                 = ISOMSG.ReceivingInstitutionIdentificationCode_100;
+        SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification1_102                 = ISOMSG.AccountIdentification1_102||'                   ';
+        --SET OutputRoot.DFDL.ns:ISO8583_1993.AccountIdentification2_103                 = ISOMSG.AccountIdentification2_103;
 			
 		
 		PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot DELETE NONE;
 		RETURN TRUE;
 	END;
 	
-		CREATE PROCEDURE makeRandom() BEGIN 
-		DECLARE TIMESTRING CHAR;
-		DECLARE SEED, RNDNUM INT;
-		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
-		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
-		SET RNDNUM = CAST(RAND(SEED) * 1000000 as INT);
-		
-		
-		SET Environment.Trace.Random  = 	CAST(RNDNUM AS CHAR);
-		SET Environment.Trace.SEED    = 		SEED;
-		SET Environment.Trace.TEST = LENGTH(Environment.Trace.RNDNUM);
-	END; 
 
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN
 		DECLARE I INTEGER 1;
@@ -247,9 +229,7 @@ CREATE COMPUTE MODULE ISO_input_ESQL_ESB_Response
 		END WHILE;
 	END;
 
-	CREATE PROCEDURE CopyEntireMessage() BEGIN
-		SET OutputRoot = InputRoot;
-	END;
+	
 END MODULE;
 
 

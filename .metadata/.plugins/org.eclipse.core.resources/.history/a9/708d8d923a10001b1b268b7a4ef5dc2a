@@ -1,0 +1,118 @@
+
+
+CREATE COMPUTE MODULE TXN_FLOW_BAL_ENQ_MSG
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+
+		DECLARE BALENQHEADER REFERENCE TO OutputRoot.DFDL.BALANCEENQUIRY.BALANCE_ENQUIRY_HEADER;
+		DECLARE BALENQBODY REFERENCE TO OutputRoot.DFDL.BALANCEENQUIRY.BALANCE_ENQUIRY_BODY;
+		
+        SET OutputRoot.Properties.MessageSet = 'Balance_Enquiry';
+        SET OutputRoot.Properties.MessageType = 'BALANCEENQUIRY';
+		SET Environment.MQMD = InputRoot.MQMD;		
+		SET OutputRoot.MQMD.Format = MQFMT_STRING;
+			
+
+        SET BALENQHEADER.MSGTYPE             =    '0'||Environment.ISO.MTI;        
+        SET BALENQHEADER.SRCSYS              =    '                            BETX';
+        SET BALENQHEADER.ORIGTYPE            =    ' ';
+        SET BALENQHEADER.TGTSYS              =    'EQUATION';
+        SET BALENQHEADER.USER                =    ' ';
+        SET BALENQHEADER.PWD                 =    ' ';
+        SET BALENQHEADER.FORMAT              =    'FIXED';
+        SET BALENQHEADER.VERSION             =    'E3C';
+        SET BALENQHEADER.RPYQUEUE            =    Environment.BET.BALRPYQUEUE;
+        SET BALENQHEADER.RESPMODE            =    ' ';
+        SET BALENQHEADER.MAPLOCN             =    ' ';
+        SET BALENQHEADER.SPAREA              =    ' ';
+        SET BALENQHEADER.DRV                 =    'H46HMR';
+        SET BALENQHEADER.RPGM                =    'H68EER';
+        SET BALENQHEADER.USID                =    'ZIMOWNER';      
+        SET BALENQHEADER.WSID                =    'BETX';
+        SET BALENQHEADER.JTT                 =    'E';
+        SET BALENQHEADER.BRNM                =    '4131';
+        SET BALENQHEADER.REPLYMSG            =    Environment.BET.BALRPYQUEUE;
+        SET BALENQHEADER.PCREF               =    Environment.ISO.PCREF;  
+        SET BALENQHEADER.FIXEDDATASIZE       =    '     00518';
+        SET BALENQHEADER.REPEATINGBLOCKSIZE  =    '00000';      
+        SET BALENQHEADER.REPLY               =    'Y';     
+        SET BALENQHEADER.TSTAMP              =    ' ';
+        SET BALENQHEADER.ORIGIN              =    'BETX';
+        SET BALENQHEADER.SPAREB              =    ' ';
+        SET BALENQHEADER.CUSTOMERDETAILS     =    ' ';
+        SET BALENQHEADER.SPAREC              =    ' ';
+        SET BALENQHEADER.ACKREQUIRED         =    'N';
+        SET BALENQHEADER.CONFREQUIRED        =    'Y';
+        SET BALENQHEADER.FORCETRANSACTION    =    'N';
+        SET BALENQHEADER.REFERTRANSACTION    =    ' ';
+        SET BALENQHEADER.CCSID               =    ' ';
+        SET BALENQHEADER.SINGLERESPONSE      =    ' ';
+        SET BALENQHEADER.VALIDATEONLY        =    ' ';
+        SET BALENQHEADER.EQREFERENCEPSN      =    ' ';
+        SET BALENQHEADER.EQREFERENCELEN      =    ' ';
+        SET BALENQHEADER.APPLYDURINGREC      =    'N';
+        SET BALENQHEADER.APPLYDURINGEXT      =    'N';
+        SET BALENQHEADER.APPLYDURINGNIGHT    =    'N';
+        SET BALENQHEADER.SPLITRESPONSE       =    ' ';
+        SET BALENQBODY.HZAB       =   SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 1 FOR 4);
+        SET BALENQBODY.HZAN       =   SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 5 FOR 6);
+        SET BALENQBODY.HZAS       =   SUBSTRING(Environment.ISO.AccountIdentification1_102 FROM 11 FOR 3);       
+        SET BALENQBODY.HZSHN      =   ' ';
+        SET BALENQBODY.HZSHNA     =   ' ';
+        SET BALENQBODY.HZCUS      =   ' ';
+        SET BALENQBODY.HZCLC      =   ' ';
+        SET BALENQBODY.HZCUN      =   ' ';
+        SET BALENQBODY.HZCUNA     =   ' ';
+        SET BALENQBODY.HZACT      =   ' ';
+        SET BALENQBODY.HZAPP      =   ' ';
+        SET BALENQBODY.HZACS      =   ' ';
+        SET BALENQBODY.HZCCY      =   ' ';
+        SET BALENQBODY.HZCED      =   ' ';
+        SET BALENQBODY.HZAI47     =   ' ';
+        SET BALENQBODY.HZAI14     =   ' ';
+        SET BALENQBODY.HZAI17     =   ' ';
+        SET BALENQBODY.HZAI20     =   ' ';
+        SET BALENQBODY.HZAI30     =   ' ';
+        SET BALENQBODY.HZODL      =   ' ';
+        SET BALENQBODY.HZLED      =   '0000000';
+        SET BALENQBODY.HZYODE     =   ' ';
+        SET BALENQBODY.HZRBA      =   ' ';
+        SET BALENQBODY.HZLDBL     =   ' ';
+        SET BALENQBODY.HZSTBL     =   ' ';
+        SET BALENQBODY.HZPCBL     =   ' ';
+        SET BALENQBODY.HZCCBL     =   ' ';
+        SET BALENQBODY.HZCABL     =   ' ';
+        SET BALENQBODY.HZYCAB     =   ' ';
+        SET BALENQBODY.HZLABL     =   ' ';
+        SET BALENQBODY.HZYLAB     =   ' ';
+        SET BALENQBODY.HZNABL     =   ' ';
+        SET BALENQBODY.HZNAB1     =   ' ';
+        SET BALENQBODY.HZYNAB     =   ' ';
+        SET BALENQBODY.HZFWBL     =   ' ';
+        SET BALENQBODY.HZYFWB     =   ' ';
+        SET BALENQBODY.HZSM0      =   ' ';
+        SET BALENQBODY.HZSML      =   ' ';
+        SET BALENQBODY.HZSM1      =   ' ';
+        SET BALENQBODY.HZSM2      =   ' ';
+        SET BALENQBODY.HZSMD      =   ' ';
+        SET BALENQBODY.HZSMC      =   ' ';
+        SET BALENQBODY.HZSMA      =   ' ';
+        SET BALENQBODY.HZAII4     =   ' ';
+        SET BALENQBODY.HZAII5     =   ' ';
+        SET BALENQBODY.HZAII7     =   ' ';
+        SET BALENQBODY.HZNWT      =   ' ';
+        SET BALENQBODY.HZAICT     =   ' ';
+        SET BALENQBODY.HZNWN      =   ' ';
+        SET BALENQBODY.HZAICN     =   ' ';
+        SET BALENQBODY.HZNWA      =   ' ';
+        SET BALENQBODY.HZAICA     =   ' ';
+        SET BALENQBODY.HZRBC      =   ' ';
+        SET BALENQBODY.HZGRP      =   ' ';
+        SET BALENQBODY.HZAIA7     =   ' ';
+		
+		
+		RETURN TRUE;
+	END;
+
+END MODULE;

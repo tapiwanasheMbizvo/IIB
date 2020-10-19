@@ -1,0 +1,17 @@
+CREATE PROCEDURE getCity_v02 (IN airportCode CHARACTER) RETURNS CHARACTER
+BEGIN
+   -- v02: "ESQL" cache   
+   -- PERFORMANCE TEST ONLY! No ATOMIC blocks. 
+   -- Do not use if Additional Instances > 0.
+   IF FIELDNAME(CACHE.*[1]) IS NULL THEN
+    -- load the cache
+    DECLARE TEMPCACHE ROW;
+    SET TEMPCACHE.AIRPORT[] = SELECT A.CODE, A.CITY 
+    FROM Database.AIRPORTS AS A;
+        FOR cacheline AS TEMPCACHE.AIRPORT[] DO
+        CREATE LASTCHILD OF CACHE   NAME cacheline.CODE 
+VALUE cacheline.CITY;
+        END FOR;
+   END IF;  
+   RETURN CACHE.{airportCode};
+END;
