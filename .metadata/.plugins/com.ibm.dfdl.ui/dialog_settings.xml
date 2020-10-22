@@ -8,7 +8,6 @@
 		<item value="true" key="SerializerInputsFromFile"/>
 		<item value="false" key="RuntimeValidation"/>
 		<list key="ParserInputs">
-			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\1200msgs\ZIMSWITCH\incoming1200.txt"/>
 			<item value="C:\ESB\VISA\visaMESSAGE1.txt"/>
 			<item value="C:\Users\tapiwanashem\Documents\ZB ESB BARS\transfers\1200msgs\ZIMSWITCH\MISSING ACCOUNT.txt"/>
 			<item value="C:\ESB\OBI\ZIPITRECEIVE.txt"/>

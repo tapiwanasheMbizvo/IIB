@@ -3,8 +3,13 @@ CREATE COMPUTE MODULE LOG_RCPT10
 	BEGIN
 
 		SET Environment.DB_VALUES.ID  = THE(SELECT ITEM R.ID FROM Database.ZBDB_ESB.DB2INST1.RCPT101 AS R WHERE R.RETRIEVAL_REFERENCE_NUMBER = InputBody.OBIRCTP10.RETRIEVAL_REFERENCE_NUMBER AND R.REFERENCE_REF = InputBody.OBIRCTP10.REFERENCE_REF );		
-
-	SET Environment.DB_VALUES.fileName=InputLocalEnvironment.File.Name;
+	
+	DECLARE file_name CHARACTER;
+	SET file_name = InputLocalEnvironment.File.Name;
+	SET file_name = REPLACE (file_name, '_', '');
+	SET file_name = UCASE(file_name);
+	SET Environment.DB_VALUES.fileName=file_name;
+	
 	SET Environment.DB_VALUES.tableName= SUBSTRING( Environment.DB_VALUES.fileName FROM 1 FOR LENGTH(Environment.DB_VALUES.fileName)-4);
 		
 		IF Environment.DB_VALUES.ID IS NULL THEN

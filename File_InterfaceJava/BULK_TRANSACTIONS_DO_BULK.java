@@ -40,6 +40,7 @@ public class BULK_TRANSACTIONS_DO_BULK extends MbJavaComputeNode {
 			
 			String tableName = fieldname.substring(0, fieldname.length() - 4);	
 			tableName = tableName.replaceAll("_", "");
+			tableName = tableName.toUpperCase();
 			Connection conn = getJDBCType4Connection("ESBDB",JDBC_TransactionType.MB_TRANSACTION_AUTO);
 			 Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			 String date  =null;

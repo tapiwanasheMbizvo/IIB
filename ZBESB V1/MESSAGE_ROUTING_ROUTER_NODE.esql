@@ -20,7 +20,7 @@ CREATE COMPUTE MODULE MESSAGE_ROUTING_ROUTER_NODE
 			CALL addToMQDestinationList(InputLocalEnvironment ,'BALANCE_IN');
 			
 		ELSE
-			CALL addToMQDestinationList(InputLocalEnvironment ,'TXN_IN');					
+			CALL addToMQDestinationList(InputLocalEnvironment ,'MAIN');					
 		END IF;	
 					 
 		 

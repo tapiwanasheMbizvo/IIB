@@ -12,7 +12,7 @@
       <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="463,151">
         <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="BALANCE_ENQUIRY" pluginId="ZBESB V1"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="238,150" computeExpression="esql://routine/#TXN_FLOW_BAL_ENQ_MSG.Main">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="238,150" transaction="commit" computeExpression="esql://routine/#TXN_FLOW_BAL_ENQ_MSG.Main">
         <translation xmi:type="utility:ConstantString" string="BAL_ENQ_MSG"/>
       </nodes>
       <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="145,150">

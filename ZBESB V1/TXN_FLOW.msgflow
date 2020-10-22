@@ -38,7 +38,7 @@
       <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="490,85" dataSource="ZBDB_ESB" connectDatasourceBeforeFlowStarts="true" transaction="commit" computeExpression="esql://routine/#TXN_FLOW_RULES.Main">
         <translation xmi:type="utility:ConstantString" string="RULES"/>
       </nodes>
-      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="795,-4" destination="file" filePath="/ESBLOG/TXN/BAD_INPUT.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="443,-8" destination="file" filePath="/ESBLOG/TXN/BAD_INPUT.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
         <translation xmi:type="utility:ConstantString" string="Trace2"/>
       </nodes>
       <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_13" location="552,276" destination="file" filePath="/ESBLOG/TXN/BAL_ENQ.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">
@@ -53,7 +53,7 @@
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="869,86" destinationMode="list">
         <translation xmi:type="utility:ConstantString" string="LOG_EQ_REQUEST"/>
       </nodes>
-      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="853,355" collectionName="TXN-RESP" collectionExpiry="10" persistenceMode="Persistent">
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="853,355" collectionName="TXN-RESP" collectionExpiry="7" persistenceMode="Persistent">
         <inTerminals terminalNodeID="ISO_Request" dynamic="true" label="ISO_Request"/>
         <inTerminals terminalNodeID="BAL_RESP" dynamic="true" label="BAL_RESP"/>
         <inTerminals terminalNodeID="TXN_RESP" dynamic="true" label="TXN_RESP"/>
@@ -104,16 +104,13 @@
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_35" location="589,446" queueName="LOG_EQ_RESP">
         <translation xmi:type="utility:ConstantString" string="TO_LOG_EQ_RESP"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_36" location="297,-6" computeExpression="esql://routine/#TXN_FLOW_FINALLY.Main">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_36" location="297,-6" dataSource="ZBDB_ESB" connectDatasourceBeforeFlowStarts="true" computeExpression="esql://routine/#TXN_FLOW_FINALLY.Main">
         <translation xmi:type="utility:ConstantString" string="FINALLY"/>
       </nodes>
-      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="980,-34" queueName="ISO_LOGGER_IN">
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="569,-6" destinationMode="list">
         <translation xmi:type="utility:ConstantString" string="TO_LOG_ERR"/>
       </nodes>
-      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_11" location="1019,67" queueName="TO_IP">
-        <translation xmi:type="utility:ConstantString" string="TO_IP_ERR"/>
-      </nodes>
-      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="30,148" queueName="TXN_IN" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993">
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="30,148" queueName="MAIN" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993">
         <translation xmi:type="utility:ConstantString" string="MQ Input"/>
       </nodes>
       <nodes xmi:type="TRANSACTION.subflow:FCMComposite_1" xmi:id="FCMComposite_1_21" location="672,86">
@@ -129,7 +126,6 @@
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.second" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.first" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
-      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out1" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_19" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_21" targetNode="FCMComposite_1_24" sourceNode="FCMComposite_1_22" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_22" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_24" sourceTerminalName="OutTerminal.out" targetTerminalName="BAL_RESP"/>
@@ -145,7 +141,6 @@
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.expire" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_33" targetNode="FCMComposite_1_19" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.out" targetTerminalName="TXN_RESP"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_20" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
-      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_30" targetNode="FCMComposite_1_36" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_35" targetNode="FCMComposite_1_30" sourceNode="FCMComposite_1_34" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_21" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>

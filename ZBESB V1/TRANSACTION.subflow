@@ -15,7 +15,7 @@
       <nodes xmi:type="ComIbmJavaCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="130,40" javaClass="TXN_FLOW_EQ_DATE">
         <translation xmi:type="utility:ConstantString" string="EQ_DATE"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="293,40" computeExpression="esql://routine/#TXN_FLOW_TXN_EQ_MSG.Main">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="293,40" transaction="commit" computeExpression="esql://routine/#TXN_FLOW_TXN_EQ_MSG.Main">
         <translation xmi:type="utility:ConstantString" string="TXN_EQ_MSG"/>
       </nodes>
       <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="435,41" destination="file" filePath="/ESBLOG/TXN/EQ_TXN_SUBFLOW.txt" pattern="======================================================================================================================================================================================&#xD;&#xA;${CURRENT_TIMESTAMP}&#xD;&#xA;${Root}&#xD;&#xA;${Environment}&#xD;&#xA;======================================================================================================================================================================================&#xD;&#xA;">

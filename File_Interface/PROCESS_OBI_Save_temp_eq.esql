@@ -4,12 +4,18 @@ CREATE COMPUTE MODULE PROCESS_OBI_Save_temp_eq
 	
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
+			DECLARE file_name CHARACTER;
+	SET file_name = InputLocalEnvironment.File.Name;
+	SET file_name = REPLACE (file_name, '_', '');
+	SET file_name = UCASE(file_name);
+	SET file_name = SUBSTRING( file_name FROM 1 FOR LENGTH(file_name)-4);
 		SET Environment.DB_VALUES.fileName=InputLocalEnvironment.File.Name;
-		SET Environment.DB_VALUES.tableName= SUBSTRING( Environment.DB_VALUES.fileName FROM 1 FOR LENGTH(Environment.DB_VALUES.fileName)-4);
+		SET Environment.DB_VALUES.tableName= file_name;
+		
 		
 		DECLARE Source CHARACTER 'ZBDB_ESB';
 		DECLARE dschema CHARACTER 'DB2INST1';
-		DECLARE Table  CHARACTER Environment.DB_VALUES.tableName;
+		DECLARE Table  CHARACTER file_name;
 		
 		-- CALL CopyMessageHeaders();
 		-- CALL CopyEntireMessage();
@@ -17,7 +23,7 @@ CREATE COMPUTE MODULE PROCESS_OBI_Save_temp_eq
 		--database table  from local env 
 		SET Source = 'ZBDB_ESB';
 		SET dschema = 'DB2INST1';
-		SET Table =Environment.DB_VALUES.tableName;
+		SET Table =file_name;
 
 		
 				
