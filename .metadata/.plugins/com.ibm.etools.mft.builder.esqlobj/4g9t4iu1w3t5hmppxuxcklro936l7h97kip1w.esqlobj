@@ -1,0 +1,14 @@
+CREATE COMPUTE MODULE LOG_AUTOPAY
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		
+	
+		
+		RETURN TRUE;
+	END;
+
+
+
+CREATE PROCEDURE logAUTOPAY()

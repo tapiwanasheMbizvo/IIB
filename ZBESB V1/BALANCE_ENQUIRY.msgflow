@@ -20,7 +20,7 @@
         <eventHandlerPropertyTable terminal="ISO_request" quantity="1" correlationPath="$Environment/ISO/PCREF" correlationPattern=""/>
         <eventHandlerPropertyTable terminal="Resp_Out" quantity="1" correlationPath="$Body/BALANCEENQUIRYRESPONSE/PCREF" correlationPattern=""/>
       </nodes>
-      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="845,321" queueName="TO_IP">
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="845,321" queueName="TO_IP_OUT">
         <translation xmi:type="utility:ConstantString" string="ISO_OUT"/>
       </nodes>
       <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="453,125" queueName="EQUATION.TRANS.QUEUE">

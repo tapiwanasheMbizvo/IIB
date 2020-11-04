@@ -174,7 +174,8 @@ END IF;
 				    AND LENGTH(Environment.ISO.CREDITCODE)> 0 THEN 
 				CALL CopyEntireMessage();
 				-- lets throw the iso to  collection tmbizvo @15072020
-			
+			CALL addToMQDestinationList(InputLocalEnvironment ,'LOG_EQ_REQ');
+			CALL addToMQDestinationList(InputLocalEnvironment ,'EQUATION.TRANS.QUEUE');
 			PROPAGATE TO TERMINAL 'out2' MESSAGE InputRoot;	
 	ELSE
 			

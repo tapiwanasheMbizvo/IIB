@@ -1,0 +1,11 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+	
+	
+
+
+	
+		RETURN TRUE;
+	END;
+
+	

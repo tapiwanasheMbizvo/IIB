@@ -259,7 +259,7 @@ CREATE COMPUTE MODULE TXN_FLOW_ISO_RESPONSE
         	
         END IF;	
         CALL addToMQDestinationList(InputLocalEnvironment ,'ISO_LOGGER_IN');
-		CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP');
+		CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP_OUT');
 
 		RETURN TRUE;
 	END;

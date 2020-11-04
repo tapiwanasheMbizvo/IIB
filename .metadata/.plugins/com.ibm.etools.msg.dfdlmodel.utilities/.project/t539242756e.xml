@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageBroker name="File_Interface">
+  <XSDCollection href="platform:/resource/File_Interface/AUTOPAY.xsd" prefix="" targetNamespace="">
+    <import name="IBMdefined/CobolDataDefinitionFormat.xsd" targetNamespace="http://www.ibm.com/dfdl/CobolDataDefinitionFormat"/>
+    <element href="platform:/resource/File_Interface/AUTOPAY.xsd#//AUTOPAY;XSDElementDeclaration" name="AUTOPAY" type="mlib://File_Interface#/-/complexType{}AUTOPAY"/>
+    <complexType baseType="mlib://File_Interface#/-/complexType{http://www.w3.org/2001/XMLSchema}anyType" href="platform:/resource/File_Interface/AUTOPAY.xsd#//AUTOPAY;XSDComplexTypeDefinition" name="AUTOPAY"/>
+  </XSDCollection>
+</MessageBroker>

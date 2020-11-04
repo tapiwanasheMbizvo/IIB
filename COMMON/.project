@@ -3,6 +3,7 @@
 	<name>COMMON</name>
 	<comment></comment>
 	<projects>
+		<project>COMMONJava</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

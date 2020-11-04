@@ -303,3 +303,60 @@ ISO8583>>ZBDEV1NODE>>fly>>0>>1594978208417
 2871<<Administration Result<<2020-07-17 18:16:45.719 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ISO8583project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
 ZBESB V1>>ZBDEV1NODE>>fly>>0>>1594978278304
 2871<<Administration Result<<2020-07-17 18:17:36.238 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/ZBESB V1project.generated.bar<<BAR<<fly<<ExecutionGroup<<COMPLETE
+COMMON>>ZBDEV1NODE>>default>>0>>1604321175289
+2871<<Administration Result<<2020-11-02 21:30:49.179 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/COMMONproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604321195515
+2871<<Administration Result<<2020-11-02 21:31:26.364 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/File_Interfaceproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604322375799
+2871<<Administration Result<<2020-11-02 21:51:06.101 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604322768870
+2871<<Administration Result<<2020-11-02 21:57:36.124 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+COMMON>>ZBDEV1NODE>>default>>0>>1604327930721
+2871<<Administration Result<<2020-11-02 23:23:24.520 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/COMMONproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604327968863
+2871<<Administration Result<<2020-11-02 23:24:06.804 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/File_Interfaceproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604328529939
+2871<<Administration Result<<2020-11-02 23:33:33.275 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604328614464
+2871<<Administration Result<<2020-11-02 23:34:57.884 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604390587042
+2871<<Administration Result<<2020-11-03 16:47:48.573 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604390641862
+2871<<Administration Result<<2020-11-03 16:48:43.705 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604390807810
+2871<<Administration Result<<2020-11-03 16:51:28.753 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604390922092
+2871<<Administration Result<<2020-11-03 16:53:24.825 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604391170149
+2871<<Administration Result<<2020-11-03 16:57:29.960 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604397103651
+2871<<Administration Result<<2020-11-03 18:36:25.986 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604397523021
+2871<<Administration Result<<2020-11-03 18:43:27.163 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604398175823
+2871<<Administration Result<<2020-11-03 18:54:17.976 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604398360890
+2871<<Administration Result<<2020-11-03 18:57:23.633 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604398850589
+2871<<Administration Result<<2020-11-03 19:05:29.350 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>PLAY>>0>>1604415445920
+2871<<Administration Result<<2020-11-03 23:42:49.992 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<PLAY<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604415551414
+2871<<Administration Result<<2020-11-03 23:43:51.642 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/File_Interfaceproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604415706169
+2871<<Administration Result<<2020-11-03 23:46:25.584 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604415812809
+2871<<Administration Result<<2020-11-03 23:48:15.204 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>ZBDEV1NODE>>default>>0>>1604416229204
+2871<<Administration Result<<2020-11-03 23:55:09.856 CAT<<mqm[jtsgondo]<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+COMMON>>TESTNODE_tapiwanashem>>default>>0>>1604425732337
+2871<<Administration Result<<2020-11-03 19:48:52.938 CAT<<TAPIWANSAHE-PC\tapiwanashem<<deploy<<C:/ESB/ZBESBLIVE/GeneratedBarFiles/COMMONproject.generated.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>TESTNODE_tapiwanashem>>default>>0>>1604425741851
+2871<<Administration Result<<2020-11-03 19:49:12.747 CAT<<TAPIWANSAHE-PC\tapiwanashem<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>TESTNODE_tapiwanashem>>default>>0>>1604426211694
+2871<<Administration Result<<2020-11-03 19:57:00.576 CAT<<TAPIWANSAHE-PC\tapiwanashem<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<COMPLETE
+File_Interface>>TESTNODE_tapiwanashem>>default>>2>>1604428502329
+2087<<Runtime Response<<2020-11-03 20:35:08.951 CAT<<TESTNODE_tapiwanashem<<362a0d6d-314b-4acb-adbb-e9c4565a8c6b
+4041<<Runtime Response<<2020-11-03 20:35:08.951 CAT<<default<<e7250478-3d2d-4266-bde7-86e1cac64654
+2432<<Runtime Response<<2020-11-03 20:35:08.951 CAT<<.AUTOPAY_Filter.Main<<6.38<<InputLocalEnvironment<<Environment, LocalEnvironment, Root, Body, Properties, ExceptionList, DestinationList
+2871<<Administration Result<<2020-11-03 20:35:08.951 CAT<<TAPIWANSAHE-PC\tapiwanashem<<deploy<<C:/ESB/ZBESBLIVE/TestModeBarFiles/File_Interfaceproject.TestMode.bar<<BAR<<default<<ExecutionGroup<<FAILED

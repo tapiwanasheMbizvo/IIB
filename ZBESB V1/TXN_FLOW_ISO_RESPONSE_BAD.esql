@@ -251,7 +251,7 @@ CREATE PROCEDURE  createISOResponse( IN GROUPID CHARACTER, IN responseCode CHARA
        
         END IF;	
        			CALL addToMQDestinationList(InputLocalEnvironment ,'ISO_LOGGER_IN');
-				CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP');
+				CALL addToMQDestinationList(InputLocalEnvironment ,'TO_IP_OUT');
 				--RETURN TRUE; 
         
 END;

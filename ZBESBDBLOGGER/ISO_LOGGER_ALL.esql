@@ -14,18 +14,21 @@ CREATE COMPUTE MODULE ISO_LOGGER_ALL
 		IF Environment.ISO.MTI = '420' OR Environment.ISO.MTI = '421' THEN
 		
 				CALL COMMON.saveReversalRequest(ISOMSG);
+				RETURN TRUE;
 			ELSE
 				IF Environment.ISO.PROCODE = '31' THEN
 				
 					CALL COMMON.saveBalRequest(ISOMSG);
+					RETURN TRUE;
 		
 				END IF;
 					
 					CALL COMMON.saveISORequest(ISOMSG);	
+					RETURN TRUE;
 			
 				
-		END IF;	
-		RETURN TRUE;
+		END IF;			
+		
 	END;
 
 	CREATE PROCEDURE CopyMessageHeaders() BEGIN

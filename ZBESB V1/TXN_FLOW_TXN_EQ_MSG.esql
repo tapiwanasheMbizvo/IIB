@@ -306,8 +306,8 @@ CREATE COMPUTE MODULE TXN_FLOW_TXN_EQ_MSG
         SET OutputRoot.DFDL.TRANSACTIONREQ.TRANSACTION_REQ_BODY.GZZZZZ_T =  '::';
 
 		--SET OutputRoot = OutputRoot.DFDL.TRANSACTIONREQ.TRANSACTION_REQ_HEADER||OutputRoot.DFDL.TRANSACTIONREQ.TRANSACTION_REQ_BODY;	
-		CALL addToMQDestinationList(InputLocalEnvironment ,'LOG_EQ_REQ');
-		CALL addToMQDestinationList(InputLocalEnvironment ,'EQUATION.TRANS.QUEUE');
+		--CALL addToMQDestinationList(InputLocalEnvironment ,'LOG_EQ_REQ');
+		--CALL addToMQDestinationList(InputLocalEnvironment ,'EQUATION.TRANS.QUEUE');
 		RETURN TRUE;
 	END;
 END MODULE;

@@ -1,0 +1,246 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+
+ 
+		 --CALL CopyEntireMessage();
+		 DECLARE  ISOMSG REFERENCE TO  InputRoot.DFDL.ns:ISO8583_1993;
+		
+		 DECLARE ZBCARD, ZBTERMINAL  BOOLEAN;
+		 DECLARE CREDITACC, DEBITACC, CREDITCODE, DEBITCODE,PROCESSINGCODE, SOURCE,TERMINALID,PCREF, GROUPID  CHARACTER;
+		 		
+		 SET PROCESSINGCODE = LEFT (ISOMSG.ProcessingCode_003,2);
+		 SET TERMINALID = ISOMSG.CardAcceptorTerminalIdentification_041;
+		 SET Environment.ISO.MCC = ISOMSG.MerchantType_018;
+		 SET ZBCARD =getISZBCARD(ISOMSG.PrimaryAccountNumber_002);
+		 SET ZBTERMINAL = getISZBTERMINAL(ISOMSG.CardAcceptorTerminalIdentification_041);
+		 SET Environment.ISO.ACQUIRERID = LEFT (ISOMSG.PrimaryAccountNumber_002, 6);
+		 SET Environment.ISO.ACQUIRERIDFILED  = ISOMSG.AcquiringInstitutionIdentificationCode_032;
+		 SET Environment.ISO.ISZBCARD = ZBCARD;
+		 SET Environment.ISO.IZBTERMINAL = ZBTERMINAL;
+		 SET Environment.ISO.MTI = CAST(ISOMSG.MTI_MessageClass * 100 + ISOMSG.MTI_MessageFunction * 10 + ISOMSG.MTI_MessageOrigin AS CHAR);
+		 SET Environment.BET.RPYQUEUE  = REPLYQUEUE; --'ESB.RESPONSES.QUEUE';--TXN REPLY QUEUE
+		 SET Environment.BET.BALRPYQUEUE= BALREPLYQUEUE;--'ESB_ENQ_Q';--BAL ENQ REPLY QUEUE
+		 SET Environment.ISO.PCREF =createPCREF();
+		 SET Environment.ISO.RetrievalReferenceNumber_037 = ISOMSG.RetrievalReferenceNumber_037;
+		 SET Environment.BET.GZBRNM ='4131';
+		 SET Environment.BET.GZPBR = 'ATM11'; -- constant for now as per instructions
+		 SET Environment.ISO.CardAcceptorNameLocation_043 = ISOMSG.CardAcceptorNameLocation_043;
+		 SET Environment.ISO.AdditionalDataPrivate_048 = ISOMSG.AdditionalDataPrivate_048;
+		 SET Environment.ISO.TERMINALID = TERMINALID;
+		 SET Environment.ISO.AcquiringInstitutionIdentificationCode_032 = ISOMSG.AcquiringInstitutionIdentificationCode_032;
+		 SET Environment.ISO.CurrencyCodeTransaction_049 = ISOMSG.CurrencyCodeTransaction_049;
+		 SET Environment.ISO.ApprovalCode_038 = createRandomSix();
+		 SET Environment.ISO.AccountIdentification1_102 = ISOMSG.AccountIdentification1_102;	
+		 SET GROUPID = Environment.ISO.MTI|| ISOMSG.RetrievalReferenceNumber_037;
+		 SET Environment.ISO.CREDITAMOUNT =ISOMSG.AmountTransaction_004;		
+		 SET Environment.ISO.DEBITAMOUNT =ISOMSG.AmountReconciliation_005;
+		 	
+	   	 IF (Environment.ISO.DEBITAMOUNT IS NULL) THEN 
+			SET Environment.ISO.DEBITAMOUNT = ISOMSG.AmountTransaction_004;
+		 END IF;	
+		 
+		
+		 IF ZBTERMINAL THEN 
+		 	SET SOURCE = getTerminalSource(TERMINALID);
+		 	SET DEBITCODE = getTransactionCode(PROCESSINGCODE, 'DEBITCODE', SOURCE);
+		 	SET CREDITCODE = getTransactionCode(PROCESSINGCODE, 'CREDITCODE', SOURCE);
+		 ELSE
+		 	SET DEBITCODE = getTransactionCode(PROCESSINGCODE, 'ADVICEDEBITCODE',null);
+		 	SET CREDITCODE = getTransactionCode(PROCESSINGCODE, 'ADVICECREDITCODE',null);
+		 END IF;
+		 		 
+		 IF ZBCARD AND ZBTERMINAL THEN --, US ON US --
+		 		
+		 	IF PROCESSINGCODE ='21' THEN  --TXN O=TO ICNREASE CUSTOMER BALANCE 
+		 		SET DEBITACC = getZBTerminalAccount(ISOMSG);		
+		 		SET CREDITACC = ISOMSG.AccountIdentification1_102;
+		 	ELSEIF PROCESSINGCODE = '40' THEN --TXN BETWEEN TWO CUSTOMERS
+		 		SET DEBITACC = ISOMSG.AccountIdentification1_102;
+		 		SET CREDITACC =ISOMSG.AccountIdentification2_103;
+		 	ELSE -- THIS IS THE DEFAULT 	 	
+		 		SET DEBITACC = ISOMSG.AccountIdentification1_102;
+		 		SET CREDITACC = getZBTerminalAccount(ISOMSG);
+		 	END IF;
+		 	
+		 ELSEIF NOT ZBCARD AND ZBTERMINAL THEN --THEM ON US 
+		 		
+		 	IF PROCESSINGCODE = '21' THEN 
+		 		SET DEBITACC = getAcquirerAccount(ISOMSG);
+		 		SET CREDITACC = ISOMSG.AccountIdentification1_102; 
+		 	ELSEIF PROCESSINGCODE = '40' THEN
+		 		SET DEBITACC = ISOMSG.AccountIdentification1_102;
+		 		SET CREDITACC = ISOMSG.AccountIdentification2_103; 		 	
+		 	ELSE	
+		 		SET DEBITACC = getAcquirerAccount(ISOMSG);
+		 		SET CREDITACC = getZBTerminalAccount(ISOMSG);	
+		 	END IF;	
+		 		
+		 ELSEIF  ZBCARD AND NOT ZBTERMINAL THEN -- US ON THEM  
+		 		
+		 	IF PROCESSINGCODE = '21' THEN 
+		 		SET DEBITACC = getAcquirerAccount(ISOMSG);
+		 		SET CREDITACC = ISOMSG.AccountIdentification1_102;
+		 	ELSEIF PROCESSINGCODE = '40' THEN
+		 		SET DEBITACC = ISOMSG.AccountIdentification1_102;
+		 		SET CREDITACC = ISOMSG.AccountIdentification2_103;
+		 	ELSE
+		 		SET DEBITACC = ISOMSG.AccountIdentification1_102;
+		 		SET CREDITACC = getAcquirerAccount(ISOMSG);
+		 	END IF;				
+		 
+		 END IF;
+		 
+--set up loic for zipit send and receieve  tmbizvo @02102020
+--ZIPIT RECEIVE  ProCode -29, P2P  Credit 103, debit Suspense 
+--ZIPIT SEND ProCode  - 11 , P2P Debit  102, credit Suspense 
+--A2A credit, Proc Code 30, field 103, debit suspense & A2A debit, Proc Code 12, field 102, credit suspense
+
+			IF PROCESSINGCODE = '29' THEN
+			
+				SET DEBITACC = CARDTOCARDSUSPENSEACCOUNT;
+				SET CREDITACC = ISOMSG.AccountIdentification2_103;
+				
+			END IF;
+			
+			IF PROCESSINGCODE = '11' THEN
+			
+				SET CREDITACC = CARDTOCARDSUSPENSEACCOUNT;
+				SET DEBITACC = ISOMSG.AccountIdentification1_102;
+			END IF;
+			
+			IF PROCESSINGCODE = '30' THEN
+			
+				SET DEBITACC = ATOASUSPENSEACCOUNT;
+				SET CREDITACC = ISOMSG.AccountIdentification2_103;
+			END IF;
+			
+			IF PROCESSINGCODE = '12' THEN
+				SET CREDITACC = ATOASUSPENSEACCOUNT;
+				SET DEBITACC = ISOMSG.AccountIdentification1_102;
+			END IF;--end code for zipit send and receive
+
+--BILL PAYMENT START
+IF PROCESSINGCODE ='50'		THEN 
+			
+CALL getBillerData(ISOMSG.AdditionalDataPrivate_048);
+SET DEBITACC = ISOMSG.AccountIdentification1_102;
+SET CREDITACC = getBillerDetail(Environment.BILL.BILLERID, NULL);
+
+END IF;				
+--END BILL PAYMENT
+
+--REVERSAL START
+IF Environment.ISO.MTI = '420' OR Environment.ISO.MTI = '421' THEN
+	SET Environment.ISO.IS_REVERSAL =isReversal(ISOMSG.RetrievalReferenceNumber_037);
+	
+	IF Environment.ISO.IS_REVERSAL  THEN
+		
+ 		SET CREDITCODE = getTransactionCode(PROCESSINGCODE, 'REVERSALCREDITCODE', NULL);
+	 	SET DEBITCODE = getTransactionCode(PROCESSINGCODE,'REVERSALDEBITCODE', NULL );
+	 
+	ELSE
+		-- THROW THIS ONE OUT AND RETURN 
+		--CALL A METHOD TO MAKE A DO NOT HONOR ISO MESSAGE
+		 THROW USER EXCEPTION CATALOG 'DO NOT HONOUR DUPLICATE REVERSAL ' MESSAGE 1 VALUES
+			(
+			'::VALUES MISSING  ON RN:: ',ISOMSG.RetrievalReferenceNumber_037,
+			 '::CREDIT ACC::',Environment.ISO.CREDITACC,
+			 '::DEBIT ACC::',Environment.ISO.DEBITACC,
+			 '::DEBIT CODE::',Environment.ISO.DEBITCODE,
+			  '::CREDIT CODE::',Environment.ISO.CREDITCODE      
+			 );	
+		RETURN FALSE;
+	END IF;		
+END IF;  
+--REVERSAL END 
+		 
+		 
+		 
+		 SET Environment.ISO.DEBITACC = DEBITACC;
+		 SET Environment.ISO.CREDITACC = CREDITACC;
+		 SET Environment.ISO.DEBITCODE = DEBITCODE;
+		 SET Environment.ISO.CREDITCODE = CREDITCODE;
+		 SET Environment.ISO.SOURCE =SOURCE; 
+		 			
+		IF LENGTH(Environment.ISO.CREDITACC)>0
+				  AND  LENGTH(Environment.ISO.DEBITACC)>0 
+				   AND LENGTH(Environment.ISO.DEBITCODE)>0 
+				    AND LENGTH(Environment.ISO.CREDITCODE)> 0 THEN 
+				CALL CopyEntireMessage();
+				-- lets throw the iso to  collection tmbizvo @15072020
+			CALL addToMQDestinationList(InputLocalEnvironment ,'LOG_EQ_REQ');
+			CALL addToMQDestinationList(InputLocalEnvironment ,'EQUATION.TRANS.QUEUE');
+			PROPAGATE TO TERMINAL 'out2' MESSAGE InputRoot;	
+	ELSE
+			
+			 --call createISOResponse(GROUPID, '');		 			
+			--malformed for some reason throw it out
+			---PROPAGATE TO TERMINAL 'out1' MESSAGE OutputRoot;		
+			 THROW USER EXCEPTION CATALOG 'INPUTMESSAGE_ERRORS' MESSAGE 1 VALUES
+			(
+			'::VALUES MISSING  ON RN:: ',ISOMSG.RetrievalReferenceNumber_037,
+			 '::CREDIT ACC::',Environment.ISO.CREDITACC,
+			 '::DEBIT ACC::',Environment.ISO.DEBITACC,
+			 '::DEBIT CODE::',Environment.ISO.DEBITCODE,
+			  '::CREDIT CODE::',Environment.ISO.CREDITCODE      
+			 );	
+			 RETURN FALSE; 
+		END IF;
+		
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+	
+	CREATE PROCEDURE getBillerData(IN INPUT48 CHARACTER) BEGIN -- procedure to get biller data 
+
+	DECLARE field048, value, tagid CHARACTER;
+	DECLARE  lenval INTEGER;
+	SET field048 = CAST (INPUT48 as CHAR CCSID 1208);
+	SET Environment.BILL.field048 = field048;
+	WHILE LENGTH(field048) > 0 DO
+		SET tagid = SUBSTRING ( field048 FROM 1 FOR 3);
+        SET OutputRoot.XMLNSC.Message.Field48.TAG =  tagid;       
+        SET lenval = CAST (SUBSTRING(field048 FROM 4 FOR 3)AS INTEGER);
+        SET value = SUBSTRING (field048 FROM 7 FOR lenval);
+        SET OutputRoot.XMLNSC.Message.Field048.VALUE = value;       
+        SET field048 = SUBSTRING (field048 FROM 7 + lenval);
+        
+        IF tagid = '001' THEN
+        	
+        	
+        	SET Environment.BILL.BILLERID = value; --this gives us the BILLER ID from filed084
+        END IF;	
+        
+        IF tagid = '020' THEN
+        	
+        	
+        	SET Environment.BILL.CustomerAccountNumber = value; -- the customer Account Number the Customer was paying to
+        END IF;	
+        
+        IF tagid = '022' THEN
+        	
+        	-- the customer Mobile number (this is optional)
+        	SET Environment.BILL.MobileNumber = value;
+        	
+        END IF;	
+        
+              
+	END WHILE;	
+		
+	END;
+	
+	
+	

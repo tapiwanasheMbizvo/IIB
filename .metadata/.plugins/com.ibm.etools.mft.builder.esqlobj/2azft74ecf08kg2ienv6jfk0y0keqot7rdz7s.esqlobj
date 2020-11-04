@@ -1,0 +1,53 @@
+CREATE COMPUTE MODULE BULK_TRANSACTIONS_MAKE_RULES
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 --CALL CopyEntireMessage();
+		 DECLARE PCREF CHAR '000000000000000'; -- 15 character unique reference code
+		DECLARE TIMESTRING CHAR;
+		DECLARE SEED, RNDNUM INT;
+		SET TIMESTRING = CAST(CURRENT_TIMESTAMP AS CHAR);
+		SET SEED = CAST(SUBSTRING(TIMESTRING FROM 32 FOR 6) AS INT);
+		SET RNDNUM = CAST(RAND(SEED) * 1000000000000000 as INT);
+		SET PCREF = CAST(RNDNUM AS CHAR);
+		 
+
+
+
+--DATE
+
+--
+
+-- -- Credit narrative lines @tmbizvo 18/03/2020    
+
+--CURRENCY_CODE
+
+
+		SET Environment.OBI.AMOUNT 		 = InputLocalEnvironment.AMOUNT;
+		SET Environment.OBI.DEBITCODE 	 = InputLocalEnvironment.DEBITCODE;
+		SET Environment.OBI.CREDITCODE	 = InputLocalEnvironment.CREDITCODE;
+		SET Environment.OBI.CREDITACC 	 = InputLocalEnvironment.CREDITACC;
+		SET Environment.OBI.DEBITACC	 = InputLocalEnvironment.DEBITACC;
+		SET Environment.OBI.PCREF   	 =  PCREF;
+		
+		SET Environment.OBI.TERMINALID   	 = InputLocalEnvironment.TERMINALID;		
+		SET Environment.OBI.RETRIEVAL_REFERENCE_NUMBER   	 = CAST ( CAST(RAND(SEED) * 1000000000000 as INT)as CHAR);
+		SET Environment.OBI.DATE 		 = THE(SELECT ITEM E.GZVFR1 FROM Database.ZBDB_ESB.DB2INST1.EQTRANSFER_OFFLINE AS E WHERE E.TERMINALID = Environment.OBI.TERMINALID);
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

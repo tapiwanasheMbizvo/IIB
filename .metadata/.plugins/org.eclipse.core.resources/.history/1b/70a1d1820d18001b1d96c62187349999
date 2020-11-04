@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:BALANCE_ENQUIRY.subflow="BALANCE_ENQUIRY.subflow" xmlns:ComIbmCollector.msgnode="ComIbmCollector.msgnode" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmMQInput.msgnode="ComIbmMQInput.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="BALANCE_ENQUIRY.msgflow" nsPrefix="BALANCE_ENQUIRY.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.BALREPLYQUEUE" name="BALREPLYQUEUE" defaultValueLiteral="ESB.ENQ.QUEUE">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="BALANCE_ENQUIRY" bundleName="BALANCE_ENQUIRY" pluginId="ZBESB V1"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/BALANCE_ENQUIRY.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/BALANCE_ENQUIRY.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="218,123" computeExpression="esql://routine/#ISO_input_ESQL_Compute.Main">
+        <translation xmi:type="utility:ConstantString" string="RULES"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCollector.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="288,211" collectionName="REQ-RESP" collectionExpiry="120">
+        <inTerminals terminalNodeID="ISO_request" dynamic="true" label="ISO_request"/>
+        <inTerminals terminalNodeID="Resp_Out" dynamic="true" label="Resp_Out"/>
+        <translation xmi:type="utility:ConstantString" string="Collector"/>
+        <eventHandlerPropertyTable terminal="ISO_request" quantity="1" correlationPath="$Environment/ISO/PCREF" correlationPattern=""/>
+        <eventHandlerPropertyTable terminal="Resp_Out" quantity="1" correlationPath="$Body/BALANCEENQUIRYRESPONSE/PCREF" correlationPattern=""/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="453,125" queueName="EQUATION.TRANS.QUEUE">
+        <translation xmi:type="utility:ConstantString" string="EQUATION.TRANS.QUEUE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_8" location="61,221" queueName="ESB.ENQ.QUEUE" messageDomainProperty="DFDL" messageTypeProperty="{}:BALANCEENQUIRYRESPONSE" transactionMode="no">
+        <translation xmi:type="utility:ConstantString" string="ESB.RESPONSES.QUEUE"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_19" location="104,123" queueName="BALANCE_IN" messageDomainProperty="DFDL" messageSetProperty="{ISO8583}" messageTypeProperty="{http://www.ibm.com/dfdl/ISO8583-1993}:ISO8583_1993" transactionMode="no" componentLevel="node" additionalInstances="25">
+        <translation xmi:type="utility:ConstantString" string="ISO_IN"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_20" location="405,213" computeExpression="esql://routine/#ISO_input_ESQL_ESB_Response.Main">
+        <translation xmi:type="utility:ConstantString" string="ESB_Response"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="513,214" queueName="ISO_LOGGER_IN" destinationMode="list">
+        <translation xmi:type="utility:ConstantString" string="TO_OUTPUT_QUEUES"/>
+      </nodes>
+      <nodes xmi:type="BALANCE_ENQUIRY.subflow:FCMComposite_1" xmi:id="FCMComposite_1_13" location="334,125">
+        <translation xmi:type="utility:ConstantString" string="BALANCE_ENQUIRY"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.out" targetTerminalName="Resp_Out"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_20" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_13" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out1" targetTerminalName="ISO_request"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_20" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.BALREPLYQUEUE">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.BALREPLYQUEUE" bundleName="BALANCE_ENQUIRY" pluginId="ZBESB V1"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

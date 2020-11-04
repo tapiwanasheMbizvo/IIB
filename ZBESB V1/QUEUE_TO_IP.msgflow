@@ -7,10 +7,10 @@
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj16/QUEUE_TO_IP.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/ZBESB V1/icons/full/obj30/QUEUE_TO_IP.gif"/>
     <composition>
-      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="123,216" queueName="TO_IP" messageDomainProperty="BLOB">
+      <nodes xmi:type="ComIbmMQInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="123,216" queueName="TO_IP_OUT" messageDomainProperty="BLOB">
         <translation xmi:type="utility:ConstantString" string="MQ Input"/>
       </nodes>
-      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="298,220" computeExpression="esql://routine/#QUEUE_TO_IP_QTO_IP.Main">
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="298,220" transaction="commit" computeExpression="esql://routine/#QUEUE_TO_IP_QTO_IP.Main">
         <translation xmi:type="utility:ConstantString" string="QTO_IP"/>
       </nodes>
       <nodes xmi:type="ComIbmTCPIPServerOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="450,228" connectionDetails="switchTCPIPportNumber" closeConnection="afterData" sendTo="all" recordLength="264">

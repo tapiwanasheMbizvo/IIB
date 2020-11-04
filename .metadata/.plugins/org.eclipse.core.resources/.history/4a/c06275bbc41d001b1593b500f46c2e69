@@ -1,0 +1,8 @@
+
+
+Importing file: C:\ESB\ZBESBLIVE\File_Interface\importFiles\AUTOPAY.cpy
+
+CTDI0234E Error occurred while importing file "AUTOPAY.cpy".
+The source file contains errors, details are: Possible reasons for failure:
+1. Syntax errors were found in the source. If the file is from the workspace, check the 'Problems' view for the list of errors.
+2. AUTOPAY.cpy is expected to have just 01 level data structures or 77 level elementary data item definition(s), based on its file extension.You can change the file extension support by going into the "More COBOL options" tab of the COBOL importer preferences page (Window -> Preferences -> Importer -> COBOL). Please correct the error and try importing the file again.

@@ -59,15 +59,18 @@ public class BULK_TRANSACTIONS_DO_BULK extends MbJavaComputeNode {
 				 String debitCode = res.getString("GZTCD1");
 				 String terminal = res.getString("TERMINALID");
 				 String creditCode = res.getString("GZTCD2");
+				 String CHARGECODE = res.getString("CHARGECODE");
 				 int amount = res.getInt("TOTAL");
 				 
 				 newEnv.getRootElement().delete();
 			 	 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "DEBITACC", debitAcc);
 			 	 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "TERMINALID", terminal);
 				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "CREDITACC", creditAcc);
-				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "CREDITCODE", debitCode);
-				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "DEBITCODE", creditCode);
+				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "CREDITCODE", creditCode);
+				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "DEBITCODE", debitCode);
 				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "AMOUNT", amount);
+				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "FILENAME", tableName);
+				 newEnv.getRootElement().createElementAsFirstChild(MbElement.TYPE_NAME_VALUE, "CHARGECODE", CHARGECODE);
 				 
 				 outAssembly = new MbMessageAssembly(
 							inAssembly,
